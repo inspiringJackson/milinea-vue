@@ -54,19 +54,19 @@
 	const handleToolChange = (groupIndex : number, toolIndex : number) => {
 		currentSelectedTool.value[groupIndex] = toolIndex
 		activeTool.value = { groupIndex, toolIndex }
-		// 这里可以添加工具切换的实际逻辑
+		
 	}
 </script>
 
 <style scoped lang="scss">
 	.side-tools {
-		position: absolute;
-		height: calc(100% - 45px);
+		heigth: 100%;
 		width: 32px;
 		padding: 8px;
 		display: flex;
+		padding-top: 30px;
 		flex-direction: column;
-		gap: 12px;
+		gap: 15px;
 		background-color: var(--n-color);
 		border-right: 1px solid #eee;
 	}

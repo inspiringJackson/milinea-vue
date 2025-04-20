@@ -22,7 +22,14 @@ export default defineConfig({
 						'NIcon',
 						'NDivider',
 						'NTooltip',
-						'NDropdown'
+						'NDropdown',
+						// 'NLayout',
+						// 'NLayoutHeader',
+						'NTabs',
+						'NTabPane',
+						'NSplit',
+						'NTree',
+						'UseMessage',
 					]
 				}
 			]

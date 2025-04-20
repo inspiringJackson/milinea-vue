@@ -3,6 +3,8 @@
 	// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 	import NavBar from './layout/components/Navbar.vue'
 	import SideTools from './layout/components/sideTools/SideTools.vue'
+	import LeftMenu from './layout/components/leftMenuPanel/LeftMenuPanel.vue'
+	import CanvasBoard from './components/CanvasBoard.vue'
 	import {
 		useI18n
 	} from 'vue-i18n'
@@ -13,15 +15,43 @@
 </script>
 
 <template>
-	<NavBar></NavBar>
-	<SideTools></SideTools>
+	<div id="app">
+		<NavBar />
+		<div class="main">
+			<SideTools />
+			<n-split direction="horizontal" min="240px" :max="0.4" default-size="240px">
+				<template #1>
+					<LeftMenu />
+				</template>
+				<template #2>
+					<CanvasBoard />
+				</template>
+			</n-split>
+		</div>
+	</div>
 </template>
 
-<style>
+<style scoped lang="scss">
 	#app {
 		font-family: Avenir, Helvetica, Arial, sans-serif;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
+		display: flex;
+		flex-direction: column;
+		height: 100vh;
+	}
 
+	.NavBar {
+		flex-shrink: 0;
+	}
+
+	.main {
+		flex-grow: 1;
+		display: flex;
+		min-height: 0;
+
+		.n-split {
+			height: 100%;
+		}
 	}
 </style>
