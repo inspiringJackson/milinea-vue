@@ -56,6 +56,7 @@ src/                        # Main source code directory
 
 - [ ] Improve scroll bar functionality
 - [ ] Add grid guide system
+- [ ] Make the tools work
 - [ ] Implement vector simplification algorithms (maybe use [Simplify.js](https://mourner.github.io/simplify-js/))
 - [ ] Optimize rendering performance
 
