@@ -20,15 +20,68 @@ export class RenderEngine {
 
 	public render() {
 		this.clearCanvas()
-		this.renderMainContent()
-		this.renderRuler()
 
+		this.renderMainContent()
+		this.rulerBottomMask()
+
+		this.renderRuler()
+		this.rulerTopMask()
 		this.renderScrollbar()
 	}
 
 	private clearCanvas() {
 		this.ctx.resetTransform()
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+
+		// 填充背景色
+		this.ctx.globalCompositeOperation = 'source-over'
+		this.ctx.fillStyle = "#F5F5F5"  // 新背景色
+		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+	}
+
+	private rulerBottomMask() {
+		const ctx = this.ctx
+		ctx.save()
+		ctx.resetTransform()
+		ctx.scale(this.devicePixelRatio, this.devicePixelRatio)
+		const viewSize = {
+			viewWidth: this.canvas.width / this.devicePixelRatio,
+			viewHeight: this.canvas.height / this.devicePixelRatio
+		}
+		ctx.globalCompositeOperation = 'source-over'
+		ctx.fillStyle = '#F5F5F5'
+		ctx.fillRect(0, 0, viewSize.viewWidth, 26)
+		ctx.fillStyle = '#F5F5F5'
+		ctx.fillRect(0, 0, 26, viewSize.viewHeight)
+		ctx.restore()
+	}
+
+	private rulerTopMask() {
+		const ctx = this.ctx
+		ctx.save()
+		ctx.resetTransform()
+		ctx.scale(this.devicePixelRatio, this.devicePixelRatio)
+		const viewSize = {
+			viewWidth: this.canvas.width / this.devicePixelRatio,
+			viewHeight: this.canvas.height / this.devicePixelRatio
+		}
+		// 设置混合模式为目标输入（仅显示重叠区域）
+		ctx.globalCompositeOperation = 'source-over'
+
+		// 横向渐变遮罩（右下角 50x25）
+		const horizontalGradient = ctx.createLinearGradient(50, 0, 0, 0)
+		horizontalGradient.addColorStop(0, 'rgba(245,245,245,0)')
+		horizontalGradient.addColorStop(0.5, 'rgba(245,245,245,1)')
+		ctx.fillStyle = horizontalGradient
+		ctx.fillRect(0, 0, 50, 26)
+
+		// 纵向渐变遮罩（右下角 25x50）
+		const verticalGradient = ctx.createLinearGradient(0, 50, 0, 0)
+		verticalGradient.addColorStop(0, 'rgba(245,245,245,0)')
+		verticalGradient.addColorStop(0.5, 'rgba(245,245,245,1)')
+		ctx.fillStyle = verticalGradient
+		ctx.fillRect(0, 0, 26, 50)
+		ctx.restore()
 	}
 
 	private getRulerStep(zoomPercent : number) : number {
@@ -69,21 +122,23 @@ export class RenderEngine {
 		ctx.fillStyle = '#aaa'
 		const fontSize = 10
 		ctx.font = `${fontSize}px Arial` // '10px Arial'
-		ctx.lineWidth = 1
+		ctx.lineWidth = 0.5
 
-		const viewWidth = this.canvas.width / this.devicePixelRatio
-		const viewHeight = this.canvas.height / this.devicePixelRatio
+		const viewSize = {
+			viewWidth: this.canvas.width / this.devicePixelRatio,
+			viewHeight: this.canvas.height / this.devicePixelRatio
+		}
 
 		// 水平标尺绘制
-		this.renderHorizontalRuler(viewWidth, step, offsetX, store.zoom, fontSize - 5)
+		this.renderHorizontalRuler(viewSize, step, offsetX, store.zoom, fontSize - 5)
 
 		// 垂直标尺绘制
-		this.renderVerticalRuler(viewHeight, step, offsetY, store.zoom)
+		this.renderVerticalRuler(viewSize, step, offsetY, store.zoom)
 
 		ctx.restore()
 	}
 
-	private renderHorizontalRuler(viewWidth : number, step : number, offsetX : number, zoom : number, fontSize : number) {
+	private renderHorizontalRuler(viewSize : { viewWidth : number, viewHeight : number }, step : number, offsetX : number, zoom : number, fontSize : number) {
 		const ctx = this.ctx
 		ctx.save()
 		ctx.textBaseline = 'top'
@@ -92,7 +147,7 @@ export class RenderEngine {
 
 		// 计算可见区域的逻辑坐标范围
 		const visibleStart = -offsetX
-		const visibleEnd = visibleStart + viewWidth / zoom
+		const visibleEnd = visibleStart + viewSize.viewWidth / zoom
 
 		// 找到第一个刻度起点
 		const startSceneX = Math.floor(visibleStart / step) * step
@@ -119,7 +174,7 @@ export class RenderEngine {
 		ctx.restore()
 	}
 
-	private renderVerticalRuler(viewHeight : number, step : number, offsetY : number, zoom : number) {
+	private renderVerticalRuler(viewSize : { viewWidth : number, viewHeight : number }, step : number, offsetY : number, zoom : number) {
 		const ctx = this.ctx
 		ctx.save()
 		ctx.textBaseline = 'middle'
@@ -128,7 +183,7 @@ export class RenderEngine {
 
 		// 计算可见区域的逻辑坐标范围
 		const visibleStart = -offsetY
-		const visibleEnd = visibleStart + viewHeight / zoom
+		const visibleEnd = visibleStart + viewSize.viewHeight / zoom
 
 		// 找到第一个刻度起点
 		const startSceneY = Math.floor(visibleStart / step) * step
@@ -149,9 +204,17 @@ export class RenderEngine {
 				ctx.moveTo(0, viewY)
 				ctx.lineTo(width, viewY)
 			}
-			ctx.fillText(`${sceneY}`, 16, viewY)
+			// 旋转文本的代码
+			ctx.save()                            // 保存当前状态
+			ctx.translate(21, viewY)              // 移动坐标到原文本位置
+			ctx.rotate(-Math.PI / 2)              // 逆时针旋转90度
+			ctx.textAlign = 'center'              // 水平居中
+			ctx.textBaseline = 'middle'           // 垂直居中
+			ctx.fillText(`${sceneY}`, 0, 0)       // 在旋转后的位置绘制文本
+			ctx.restore()                         // 恢复状态
 		}
 		ctx.stroke()
+
 		ctx.restore()
 	}
 
@@ -163,7 +226,7 @@ export class RenderEngine {
 
 		// 添加缩放限制保护
 		const safeZoom = Math.min(Math.max(store.zoom, 0.05), 100)
-		
+
 		ctx.scale(safeZoom * this.devicePixelRatio, safeZoom * this.devicePixelRatio)
 		ctx.translate(store.offsetX, store.offsetY)
 
