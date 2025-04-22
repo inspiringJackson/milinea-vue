@@ -1,8 +1,8 @@
 # Milinea Vue - Vector Design Tool
 
-We're developing a simple vector-based design tool (probably me & AI, and welcome you!) that simplifies messy vector lines into clean subway-style route maps. Inspired by research like [this paper](https://i11www.iti.kit.edu/extra/publications/fhnrsw-dmmbc-12.pdf).
+We're (probably me & AI, and welcome you!) developing a simple vector-based design tool that simplifies messy vector lines into clean subway-style route maps. Inspired by research like [this paper](https://i11www.iti.kit.edu/extra/publications/fhnrsw-dmmbc-12.pdf).
 
-At this early stage, it may resemble platforms like Figma or JsDesign. Current focus is on core functionality, improving scroll bars and grid guides.
+At this early stage, it may resemble platforms like Figma or JsDesign... Current focus is on core functionality, improving scroll bars and grid guides...
 
 ![Preview](https://github.com/inspiringJackson/mycdn/blob/main/milinea-vue/preview4-23.png)
 
