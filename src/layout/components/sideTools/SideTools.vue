@@ -10,6 +10,7 @@
 	import { ref } from 'vue'
 	import ToolButton from './ToolButton.vue'
 	import { useI18n } from 'vue-i18n'
+	import { useCanvasStore } from '../../../stores/useCanvasStore'
 
 	const { t } = useI18n()
 
@@ -20,15 +21,15 @@
 
 	const tools : Tool[][] = [
 		[
-			{ src: 'src/assets/icons/mousePointer.svg', i18nKey: 'tools.selection' },
-			{ src: 'src/assets/icons/move.svg', i18nKey: 'tools.moveView' }
+			{ src: 'src/assets/icons/move.svg', i18nKey: 'tools.moveView' },
+			{ src: 'src/assets/icons/mousePointer.svg', i18nKey: 'tools.selection' }
 		],
 		[
 			{ src: 'src/assets/icons/rectangle.svg', i18nKey: 'tools.rectangle' },
 			{ src: 'src/assets/icons/diagonal.svg', i18nKey: 'tools.diagonal' },
 			{ src: 'src/assets/icons/ellipse.svg', i18nKey: 'tools.ellipse' },
-			{ src: 'src/assets/icons/triangle.svg', i18nKey: 'tools.triangle' },
-			{ src: 'src/assets/icons/picture.svg', i18nKey: 'tools.picture' }
+			// { src: 'src/assets/icons/triangle.svg', i18nKey: 'tools.triangle' },
+			// { src: 'src/assets/icons/picture.svg', i18nKey: 'tools.picture' }
 		],
 		[
 			{ src: 'src/assets/icons/calligraphyPen.svg', i18nKey: 'tools.calligraphyPen' },
@@ -54,7 +55,7 @@
 	const handleToolChange = (groupIndex : number, toolIndex : number) => {
 		currentSelectedTool.value[groupIndex] = toolIndex
 		activeTool.value = { groupIndex, toolIndex }
-		
+		useCanvasStore().tool = tools[groupIndex][toolIndex].i18nKey.split('.')[1]
 	}
 </script>
 

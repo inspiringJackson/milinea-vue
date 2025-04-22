@@ -41,13 +41,9 @@ export class CanvasManager {
 		if (clampedZoom === store.zoom) return
 
 		if (center) {
-			// const scaleFactor = (prevZoom - clampedZoom) / clampedZoom
-			// store.offsetX += (center.x * scaleFactor)
-			// store.offsetY += (center.y * scaleFactor)
 			store.offsetX = center.x - (center.x - store.offsetX) * clampedZoom / prevZoom
 			store.offsetY = center.y - (center.y - store.offsetY) * clampedZoom / prevZoom
 		}
-		console.log(store.offsetX, store.offsetY)
 		store.zoom = clampedZoom
 		this.render()
 	}

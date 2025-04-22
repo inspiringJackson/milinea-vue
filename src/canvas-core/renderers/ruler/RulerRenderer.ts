@@ -58,22 +58,13 @@ export class RulerRenderer {
 		for (let sceneX = startSceneX; sceneX <= visibleEnd; sceneX += step) {
 			const viewX = sceneX * zoom + offsetX // * zoom
 	
-			// 高缩放级别处理逻辑
-			// zoom >= 100: use 10px height ruler scale
-			if (zoom >= 1000) {
-				// 统一使用10px高度的刻度线
-				console.log('Y')
-				//english: use 10px height ruler scale
-				ctx.moveTo(viewX, 0)
-				ctx.lineTo(viewX, 10)
-			} else {
-				// 常规主副刻度逻辑
-				// english: normal main and sub ruler logic
-				const isMain = (sceneX / step) % 5 === 0
-				const height = isMain ? 15 : 10
-				ctx.moveTo(viewX, 0)
-				ctx.lineTo(viewX, height)
-			}
+			// 常规主副刻度逻辑
+			// english: normal main and sub ruler logic
+			const isMain = (sceneX / step) % 5 === 0
+			const height = isMain ? 15 : 10
+			ctx.moveTo(viewX, 0)
+			ctx.lineTo(viewX, height)
+			
 			this.renderText(ctx, viewX, sceneX, false)
 		}
 		ctx.stroke()
@@ -98,15 +89,11 @@ export class RulerRenderer {
 		for (let sceneY = startSceneY; sceneY <= visibleEnd; sceneY += step) {
 			const viewY = sceneY * zoom + offsetY
 	
-			if (zoom >= 1000) {
-				ctx.moveTo(0, viewY)
-				ctx.lineTo(10, viewY)
-			} else {
-				const isMain = (sceneY / step) % 5 === 0
-				const width = isMain ? 15 : 10
-				ctx.moveTo(0, viewY)
-				ctx.lineTo(width, viewY)
-			}
+			const isMain = (sceneY / step) % 5 === 0
+			const width = isMain ? 15 : 10
+			ctx.moveTo(0, viewY)
+			ctx.lineTo(width, viewY)
+				
 			this.renderText(ctx, viewY, sceneY, true)
 		}
 		ctx.stroke()
