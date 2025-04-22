@@ -146,15 +146,15 @@ export class RenderEngine {
 		const zoomPercent = zoom * 100
 
 		// 计算可见区域的逻辑坐标范围
-		const visibleStart = -offsetX
+		const visibleStart = -offsetX / zoom
 		const visibleEnd = visibleStart + viewSize.viewWidth / zoom
 
 		// 找到第一个刻度起点
 		const startSceneX = Math.floor(visibleStart / step) * step
 
 		ctx.beginPath()
-		for (let sceneX = startSceneX; sceneX <= visibleEnd + offsetX; sceneX += step) {
-			const viewX = sceneX * zoom + offsetX * zoom
+		for (let sceneX = startSceneX; sceneX <= visibleEnd + offsetX * zoom; sceneX += step) {
+			const viewX = sceneX * zoom + offsetX // * zoom
 
 			// 高缩放级别处理逻辑
 			if (zoomPercent === 10000) {
@@ -182,15 +182,15 @@ export class RenderEngine {
 		const zoomPercent = zoom * 100
 
 		// 计算可见区域的逻辑坐标范围
-		const visibleStart = -offsetY
+		const visibleStart = -offsetY / zoom
 		const visibleEnd = visibleStart + viewSize.viewHeight / zoom
 
 		// 找到第一个刻度起点
 		const startSceneY = Math.floor(visibleStart / step) * step
 
 		ctx.beginPath()
-		for (let sceneY = startSceneY; sceneY <= visibleEnd + offsetY; sceneY += step) {
-			const viewY = sceneY * zoom + offsetY * zoom
+		for (let sceneY = startSceneY; sceneY <= visibleEnd + offsetY * zoom; sceneY += step) {
+			const viewY = sceneY * zoom + offsetY
 
 			// 高缩放级别处理逻辑
 			if (zoomPercent === 10000) {
@@ -227,8 +227,9 @@ export class RenderEngine {
 		// 添加缩放限制保护
 		const safeZoom = Math.min(Math.max(store.zoom, 0.05), 100)
 
+ctx.translate(store.offsetX, store.offsetY)
 		ctx.scale(safeZoom * this.devicePixelRatio, safeZoom * this.devicePixelRatio)
-		ctx.translate(store.offsetX, store.offsetY)
+		
 
 		// 绘制测试内容
 		ctx.fillStyle = '#2196f3'

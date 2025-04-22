@@ -24,8 +24,8 @@ export class CanvasManager {
 
 	public pan(dx : number, dy : number) {
 		const store = useCanvasStore()
-		store.offsetX += dx
-		store.offsetY += dy
+		store.offsetX += dx * store.zoom
+		store.offsetY += dy * store.zoom
 		this.render()
 	}
 
