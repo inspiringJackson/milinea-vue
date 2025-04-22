@@ -48,20 +48,21 @@ export class RulerRenderer {
 		// 计算可见区域的逻辑坐标范围
 		// english: calculate the logical coordinate range of the visible area
 		const visibleStart = -offsetX / zoom
-		const visibleEnd = visibleStart + viewSize.viewWidth / zoom
-	
+		const visibleEnd = visibleStart + viewSize.viewWidth / zoom 
+		
 		// 找到第一个刻度起点
 		// english: find the starting point of the first ruler scale
 		const startSceneX = Math.floor(visibleStart / step) * step
 	
 		ctx.beginPath()
-		for (let sceneX = startSceneX; sceneX <= visibleEnd + offsetX * zoom; sceneX += step) {
+		for (let sceneX = startSceneX; sceneX <= visibleEnd; sceneX += step) {
 			const viewX = sceneX * zoom + offsetX // * zoom
 	
 			// 高缩放级别处理逻辑
 			// zoom >= 100: use 10px height ruler scale
-			if (zoom === 100) {
+			if (zoom >= 1000) {
 				// 统一使用10px高度的刻度线
+				console.log('Y')
 				//english: use 10px height ruler scale
 				ctx.moveTo(viewX, 0)
 				ctx.lineTo(viewX, 10)
@@ -94,10 +95,10 @@ export class RulerRenderer {
 		const startSceneY = Math.floor(visibleStart / step) * step
 	
 		ctx.beginPath()
-		for (let sceneY = startSceneY; sceneY <= visibleEnd + offsetY * zoom; sceneY += step) {
+		for (let sceneY = startSceneY; sceneY <= visibleEnd; sceneY += step) {
 			const viewY = sceneY * zoom + offsetY
 	
-			if (zoom === 100) {
+			if (zoom >= 1000) {
 				ctx.moveTo(0, viewY)
 				ctx.lineTo(10, viewY)
 			} else {
