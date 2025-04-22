@@ -1,6 +1,6 @@
 # Milinea Vue - Vector Design Tool
 
-We're (probably me & AI, and welcome you!) developing a simple vector-based design tool that simplifies messy vector lines into clean subway-style route maps. Inspired by research like [this paper](https://i11www.iti.kit.edu/extra/publications/fhnrsw-dmmbc-12.pdf).
+We're (probably just me & AI, and welcome you!) developing a simple vector-based design tool that simplifies messy vector lines users draw into something like clean subway-style route maps. Inspired by research like [this paper](https://i11www.iti.kit.edu/extra/publications/fhnrsw-dmmbc-12.pdf).
 
 At this early stage, it may resemble platforms like Figma or JsDesign... Current focus is on core functionality, improving scroll bars and grid guides...
 
@@ -52,19 +52,11 @@ src/                        # Main source code directory
 └── App.vue                 # Root Vue component
 ```
 
-## Key Features
-
-- Vector line simplification (subway map style)
-- Custom scroll bar implementation
-- Grid guide system
-- Canvas-based rendering engine
-- Vue 3 composition API architecture
-
-## Development Goals
+## Development Goals Recently
 
 - [ ] Improve scroll bar functionality
-- [ ] Enhance grid guide system
-- [ ] Implement vector simplification algorithms
+- [ ] Add grid guide system
+- [ ] Implement vector simplification algorithms (maybe use [Simplify.js](https://mourner.github.io/simplify-js/))
 - [ ] Optimize rendering performance
 
 Written by AI, for reference only
