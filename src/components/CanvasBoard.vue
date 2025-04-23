@@ -52,7 +52,7 @@
 	const onMouseDown = (e : MouseEvent) => handleMouseEvent('down', e)
 	const onMouseMove = (e : MouseEvent) => handleMouseEvent('move', e)
 	const onMouseUp = (e : MouseEvent) => handleMouseEvent('up', e)
-	const onWheel = (e : WheelEvent) => handleWheelEvent(e)
+	const onWheel = (e : WheelEvent) => handleWheelEvent(e) 
 	const onKeydown = (e : KeyboardEvent) => handleKeyboradEvent('down', e)
 	const onKeypress = (e : KeyboardEvent) => handleKeyboradEvent('press', e)
 	const onKeyup = (e : KeyboardEvent) => handleKeyboradEvent('up', e)
