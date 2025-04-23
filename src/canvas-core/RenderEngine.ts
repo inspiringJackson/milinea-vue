@@ -2,6 +2,7 @@
 import { MainContentRenderer } from './renderers/main/MainContentRenderer'
 import { ScrollBarRenderer } from './renderers/scrollBar/ScrollBarRenderer'
 import { RulerRenderer } from './renderers/ruler/RulerRenderer'
+import { useCanvasStore } from '../stores/useCanvasStore'
 
 export class RenderEngine {
 	private ctx : CanvasRenderingContext2D
@@ -15,12 +16,26 @@ export class RenderEngine {
 	) {
 		this.ctx = canvas.getContext('2d')!
 		this.initCanvasSize()
+		this.setupResizeObserver()
 	}
 
 	private initCanvasSize() {
-		const rect = this.canvas.getBoundingClientRect()
-		this.canvas.width = rect.width * this.devicePixelRatio
-		this.canvas.height = rect.height * this.devicePixelRatio
+		const { width, height } = this.canvas.getBoundingClientRect()
+		
+		this.canvas.width = Math.floor(width * this.devicePixelRatio)
+		this.canvas.height = Math.floor(height * this.devicePixelRatio)
+		this.ctx.scale(this.devicePixelRatio, this.devicePixelRatio)
+	}
+	
+	private setupResizeObserver() {
+		// 监听 canvas 大小变化
+		// 重新设置 canvas 大小并渲染
+		// english: listen for canvas size changes and re-render with new size
+		const resizeObserver = new ResizeObserver(() => {
+			this.initCanvasSize()
+			this.render()
+		})
+		resizeObserver.observe(this.canvas)
 	}
 	
 	private getViewMetrics() {
@@ -31,11 +46,19 @@ export class RenderEngine {
 	}
 
 	public render() {
+		const { zoom, offsetX, offsetY } = useCanvasStore();
 		this.clearCanvas()
 
-		this.mainContentRenderer.render(this.ctx, devicePixelRatio)
-		this.rulerRenderer.render(this.ctx, devicePixelRatio, this.getViewMetrics())
-		this.scrollBarRenderer.render(this.ctx, devicePixelRatio, this.getViewMetrics())
+		this.ctx.setTransform(
+		    zoom * this.devicePixelRatio, 0,
+		    0, zoom * this.devicePixelRatio,
+		    offsetX * this.devicePixelRatio,
+		    offsetY * this.devicePixelRatio
+		);
+
+		this.mainContentRenderer.render(this.ctx)
+		this.rulerRenderer.render(this.ctx, this.getViewMetrics())
+		this.scrollBarRenderer.render(this.ctx, this.getViewMetrics())
 	}
 
 	private clearCanvas() {
