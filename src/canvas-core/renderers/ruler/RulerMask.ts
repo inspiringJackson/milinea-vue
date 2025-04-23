@@ -1,23 +1,21 @@
 // src/canvas-core/renderers/ruler/RulerMask.ts
 function initial(
-	ctx: CanvasRenderingContext2D,
-	devicePixelRatio: number
+	ctx: CanvasRenderingContext2D
 ) {
 	ctx.save()
 	ctx.resetTransform()
-	ctx.scale(devicePixelRatio, devicePixelRatio)
+
 	ctx.globalCompositeOperation = 'source-over'
 }
 
 export function renderBottomMask(
 	ctx: CanvasRenderingContext2D,
-	devicePixelRatio: number,
 	viewSize: {
 		viewWidth: number,
 		viewHeight: number
 	}
 ) {
-	initial(ctx, devicePixelRatio)
+	initial(ctx)
 	
 	const { viewWidth, viewHeight } = viewSize
 	const maskColor = '#F5F5F5'
@@ -30,10 +28,9 @@ export function renderBottomMask(
 }
 
 export function renderTopMask(
-	ctx: CanvasRenderingContext2D,
-	devicePixelRatio: number
+	ctx: CanvasRenderingContext2D
 ) {
-	initial(ctx, devicePixelRatio)
+	initial(ctx)
 	
 	const maskColor = '#F5F5F5'
 	

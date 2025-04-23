@@ -6,10 +6,9 @@ import { renderBottomMask, renderTopMask } from './RulerMask'
 export class RulerRenderer {
 	public render(
 		ctx: CanvasRenderingContext2D, 
-		devicePixelRatio : number,
 		viewSize : {viewWidth : number, viewHeight : number}
 	) {
-		renderBottomMask(ctx, devicePixelRatio, viewSize)
+		renderBottomMask(ctx, viewSize)
 		
 		const store = useCanvasStore()
 		const { offsetX, offsetY } = store
@@ -17,7 +16,6 @@ export class RulerRenderer {
 		
 		ctx.save()
 		ctx.resetTransform()
-		ctx.scale(devicePixelRatio, devicePixelRatio)
 		
 		ctx.strokeStyle = '#444'
 		ctx.fillStyle = '#aaa'
@@ -33,7 +31,7 @@ export class RulerRenderer {
 		
 		ctx.restore()
 		
-		renderTopMask(ctx, devicePixelRatio)
+		renderTopMask(ctx)
 	}
 	
 	private renderHorizontalRuler(

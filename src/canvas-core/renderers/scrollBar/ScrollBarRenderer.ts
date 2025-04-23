@@ -4,7 +4,6 @@ import { useCanvasStore } from './../../../stores/useCanvasStore'
 export class ScrollBarRenderer {
 	public render(
 		ctx : CanvasRenderingContext2D, 
-		devicePixelRatio : number,
 		viewSize : {viewWidth : number, viewHeight : number}
 	) {
 		const store = useCanvasStore()
@@ -12,7 +11,6 @@ export class ScrollBarRenderer {
 		// 保存主内容变换状态
 		ctx.save()
 		ctx.resetTransform()
-		ctx.scale(devicePixelRatio, devicePixelRatio)
 		
 		// 水平滚动条
 		ctx.fillStyle = '#ddd'

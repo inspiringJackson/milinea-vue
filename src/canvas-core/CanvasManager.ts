@@ -1,7 +1,6 @@
 // src/canvas-core/CanvasManager.ts
 import { RenderEngine } from './RenderEngine'
 import { useCanvasStore } from '../stores/useCanvasStore'
-import { screenToCanvas } from './utils/coordinate'
 
 export class CanvasManager {
 	private renderEngine : RenderEngine
@@ -30,7 +29,6 @@ export class CanvasManager {
 	}
 
 	public zoom(zoom : number, center ?: { x : number; y : number }) {
-		// console.log(zoom, center)
 		const store = useCanvasStore()
 		const prevZoom = store.zoom
 		// 应用缩放范围限制（0.02-256）
@@ -54,22 +52,11 @@ export class CanvasManager {
 
 	private handleWheel(e : WheelEvent) {
 		e.preventDefault()
-		const { clientX, clientY, deltaY } = e
-		const rect = this.canvas.getBoundingClientRect()
+		const { deltaY, offsetX, offsetY } = e
 		const point = {
-			x: clientX - rect.left,
-			y: clientY - rect.top
+			x: offsetX,
+			y: offsetY
 		}
-		// console.log(point)
-
-		// // 将屏幕坐标转换为画布逻辑坐标
-		// const logicalPoint = screenToCanvas(
-		// 	point,
-		// 	this.container,
-		// 	useCanvasStore().zoom,
-		// 	useCanvasStore().offsetX,
-		// 	useCanvasStore().offsetY
-		// )
 
 		// 计算缩放方向（放大或缩小）
 		const zoomFactor = deltaY > 0 ? 0.9 : 1.1
