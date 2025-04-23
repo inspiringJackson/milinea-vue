@@ -2,7 +2,7 @@
 <template>
 	<div class="canvas-container" ref="container">
 		<canvas ref="canvas" class="main-canvas" :class="store.tool" @mousedown="onMouseDown" @mousemove="onMouseMove"
-			@mouseup="onMouseUp" @wheel="onWheel"></canvas>
+			@mouseup="onMouseUp" @wheel="onWheel" @keydown="onKeydown" @keypress="onKeypress" @keyup="onKeyup"></canvas>
 	</div>
 </template>
 
@@ -33,7 +33,7 @@
 
 	let canvasManager : CanvasManager
 
-	const { init, handleMouseEvent, handleWheelEvent } = store
+	const { init, handleMouseEvent, handleWheelEvent, handleKeyboradEvent } = store
 
 	onMounted(() => {
 		if (!container.value || !canvas.value) return
@@ -53,19 +53,22 @@
 	const onMouseMove = (e : MouseEvent) => handleMouseEvent('move', e)
 	const onMouseUp = (e : MouseEvent) => handleMouseEvent('up', e)
 	const onWheel = (e : WheelEvent) => handleWheelEvent(e)
+	const onKeydown = (e : KeyboardEvent) => handleKeyboradEvent('down', e)
+	const onKeypress = (e : KeyboardEvent) => handleKeyboradEvent('press', e)
+	const onKeyup = (e : KeyboardEvent) => handleKeyboradEvent('up', e)
 </script>
 
 <style scoped lang="scss">
 	.main-canvas.moveView {
-		cursor: url('../assets/cursors/drag.png') 0 0, default;
+		cursor: url('../assets/cursors/drag.png') 11 9, default;
 	}
 
 	.main-canvas.movingView {
-		cursor: url('../assets/cursors/dragging.png') 0 0, default;
+		cursor: url('../assets/cursors/dragging.png') 11 12, default;
 	}
 
 	.main-canvas.selection {
-		cursor: url('../assets/cursors/selection.png') 0 0, default;
+		cursor: url('../assets/cursors/selection.png') 4 4, default;
 	}
 
 	.main-canvas.rectangle,
@@ -73,15 +76,15 @@
 	.main-canvas.diagonal,
 	.main-canvas.text,
 	.main-canvas.slice {
-		cursor: url('../assets/cursors/draw.png') 0 0, default;
+		cursor: url('../assets/cursors/draw.png') 15 15, default;
 	}
 
 	.main-canvas.calligraphyPen {
-		cursor: url('../assets/cursors/pen.png') 0 0, default;
+		cursor: url('../assets/cursors/pen.png') 5 5, default;
 	}
 
 	.main-canvas.pen {
-		cursor: url('../assets/cursors/pencil.png') 0 0, default;
+		cursor: url('../assets/cursors/pencil.png') 7 18, default;
 	}
 
 	/* 默认样式 */
