@@ -56,7 +56,7 @@ export class RenderEngine {
 		    0, zoom * this.devicePixelRatio,
 		    offsetX * this.devicePixelRatio,
 		    offsetY * this.devicePixelRatio
-		);
+		)
 
 		this.mainContentRenderer.render(this.ctx)
 		this.contentInfoRenderer.render(this.ctx)

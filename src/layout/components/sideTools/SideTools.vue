@@ -21,8 +21,8 @@
 
 	const tools : Tool[][] = [
 		[
-			{ src: 'src/assets/icons/move.svg', i18nKey: 'tools.moveView' },
-			{ src: 'src/assets/icons/mousePointer.svg', i18nKey: 'tools.selection' }
+			{ src: 'src/assets/icons/mousePointer.svg', i18nKey: 'tools.selection' },
+			{ src: 'src/assets/icons/move.svg', i18nKey: 'tools.moveView' }
 		],
 		[
 			{ src: 'src/assets/icons/rectangle.svg', i18nKey: 'tools.rectangle' },

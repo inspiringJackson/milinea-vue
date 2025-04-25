@@ -65,6 +65,11 @@ export class CanvasManager {
 	public select() {
 		this.render()
 	}
+	
+	public hover() {
+		console.log('hover')
+		this.render()
+	}
 
 	public render() {
 		this.renderEngine.render()

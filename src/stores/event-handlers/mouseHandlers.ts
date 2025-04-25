@@ -16,6 +16,19 @@ export const handleMouseEvent = (
 		y: e.clientY - rect.top
 	}
 	
+	const logicalX = (point.x - store.offsetX) / store.zoom
+	const logicalY = (point.y - store.offsetY) / store.zoom
+	
+	if (store.tool === 'selection') {
+		if (type === 'move') {
+			const hoverLayer = findLayer(store.layers, logicalX, logicalY)
+			if (store.hoverLayer !== hoverLayer) {
+				store.hoverLayer = hoverLayer
+				canvasManager.hover()
+			}
+		}
+	}
+	
 	if (e.button === 0 && (store.tool === 'moveView' || store.tool === 'movingView')) {
 		if (type === 'down') {
 			canvasManager.setLastPos(point)
@@ -44,8 +57,6 @@ export const handleMouseEvent = (
 			}
 		}
 	} else if (e.button === 0 && store.tool === 'selection') {
-		const logicalX = (point.x - store.offsetX) / store.zoom
-		const logicalY = (point.y - store.offsetY) / store.zoom
 		if (type === 'down') {
 			const layer = findLayer(store.layers, logicalX, logicalY)
 			if (layer) {
