@@ -2,6 +2,7 @@
 import { useCanvasStore } from './../../../stores/useCanvasStore'
 import { getRulerStep } from './../../utils/rulerStep'
 import { renderBottomMask, renderTopMask } from './RulerMask'
+import { renderSelectionHelper } from './RulerSelectionHelper'
 
 export class RulerRenderer {
 	public render(
@@ -32,6 +33,8 @@ export class RulerRenderer {
 		ctx.restore()
 		
 		renderTopMask(ctx)
+		
+		renderSelectionHelper(ctx)
 	}
 	
 	private renderHorizontalRuler(
