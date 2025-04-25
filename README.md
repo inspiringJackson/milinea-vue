@@ -21,16 +21,15 @@ src/                        # Main source code directory
 │   ├── adapter/            # Adapters for different rendering environments
 │   ├── components/         # Reusable canvas components
 │   ├── core/               # Core rendering logic and base classes
+│   ├── utils/              # Canvas utilities
+│   ├── types/              # Canvas type definition
 │   ├── renderers/          # Concrete renderer implementations
 │   │   ├── main/           # Main content renderer
 │   │   ├── ruler/          # Ruler measurement components
 │   │   └── scrollBar/      # Scrollbar components
 │   │
-│   ├── utils/              # Canvas utilities
-│   │
 │   ├── CanvasManager.ts    # Canvas state and lifecycle manager
-│   ├── RenderEngine.ts     # Main rendering engine
-│   └── types.ts            # Canvas type definitions
+│   └── RenderEngine.ts     # Main rendering engine
 │
 ├── components/             # Vue components (non-canvas)
 │   └── CanvasBoard.vue     # Vue wrapper for canvas
