@@ -2,7 +2,9 @@
 
 We're (probably just me & AI, and welcome you!) developing a simple vector-based design tool that simplifies messy vector lines, which users draw, into something like clean subway-style route maps. Inspired by research like [this paper](https://i11www.iti.kit.edu/extra/publications/fhnrsw-dmmbc-12.pdf).
 
-At this early stage, it may resemble platforms like Figma or JsDesign... Current focus is on core functionality, improving scroll bars and grid guides...
+At this early stage, it may resemble platforms like Figma or JsDesign... 
+
+Current focus is on core functionality, improving scroll bars and grid guides...
 
 ![Preview](https://github.com/inspiringJackson/mycdn/blob/main/milinea-vue/preview4-23.png)
 
@@ -19,22 +21,15 @@ src/                        # Main source code directory
 │   ├── adapter/            # Adapters for different rendering environments
 │   ├── components/         # Reusable canvas components
 │   ├── core/               # Core rendering logic and base classes
+│   ├── utils/              # Canvas utilities
+│   ├── types/              # Canvas type definition
 │   ├── renderers/          # Concrete renderer implementations
 │   │   ├── main/           # Main content renderer
-│   │   │   └── MainContentRenderer.ts  # Primary canvas content renderer
 │   │   ├── ruler/          # Ruler measurement components
-│   │   │   ├── RulerRenderer.ts        # Ruler visualization
-│   │   │   └── RulerMask.ts            # Ruler masking
 │   │   └── scrollBar/      # Scrollbar components
-│   │       └── ScrollBarRenderer.ts    # Custom scrollbar
-│   │
-│   ├── utils/              # Canvas utilities
-│   │   ├── coordinate.ts   # Coordinate system helpers
-│   │   └── rulerStep.ts    # Ruler calculation utilities
 │   │
 │   ├── CanvasManager.ts    # Canvas state and lifecycle manager
-│   ├── RenderEngine.ts     # Main rendering engine
-│   └── types.ts            # Canvas type definitions
+│   └── RenderEngine.ts     # Main rendering engine
 │
 ├── components/             # Vue components (non-canvas)
 │   └── CanvasBoard.vue     # Vue wrapper for canvas
@@ -45,7 +40,11 @@ src/                        # Main source code directory
 ├── locales/                # Internationalization files
 │
 ├── stores/                 # State management (Pinia)
-│   └── useCanvasStore.ts   # Canvas-related state
+│   ├── event-handlers/     # Mouse & keyboard events handlers
+│   ├── useCanvasStore.ts   # Canvas-related state & actions
+│   ├── layerUtils.ts       # Layers utils
+│   ├── state.ts            # Canvas-related state
+│   └── demoData.ts         # Demo data for testing
 │
 ├── utils/                  # General utilities
 │
@@ -56,7 +55,7 @@ src/                        # Main source code directory
 
 - [ ] Improve scroll bar functionality
 - [ ] Add grid guide system
-- [ ] Make the tools work
+- [ ] Make the tools work (2 / 9 finished)
 - [ ] Implement vector simplification algorithms (maybe use [Simplify.js](https://mourner.github.io/simplify-js/))
 - [ ] Optimize rendering performance
 
