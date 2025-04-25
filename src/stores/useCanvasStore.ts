@@ -1,22 +1,41 @@
 // src/stores/useCanvasStore.ts
 import { defineStore } from 'pinia'
 import { CanvasManager } from '../canvas-core/CanvasManager'
+import type { BaseLayer } from '../canvas-core/types/base-layer'
 
 export const useCanvasStore = defineStore('canvas', {
 	state: () => ({
-		offsetX: 0,
-		offsetY: 0,
+		offsetX: 100,
+		offsetY: 100,
 		zoom: 1,
 		isPanning: false,
+		isZooming: false,
 		canvasManager: null as CanvasManager | null,
 		contentWidth: 0,
 		contentHeight: 0,
-		tool: 'moveView'
+		tool: 'moveView',
+		layers: [] as BaseLayer[],
 	}),
 	actions: {
 		init(manager : CanvasManager) {
 			console.log('init canvas store')
 			this.canvasManager = manager
+			this.layers.push({
+				id: 'demo-frame',
+				name: 'demo-frame',
+				type: 'frame',
+				visible: true,
+				locked: false,
+				componentType: 'none',
+				boundingBox: {
+					position: { x: 0, y: 0 },
+					size: { width: 200, height: 150 }
+				},
+				childrenIds: [],
+				style: {
+					fill: ['#2196f3']
+				}
+			} as BaseLayer)
 		},
 		setTool(tool : string) {
 			this.tool = tool
@@ -60,6 +79,11 @@ export const useCanvasStore = defineStore('canvas', {
 		},
 		handleWheelEvent(e : WheelEvent) {
 			e.preventDefault()
-		}
+		},
+		handleKeyboradEvent(type : 'down' | 'press' | 'up', e : KeyboardEvent) {
+			if (e.key === 'Ctrl' && type === 'down') {
+				this.isZooming = true
+			}
+		},
 	}
 })
