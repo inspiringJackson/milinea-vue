@@ -16,6 +16,22 @@ export class CanvasManager {
 		this.renderEngine = new RenderEngine(this.canvas)
 		this.setupEventListeners()
 	}
+	
+	public getIsPanning() {
+		return this.isPanning
+	}
+
+	public setIsPanning(isPanning : boolean) {
+		this.isPanning = isPanning
+	}
+	
+	public getLastPos() {
+		return this.lastPos
+	}
+
+	public setLastPos(lastPos : { x : number; y : number }) {
+		this.lastPos = lastPos	
+	}
 
 	private setupEventListeners() {
 		this.canvas.addEventListener('wheel', this.handleWheel.bind(this))
