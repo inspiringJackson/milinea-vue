@@ -40,6 +40,7 @@ export class ContentInfoRenderer {
 		// 绘制四个角的小方块
 		// english: strokeRect, fillRect
 		ctx.fillStyle = "#FFF"
+		ctx.lineWidth = 2 / this.store.zoom
 		const offset = 4 / zoom
 		const width = 8 / zoom
 		ctx.strokeRect(box.x - offset, box.y - offset, width, width)
@@ -102,6 +103,7 @@ export class ContentInfoRenderer {
 
 		// 渲染选中状态
 		// english: render selection box
+		console.log(this.store.selectedLayers);
 		if (this.store.selectedLayers.length > 0) {
 			const selectionBox = this.calculateSelectionBounds();
 			ctx.save();
