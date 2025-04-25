@@ -25,7 +25,6 @@ export class MainContentRenderer {
 	) {
 		const store = useCanvasStore()
 		ctx.resetTransform()
-
 		// 应用缩放和位移
 		ctx.translate(store.offsetX, store.offsetY)
 		ctx.scale(store.zoom, store.zoom)
@@ -34,7 +33,7 @@ export class MainContentRenderer {
 		// ctx.fillStyle = '#2196f3'
 		// ctx.fillRect(0, 0, 200, 150)
 		// 遍历所有图层进行渲染
-		// console.log(store.layers)
+		//console.log(store.layers)
 		store.layers.forEach(layer => {
 			ctx.save()
 			try {

@@ -3,6 +3,7 @@ import { MainContentRenderer } from './renderers/main/MainContentRenderer'
 import { ScrollBarRenderer } from './renderers/scrollBar/ScrollBarRenderer'
 import { RulerRenderer } from './renderers/ruler/RulerRenderer'
 import { useCanvasStore } from '../stores/useCanvasStore'
+import { ContentInfoRenderer } from './renderers/main/ContentInfoRenderer'
 
 export class RenderEngine {
 	private ctx : CanvasRenderingContext2D
@@ -10,6 +11,7 @@ export class RenderEngine {
 	private mainContentRenderer = new MainContentRenderer()
 	private scrollBarRenderer = new ScrollBarRenderer()
 	private rulerRenderer = new RulerRenderer()
+	private contentInfoRenderer = new ContentInfoRenderer()
 
 	constructor(
 		private canvas : HTMLCanvasElement
@@ -57,6 +59,7 @@ export class RenderEngine {
 		);
 
 		this.mainContentRenderer.render(this.ctx)
+		this.contentInfoRenderer.render(this.ctx)
 		this.rulerRenderer.render(this.ctx, this.getViewMetrics())
 		this.scrollBarRenderer.render(this.ctx, this.getViewMetrics())
 	}

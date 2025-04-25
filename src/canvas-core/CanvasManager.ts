@@ -45,6 +45,10 @@ export class CanvasManager {
 		store.zoom = clampedZoom
 		this.render()
 	}
+	
+	public select() {
+		this.render()
+	}
 
 	public render() {
 		this.renderEngine.render()

@@ -9,4 +9,5 @@ export interface ShapeLayer extends BaseLayer {
 		path ?: string  // 矢量路径
 		points ?: VertexAttributes[] // 顶点属性
 	}
+	childrenId : null // 不可再分 
 }

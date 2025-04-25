@@ -1,8 +1,17 @@
 <!-- src/components/CanvasBoard.vue -->
 <template>
 	<div class="canvas-container" ref="container">
-		<canvas ref="canvas" class="main-canvas" :class="store.tool" @mousedown="onMouseDown" @mousemove="onMouseMove"
-			@mouseup="onMouseUp" @wheel="onWheel" @keydown="onKeydown" @keypress="onKeypress" @keyup="onKeyup"></canvas>
+		<canvas ref="canvas" 
+		class="main-canvas" 
+		:class="store.tool" 
+		tabindex="0"
+		@mousedown="onMouseDown" 
+		@mousemove="onMouseMove"
+		@mouseup="onMouseUp" 
+		@wheel="onWheel" 
+		@keydown="onKeydown" 
+		@keypress="onKeypress" 
+		@keyup="onKeyup"></canvas>
 	</div>
 </template>
 
@@ -47,6 +56,8 @@
 
 		init(canvasManager)
 		canvasManager.render()
+		
+		canvas.value.focus()
 	})
 
 	const onMouseDown = (e : MouseEvent) => handleMouseEvent('down', e)
@@ -98,5 +109,9 @@
 	.main-canvas {
 		width: 100%;
 		height: 100%;
+	}
+	
+	.main-canvas:focus {
+		outline: none;
 	}
 </style>
