@@ -4,6 +4,7 @@ import { ScrollBarRenderer } from './renderers/scrollBar/ScrollBarRenderer'
 import { RulerRenderer } from './renderers/ruler/RulerRenderer'
 import { useCanvasStore } from '../stores/useCanvasStore'
 import { ContentInfoRenderer } from './renderers/main/ContentInfoRenderer'
+import { GridRenderer } from './renderers/grid/gridRenderer'
 
 export class RenderEngine {
 	private ctx : CanvasRenderingContext2D
@@ -12,6 +13,7 @@ export class RenderEngine {
 	private scrollBarRenderer = new ScrollBarRenderer()
 	private rulerRenderer = new RulerRenderer()
 	private contentInfoRenderer = new ContentInfoRenderer()
+	private gridRenderer = new GridRenderer()
 
 	constructor(
 		private canvas : HTMLCanvasElement
@@ -48,7 +50,7 @@ export class RenderEngine {
 	}
 
 	public render() {
-		const { zoom, offsetX, offsetY } = useCanvasStore();
+		const { gridVisible, zoom, offsetX, offsetY } = useCanvasStore();
 		this.clearCanvas()
 
 		this.ctx.setTransform(
@@ -57,9 +59,15 @@ export class RenderEngine {
 		    offsetX * this.devicePixelRatio,
 		    offsetY * this.devicePixelRatio
 		)
-
+		if (zoom < 10 && gridVisible) {
+			this.gridRenderer.render(this.ctx, this.getViewMetrics())
+		}
 		this.mainContentRenderer.render(this.ctx)
+		
 		this.contentInfoRenderer.render(this.ctx)
+		if (zoom >= 10) {
+			this.gridRenderer.render(this.ctx, this.getViewMetrics())
+		}
 		this.rulerRenderer.render(this.ctx, this.getViewMetrics())
 		this.scrollBarRenderer.render(this.ctx, this.getViewMetrics())
 	}
