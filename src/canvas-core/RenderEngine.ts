@@ -5,6 +5,7 @@ import { RulerRenderer } from './renderers/ruler/RulerRenderer'
 import { useCanvasStore } from '../stores/useCanvasStore'
 import { ContentInfoRenderer } from './renderers/main/ContentInfoRenderer'
 import { GridRenderer } from './renderers/grid/GridRenderer'
+import { PathEditingRenderer } from './renderers/main/PathEditingRenderer'
 
 export class RenderEngine {
 	private ctx : CanvasRenderingContext2D
@@ -14,6 +15,7 @@ export class RenderEngine {
 	private rulerRenderer = new RulerRenderer()
 	private contentInfoRenderer = new ContentInfoRenderer()
 	private gridRenderer = new GridRenderer()
+	private pathEditingRenderer = new PathEditingRenderer()
 
 	constructor(
 		private canvas : HTMLCanvasElement
@@ -49,10 +51,11 @@ export class RenderEngine {
 		}
 	}
 
-	public render() {
-		const { gridVisible, zoom, offsetX, offsetY } = useCanvasStore();
+	public async render() {
+		const { isPathEditing, gridVisible, zoom, offsetX, offsetY } = useCanvasStore();
 		this.clearCanvas()
 
+		this.ctx.save()
 		this.ctx.setTransform(
 		    zoom * this.devicePixelRatio, 0,
 		    0, zoom * this.devicePixelRatio,
@@ -62,8 +65,10 @@ export class RenderEngine {
 		if (zoom < 10 && gridVisible) {
 			this.gridRenderer.render(this.ctx, this.getViewMetrics())
 		}
-		this.mainContentRenderer.render(this.ctx)
-		
+		await this.mainContentRenderer.render(this.ctx)
+		if (isPathEditing) {
+			this.pathEditingRenderer.render(this.ctx)
+		}
 		this.contentInfoRenderer.render(this.ctx)
 		if (zoom >= 10) {
 			this.gridRenderer.render(this.ctx, this.getViewMetrics())

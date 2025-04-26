@@ -2,7 +2,7 @@
 import { defineStore } from 'pinia'
 import { CanvasManager } from '../canvas-core/CanvasManager'
 import { initialState } from './state'
-import { demoData } from './demoData'
+import { createDemoData } from './demoData'
 import { handleMouseEvent } from './event-handlers/mouseHandlers'
 import { handleKeyboardEvent } from './event-handlers/keyboardHandlers'
 import { useHistoryStore } from './useHistoryStore'
@@ -13,12 +13,19 @@ import { arraysEqual } from './layerUtils'
 export const useCanvasStore = defineStore('canvas', {
 	state: initialState,
 	actions: {
-		init(manager : CanvasManager) {
+		async init(manager : CanvasManager) {
 			this.canvasManager = manager
-			this.layers.push(...demoData)
+			this.layers = await createDemoData()
 		},
 		setTool(tool : string) {
 			this.tool = tool
+			if (tool === 'calligraphyPen') {
+				this.isPathEditing = true
+				this.isPathDrawing = true
+			} else {
+				this.isPathEditing = false
+				this.isPathDrawing = false
+			}
 		},
 		handleMouseEvent(type : 'down' | 'move' | 'up', e : MouseEvent) {
 			handleMouseEvent(type, e)

@@ -25,3 +25,8 @@ export type ShadowStyle = { // 阴影样式
 	offset : { x : number; y : number } // 偏移量
 	spread : number // 阴影扩散
 }
+
+export type ImageFill = {
+  type: 'image'
+  src: string
+}

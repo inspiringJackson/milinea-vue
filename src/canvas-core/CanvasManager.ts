@@ -70,6 +70,10 @@ export class CanvasManager {
 	public hover() {
 		this.render()
 	}
+	
+	public enterPathEditMode() {
+		this.render()
+	}
 
 	public render() {
 		this.renderEngine.render()

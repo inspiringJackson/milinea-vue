@@ -8,12 +8,16 @@ export const initialState = () => ({
 	canvasManager: null as CanvasManager | null,
 	offsetX: 100,
 	offsetY: 100,
+	logicalX: 0,
+	logicalY: 0,
 	zoom: 1,
 	panSpeed: 0.4,
 
 	isPanning: false,
 	isZooming: false,
 	isSelecting: false,
+	isPathEditing: false,
+	isPathDrawing: false,
 
 	shiftKey: false,
 	ctrlKey: false,

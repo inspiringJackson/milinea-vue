@@ -60,7 +60,8 @@
 		console.log(groupIndex, toolIndex)
 		currentSelectedTool.value[groupIndex] = toolIndex
 		activeTool.value = { groupIndex, toolIndex }
-		useCanvasStore().tool = tools[groupIndex][toolIndex].i18nKey.split('.')[1]
+		const tool = tools[groupIndex][toolIndex].i18nKey.split('.')[1]
+		useCanvasStore().setTool(tool)
 	}
 	
 	onMounted(() => {

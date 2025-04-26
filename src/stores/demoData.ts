@@ -1,8 +1,14 @@
-// src/stores/demo-data.ts
-import type { BaseLayer } from "../canvas-core/types/base-layer"
+// /src/stores/demo-data.ts
+import type { BaseLayer } from "../canvas-core/types/base-layer";
+import { getImageDimensions } from "../utils/image-loader";
 
-export const demoData : BaseLayer[] = [
-	{
+const LOCAL_IMAGE_PATH = 'src/assets/demo/demo_map.jpg';
+
+export async function createDemoData() : Promise<BaseLayer[]> {
+	// 获取图片尺寸
+	const dimensions = await getImageDimensions(LOCAL_IMAGE_PATH);
+
+	const demoLayer : BaseLayer = {
 		id: 'demo-frame',
 		name: 'demo-frame',
 		type: 'frame',
@@ -12,28 +18,22 @@ export const demoData : BaseLayer[] = [
 		componentType: 'none',
 		boundingBox: {
 			position: { x: 0, y: 0 },
-			size: { width: 20, height: 15 }
+			size: {
+				width: dimensions.width,
+				height: dimensions.height
+			}
 		},
 		childrenId: [],
 		style: {
-			fill: ['#2196f3']
+			fill: [{
+				type: 'image',
+				src: LOCAL_IMAGE_PATH
+			}]
 		}
-	},
-	{
-		id: 'demo-frame2',
-		name: 'demo-frame2',
-		type: 'frame',
-		visible: true,
-		locked: false,
-		isSelected: false,
-		componentType: 'none',
-		boundingBox: {
-			position: { x: 200, y: 75 },
-			size: { width: 150, height: 150 }
-		},
-		childrenId: [],
-		style: {
-			fill: ['#A5D63F']
-		}
-	}
-]
+	};
+
+	return [demoLayer];
+}
+
+// 使用示例
+// const demoData = await createDemoData();

@@ -25,10 +25,18 @@ export const handleMouseEvent = (
 	if (store.tool === 'selection') {
 		if (type === 'move') {
 			const hoverLayer = findLayer(store.layers, logicalX, logicalY)
-			if (store.hoverLayer !== hoverLayer) {
+			if (store.hoverLayer !== hoverLayer && hoverLayer.type !== 'frame') {
 				store.hoverLayer = hoverLayer
 				canvasManager.hover()
 			}
+		}
+	}
+	
+	if (store.isPathEditing) {
+		if (type === 'move') {
+			store.logicalX = logicalX * store.zoom
+			store.logicalY = logicalY * store.zoom
+			canvasManager.enterPathEditMode()
 		}
 	}
 
@@ -133,7 +141,7 @@ export const handleMouseEvent = (
 
 			// 处理多选逻辑
 			// english: handle multi-select logic
-			if (layer) {
+			if (layer && layer.type !== 'frame') {
 				if (!e.shiftKey) {
 					// 非多选模式：清空原有选择
 					// english: non-multi-select mode: clear previous selection
@@ -162,6 +170,14 @@ export const handleMouseEvent = (
 
 			canvasManager.select()
 			e.preventDefault()
+		}
+	}
+	
+	// 路径绘制
+	// english: path drawing
+	if (store.isPathEditing) {
+		if (store.isPathDrawing && e.button === 0 && type === 'down') {
+			// TODO
 		}
 	}
 }

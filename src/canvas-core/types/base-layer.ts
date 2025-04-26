@@ -1,7 +1,7 @@
 // src/canvas-core/types/base-layer.ts
 import { LayerType, ComponentType, Transform } from "./core-types";
 import { Coordinate, Size } from "./geometry-types";
-import { StrokeStyle, ShadowStyle } from "./style-types";
+import { StrokeStyle, ShadowStyle, ImageFill } from "./style-types";
 
 export interface BaseLayer {
 	id : string
@@ -18,7 +18,7 @@ export interface BaseLayer {
 	}
 	transform ?: Transform // 变换矩阵
 	style ?: {
-		fill ?: string[] // 填充颜色
+		fill ?: string[] | ImageFill[] // 填充颜色
 		stroke ?: StrokeStyle[] // 描边样式
 		shadow ?: ShadowStyle[] // 阴影样式
 	}

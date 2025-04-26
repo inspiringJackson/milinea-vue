@@ -4,15 +4,38 @@ import { useCanvasStore } from './../../../stores/useCanvasStore'
 import type { BaseLayer } from '../../types/base-layer'
 import type { FrameLayer } from '../../types/layers/frame-layer'
 import type { ShapeLayer } from '../../types/layers/shape-layer'
+import { loadImage } from './../../../utils/image-loader'
 
 export class MainContentRenderer {
-	private renderFrameLayer(ctx : CanvasRenderingContext2D, layer : FrameLayer) {
+	private async renderFrameLayer(ctx : CanvasRenderingContext2D, layer : FrameLayer) {
 		const { position, size } = layer.boundingBox
-		const fillColor = layer.style?.fill?.[0]
+		const { zoom } = useCanvasStore()
 
-		if (fillColor) {
-			ctx.fillStyle = fillColor
-			ctx.fillRect(position.x, position.y, size.width, size.height)
+		if (layer.style.fill) {
+			for (const fill of layer.style.fill) {
+				if (typeof fill === 'string') {
+					// 处理颜色填充
+					ctx.fillStyle = fill
+					ctx.fillRect(position.x, position.y, size.width, size.height)
+				} else if (fill.type === 'image') {
+					// 处理图片填充
+					try {
+						const img = await loadImage(fill.src)
+						ctx.save()
+						ctx.imageSmoothingEnabled = false;
+						// ctx.mozImageSmoothingEnabled = false;
+						// ctx.webkitImageSmoothingEnabled = false;
+						// ctx.msImageSmoothingEnabled = false;
+						ctx.drawImage(img, 0, 0, size.width, size.height, position.x, position.y, size.width, size.height)
+						ctx.restore()
+					} catch (error) {
+						console.error('Failed to load image:', fill.src, error)
+						// 图片加载失败时显示备用颜色
+						ctx.fillStyle = '#cccccc'
+						ctx.fillRect(position.x, position.y, size.width, size.height)
+					}
+				}
+			}
 		}
 	}
 
@@ -20,7 +43,7 @@ export class MainContentRenderer {
 		// 可根据需要实现具体形状渲染逻辑
 	}
 
-	public render(
+	public async render(
 		ctx : CanvasRenderingContext2D
 	) {
 		const store = useCanvasStore()
@@ -29,17 +52,13 @@ export class MainContentRenderer {
 		ctx.translate(store.offsetX, store.offsetY)
 		ctx.scale(store.zoom, store.zoom)
 
-		// 绘制测试内容（后续可替换为正式内容）
-		// ctx.fillStyle = '#2196f3'
-		// ctx.fillRect(0, 0, 200, 150)
 		// 遍历所有图层进行渲染
-		//console.log(store.layers)
-		store.layers.forEach(layer => {
+		store.layers.forEach(async (layer) => {
 			ctx.save()
 			try {
 				switch (layer.type) {
 					case 'frame':
-						this.renderFrameLayer(ctx, layer as FrameLayer)
+						await this.renderFrameLayer(ctx, layer as FrameLayer)
 						break
 					case 'group':
 						// 实现组渲染逻辑
