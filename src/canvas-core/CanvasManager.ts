@@ -48,10 +48,11 @@ export class CanvasManager {
 		const store = useCanvasStore()
 		const prevZoom = store.zoom
 		// 应用缩放范围限制（0.02-256）
+		// english: limit zoom range (0.02-256)
 		const clampedZoom = Math.min(Math.max(zoom, 0.05), 100)
-		// console.log(clampedZoom)
 
 		// 添加缩放限制检测
+		// english: add zoom limit detection
 		if (clampedZoom === store.zoom) return
 
 		if (center) {

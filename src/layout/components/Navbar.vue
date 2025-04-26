@@ -10,7 +10,7 @@
 			</n-button>
 			<n-divider vertical></n-divider>
 			<div class="zoomButtonPanel">
-				<div class="zoomNum">{{zoomNum}}%</div>
+				<div class="zoomNum">{{Math.round(useCanvasStore().zoom * 100)}}%</div>
 				<n-icon size="16">
 					<img style="rotate: 0deg;" src="./../../assets/icons/menuArrow.svg" alt="preferencesMenu">
 				</n-icon>
@@ -40,12 +40,12 @@
 	import {
 		useI18n
 	} from 'vue-i18n'
+	import { useCanvasStore } from '../../stores/useCanvasStore'
 
 	const {
 		locale,
 		t
 	} = useI18n()
-	const zoomNum = ref(100)
 
 	onMounted(() => {
 		const savedLocale = localStorage.getItem('locale')
@@ -98,7 +98,7 @@
 					margin-left: 5px;
 					font-size: 12px;
 					line-height: 16px;
-					color: #999;
+					color: #000;
 				}
 			}
 		}
