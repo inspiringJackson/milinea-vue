@@ -1,8 +1,8 @@
 <template>
 	<n-tooltip placement="right" :show-arrow="false" trigger="hover">
 		<template #trigger>
-			<n-button class="tool-button" :class="{ 'active': active }" :bordered="false" :type="active ? 'primary' : 'default'"
-				@click="handleMainClick">
+			<n-button class="tool-button" :class="{ 'active': active }" :bordered="false"
+				:type="active ? 'primary' : 'default'" @click="handleMainClick">
 				<template #icon>
 					<div class="icon-container">
 						<n-icon size="20" class="main-icon">
@@ -20,13 +20,17 @@
 			</n-button>
 		</template>
 		{{ t(currentTool.i18nKey) }}
+		<n-tag :bordered="false" type="success" round>
+			{{currentTool.shortCut}}
+		</n-tag>
 	</n-tooltip>
 </template>
 
 <script setup lang="ts">
 	import { computed, ref, h } from 'vue'
 	import { useI18n } from 'vue-i18n'
-	import { NIcon } from 'naive-ui'
+	import { NIcon, NTag } from 'naive-ui'
+	import { watch } from 'vue'
 
 	const { t } = useI18n()
 
@@ -38,13 +42,21 @@
 		active: {
 			type: Boolean,
 			default: false
+		},
+		selectedIndex: {
+			type: Number,
+			default: 0
 		}
 	})
 
 	const emit = defineEmits(['tool-change'])
 
-	const selectedIndex = ref(0)
+	const selectedIndex = ref(props.selectedIndex)
 	const showPopselect = ref(false)
+
+	watch(() => props.selectedIndex, (newVal) => {
+		selectedIndex.value = newVal
+	})
 
 	const currentTool = computed(() => {
 		return props.toolGroup[selectedIndex.value]
@@ -56,7 +68,14 @@
 				h(NIcon, { size: 16, class: 'option-icon' }, () =>
 					h('img', { src: tool.src, class: 'icon' })
 				),
-				h('span', { class: 'option-label' }, t(tool.i18nKey))
+				h('span', { class: 'option-label' }, t(tool.i18nKey)),
+				h('div', { class: 'option-hint' }, [
+					h(NTag, { round: true, 
+					type: 'success', 
+					bordered: false,
+					style: { minWidth: '2rem' }
+					}, () => tool.shortCut)
+				])
 			]),
 			value: index
 		}))
@@ -149,11 +168,17 @@
 			z-index: 3;
 		}
 	}
+	
+	:deep(.n-base-select-option__content) {
+		width: 100%;
+	}
 
 	:global(.option-content) {
 		display: flex;
 		align-items: center;
+		// justify-content: space-between;
 		gap: 8px;
+		width: 100%;
 	}
 
 	:global(.option-icon) {
@@ -165,8 +190,23 @@
 			filter: brightness(0);
 		}
 	}
+	
+	:global(.option-hint) {
+		margin-left: auto;
+	}
 
 	:global(.option-label) {
 		white-space: nowrap;
+	}
+</style>
+
+<style>
+	.n-base-select-option__content {
+		width: 100%;
+	}
+	
+	.n-tag__content {
+		width: 100%;
+		text-align: center;
 	}
 </style>

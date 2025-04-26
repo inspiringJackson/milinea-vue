@@ -30,6 +30,12 @@ export const handleKeyboardEvent = (
 	} else if (e.key === 'Alt' && type === 'up') {
 		store.altKey = false
 	}
+	
+	if (e.key === 'H' && type === 'down') {
+		store.hKey = true
+	} else if (e.key === 'H' && type === 'up') {
+		store.hKey = false
+	}
 
 	if (e.key === 'S' && type === 'down') {
 		store.sKey = true
@@ -37,9 +43,17 @@ export const handleKeyboardEvent = (
 		store.sKey = false
 	}
 	
+	if (e.key === 'V' && type === 'down') {
+		store.vKey = true
+	} else if (e.key === 'V' && type === 'up') {
+		store.vKey = false
+	}
+	
 	if (e.key === 'X' && type === 'down') {
 		store.xKey = true
 	} else if (e.key === 'X' && type === 'up') {
 		store.xKey = false
 	}
+	
+	
 }

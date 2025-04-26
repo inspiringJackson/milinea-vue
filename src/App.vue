@@ -12,10 +12,15 @@
 	const {
 		t
 	} = useI18n()
+	
+
 </script>
 
 <template>
-	<div id="app">
+	<div id="app" 
+		@keydown="onKeydown" 
+		@keypress="onKeypress" 
+		@keyup="onKeyup">
 		<NavBar />
 		<div class="main">
 			<SideTools />

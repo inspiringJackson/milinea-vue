@@ -16,7 +16,9 @@ export const initialState = () => ({
 	shiftKey: false,
 	ctrlKey: false,
 	altKey: false,
+	hKey: false,
 	sKey: false,
+	vKey: false,
 	xKey: false,
 	
 	contentWidth: 0,
