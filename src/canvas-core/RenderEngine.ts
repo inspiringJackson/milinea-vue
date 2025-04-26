@@ -4,7 +4,7 @@ import { ScrollBarRenderer } from './renderers/scrollBar/ScrollBarRenderer'
 import { RulerRenderer } from './renderers/ruler/RulerRenderer'
 import { useCanvasStore } from '../stores/useCanvasStore'
 import { ContentInfoRenderer } from './renderers/main/ContentInfoRenderer'
-import { GridRenderer } from './renderers/grid/gridRenderer'
+import { GridRenderer } from './renderers/grid/GridRenderer'
 
 export class RenderEngine {
 	private ctx : CanvasRenderingContext2D

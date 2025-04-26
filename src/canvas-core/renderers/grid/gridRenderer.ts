@@ -1,6 +1,6 @@
 // src/canvas-core/renderers/grid/gridRenderer.ts
 import { useCanvasStore } from './../../../stores/useCanvasStore'
-import { getRulerStep } from './../../utils/rulerStep'
+import { getRulerStep } from './../../utils/rulerStep' 
 
 export class GridRenderer {
 	public render(
