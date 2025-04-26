@@ -5,6 +5,8 @@
 	import SideTools from './layout/components/sideTools/SideTools.vue'
 	import LeftMenu from './layout/components/leftMenuPanel/LeftMenuPanel.vue'
 	import CanvasBoard from './components/CanvasBoard.vue'
+	import { useHistoryStore } from './stores/useHistoryStore'
+	import { onMounted } from 'vue'
 	import {
 		useI18n
 	} from 'vue-i18n'
@@ -13,6 +15,20 @@
 		t
 	} = useI18n()
 	
+	const historyStore = useHistoryStore()
+	
+	onMounted(() => {
+		const handleKeydown = (e) => {
+			e.preventDefault()
+			if (e.ctrlKey && e.key === 'z') {
+				historyStore.undo()
+			} else if (e.ctrlKey && e.key === 'y') {
+				historyStore.redo()
+			}
+		}
+		
+		window.addEventListener('keydown', handleKeydown)
+	})
 
 </script>
 

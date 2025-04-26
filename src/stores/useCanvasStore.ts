@@ -5,14 +5,15 @@ import { initialState } from './state'
 import { demoData } from './demoData'
 import { handleMouseEvent } from './event-handlers/mouseHandlers'
 import { handleKeyboardEvent } from './event-handlers/keyboardHandlers'
-import { findLayer } from './layerUtils'
-
+import { useHistoryStore } from './useHistoryStore'
+import { MoveSelectedLayersCommand } from './commands/MoveSelectedLayersCommand'
+import { SelectLayerCommand } from './commands/SelectLayerCommand'
+import { arraysEqual } from './layerUtils'
 
 export const useCanvasStore = defineStore('canvas', {
 	state: initialState,
 	actions: {
 		init(manager : CanvasManager) {
-			console.log('init canvas store')
 			this.canvasManager = manager
 			this.layers.push(...demoData)
 		},
@@ -29,8 +30,22 @@ export const useCanvasStore = defineStore('canvas', {
 			e.preventDefault()
 			handleKeyboardEvent(type, e)
 		},
-		findLayer(x: number, y: number) {
-		  return findLayer(this.layers, x, y)
-		}
+		commitMoveSelectedLayers(layerIds : string[], deltaX : number, deltaY : number) {
+			const historyStore = useHistoryStore()
+			historyStore.addCommand(
+				new MoveSelectedLayersCommand(layerIds, deltaX, deltaY, this)
+			)
+		},
+		commitSelectionChange(prevSelectedIds : string[], newSelectedIds : string[]) {
+			const historyStore = useHistoryStore()
+
+			// 跳过完全相同的选择状态
+			// english: skip identical selection state
+			if (arraysEqual(prevSelectedIds, newSelectedIds)) return
+
+			historyStore.addCommand(
+				new SelectLayerCommand(prevSelectedIds, newSelectedIds, this)
+			)
+		},
 	}
 })

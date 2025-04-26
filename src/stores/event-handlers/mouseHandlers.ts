@@ -20,6 +20,8 @@ export const handleMouseEvent = (
 	const logicalX = (point.x - store.offsetX) / store.zoom
 	const logicalY = (point.y - store.offsetY) / store.zoom
 
+	// 悬停状态
+	// english: hover state
 	if (store.tool === 'selection') {
 		if (type === 'move') {
 			const hoverLayer = findLayer(store.layers, logicalX, logicalY)
@@ -30,6 +32,8 @@ export const handleMouseEvent = (
 		}
 	}
 
+	// 选区拖拽
+	// english: selection dragging
 	if (store.tool === 'selection' && store.selectedLayers.length > 0) {
 		if (type === 'down' && e.button === 0) {
 			// 检查点击位置是否在选区内
@@ -56,7 +60,7 @@ export const handleMouseEvent = (
 			if (type === 'move') {
 				const rawDeltaX = logicalX - store.dragState.startX
 				const rawDeltaY = logicalY - store.dragState.startY
-				
+
 				const snapStep = 0.5
 				const deltaX = Math.round(rawDeltaX / snapStep) * snapStep
 				const deltaY = Math.round(rawDeltaY / snapStep) * snapStep
@@ -74,6 +78,17 @@ export const handleMouseEvent = (
 			}
 
 			if (type === 'up') {
+				const movedLayerIds = store.selectedLayers.map(l => l.id)
+				const rawDeltaX = logicalX - store.dragState.startX
+				const rawDeltaY = logicalY - store.dragState.startY
+
+				const snapStep = 0.5
+				const deltaX = Math.round(rawDeltaX / snapStep) * snapStep
+				const deltaY = Math.round(rawDeltaY / snapStep) * snapStep
+
+				if (deltaX !== 0 || deltaY !== 0) {
+					store.commitMoveSelectedLayers(movedLayerIds, deltaX, deltaY)
+				}
 				store.dragState.isDragging = false
 				store.dragState.originalPositions = []
 				e.preventDefault()
@@ -82,6 +97,8 @@ export const handleMouseEvent = (
 		}
 	}
 
+	// 移动视图
+	// english: move view
 	if (e.button === 0 && (store.tool === 'moveView' || store.tool === 'movingView')) {
 		if (type === 'down') {
 			canvasManager.setLastPos(point)
@@ -109,26 +126,42 @@ export const handleMouseEvent = (
 				store.tool = 'moveView'
 			}
 		}
-	} else if (e.button === 0 && store.tool === 'selection') {
+	} else if (e.button === 0 && store.tool === 'selection') { // 点击选中 englist: select
 		if (type === 'down') {
+			const prevSelectedIds = [...store.selectedLayers.map(l => l.id)]
 			const layer = findLayer(store.layers, logicalX, logicalY)
+
+			// 处理多选逻辑
+			// english: handle multi-select logic
 			if (layer) {
-				if (!store.isSelecting) {
-					store.layers.forEach(l => {
-						l.isSelected = false
-					})
+				if (!e.shiftKey) {
+					// 非多选模式：清空原有选择
+					// english: non-multi-select mode: clear previous selection
+					store.layers.forEach(l => l.isSelected = false)
 					store.selectedLayers = []
 				}
-				layer.isSelected = true
-				store.selectedLayers.push(layer)
-				console.log(store.selectedLayers)
-			} else {
-				store.layers.forEach(l => {
-					l.isSelected = false
-				})
+				// 切换选中状态
+				// english: toggle select state
+				layer.isSelected = !layer.isSelected
+				if (layer.isSelected) {
+					store.selectedLayers.push(layer)
+				} else {
+					store.selectedLayers = store.selectedLayers.filter(l => l.id !== layer.id)
+				}
+			} else if (!e.shiftKey) {
+				// 点击空白区域且非多选模式：清空选择
+				// english: click blank area and non-multi-select mode: clear selection
+				store.layers.forEach(l => l.isSelected = false)
 				store.selectedLayers = []
 			}
+
+			// 提交选择变更到历史记录
+			// english: commit selection change to history
+			const newSelectedIds = store.selectedLayers.map(l => l.id)
+			store.commitSelectionChange(prevSelectedIds, newSelectedIds)
+
 			canvasManager.select()
+			e.preventDefault()
 		}
 	}
 }

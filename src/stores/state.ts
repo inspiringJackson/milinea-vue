@@ -4,7 +4,7 @@ import type { CanvasManager } from '../canvas-core/CanvasManager'
 
 export const initialState = () => ({
 	gridVisible: false,
-	
+
 	canvasManager: null as CanvasManager | null,
 	offsetX: 100,
 	offsetY: 100,
@@ -35,5 +35,5 @@ export const initialState = () => ({
 		startX: 0,
 		startY: 0,
 		originalPositions: [] as Array<{ id : string; x : number; y : number }>
-	}
+	},
 })

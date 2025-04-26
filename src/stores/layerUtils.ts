@@ -18,3 +18,11 @@ export const findLayer = (layers : BaseLayer[], x : number, y : number) : BaseLa
 	}
 	return null
 }
+
+export function arraysEqual(a : string[], b : string[]) {
+	// 数组是否相等
+	// english: whether two arrays are equal
+	if (a === b) return true
+	if (a.length !== b.length) return false
+	return a.every((id, i) => id === b[i])
+}
