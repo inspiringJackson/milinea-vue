@@ -7,10 +7,17 @@ export const initialState = () => ({
 	offsetX: 100,
 	offsetY: 100,
 	zoom: 1,
+	panSpeed: 0.4,
 	
 	isPanning: false,
 	isZooming: false,
 	isSelecting: false,
+	
+	shiftKey: false,
+	ctrlKey: false,
+	altKey: false,
+	sKey: false,
+	xKey: false,
 	
 	contentWidth: 0,
 	contentHeight: 0,

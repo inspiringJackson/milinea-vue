@@ -26,6 +26,7 @@ export const useCanvasStore = defineStore('canvas', {
 			e.preventDefault()
 		},
 		handleKeyboradEvent(type : 'down' | 'press' | 'up', e : KeyboardEvent) {
+			e.preventDefault()
 			handleKeyboardEvent(type, e)
 		},
 		findLayer(x: number, y: number) {

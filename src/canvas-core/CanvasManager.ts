@@ -67,7 +67,6 @@ export class CanvasManager {
 	}
 	
 	public hover() {
-		console.log('hover')
 		this.render()
 	}
 
@@ -76,17 +75,40 @@ export class CanvasManager {
 	}
 
 	private handleWheel(e : WheelEvent) {
+		const store = useCanvasStore()
 		e.preventDefault()
 		const { deltaY, offsetX, offsetY } = e
-		const point = {
-			x: offsetX,
-			y: offsetY
+		if (store.isZooming) {
+			if (!store.shiftKey) {
+				const point = {
+					x: offsetX,
+					y: offsetY
+				}
+				
+				const zoomFactor = deltaY > 0 ? 0.9 : 1.1
+				const newZoom = useCanvasStore().zoom * zoomFactor
+				
+				this.zoom(newZoom, point)
+			}
+		} else {
+			const dx = deltaY * store.panSpeed / store.zoom
+			const dy = deltaY * store.panSpeed / store.zoom
+			if (store.shiftKey) {
+				if (store.xKey && !store.sKey) {
+					// ↖↘
+					this.pan(-dx, -dy)
+				} else if (!store.xKey && store.sKey) {
+					// ↙↗
+					this.pan(dx, -dy)
+				} else {
+					// ←→
+					this.pan(-dx, 0)
+				}
+			} else {
+				// 垂直平移
+				// horizontal pan
+				this.pan(0, -dy)
+			}
 		}
-
-		// 计算缩放方向（放大或缩小）
-		const zoomFactor = deltaY > 0 ? 0.9 : 1.1
-		const newZoom = useCanvasStore().zoom * zoomFactor
-
-		this.zoom(newZoom, point)
 	}
 }
