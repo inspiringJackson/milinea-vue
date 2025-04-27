@@ -83,8 +83,8 @@ export class CanvasManager {
 		const store = useCanvasStore()
 		e.preventDefault()
 		const { deltaY, offsetX, offsetY } = e
-		if (store.isZooming) {
-			if (!store.shiftKey) {
+		if ((store.isZooming || e.ctrlKey ) && !e.shiftKey) {
+			if (!store.shiftKey || !e.shiftKey) {
 				const point = {
 					x: offsetX,
 					y: offsetY
@@ -98,11 +98,13 @@ export class CanvasManager {
 		} else {
 			const dx = deltaY * store.panSpeed / store.zoom
 			const dy = deltaY * store.panSpeed / store.zoom
-			if (store.shiftKey) {
-				if (store.xKey && !store.sKey) {
+			if (store.shiftKey || e.shiftKey) {
+				if ((store.altKey && !store.ctrlKey) || 
+					(e.altKey && !e.ctrlKey)) { // if (store.xKey && !store.sKey) {
 					// ↖↘
 					this.pan(-dx, -dy)
-				} else if (!store.xKey && store.sKey) {
+				} else if ((!store.altKey && store.ctrlKey) || 
+							(!e.altKey && e.ctrlKey)) { //(!store.xKey && store.sKey) {
 					// ↙↗
 					this.pan(dx, -dy)
 				} else {

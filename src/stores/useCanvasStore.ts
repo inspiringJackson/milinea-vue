@@ -33,7 +33,7 @@ export const useCanvasStore = defineStore('canvas', {
 		handleWheelEvent(e : WheelEvent) {
 			e.preventDefault()
 		},
-		handleKeyboradEvent(type : 'down' | 'press' | 'up', e : KeyboardEvent) {
+		handleKeyboardEvent(type : 'down' | 'press' | 'up', e : KeyboardEvent) {
 			e.preventDefault()
 			handleKeyboardEvent(type, e)
 		},

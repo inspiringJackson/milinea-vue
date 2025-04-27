@@ -1,17 +1,9 @@
 <!-- src/components/CanvasBoard.vue -->
 <template>
 	<div class="canvas-container" ref="container">
-		<canvas ref="canvas" 
-		class="main-canvas" 
-		:class="store.tool" 
-		tabindex="0"
-		@mousedown="onMouseDown" 
-		@mousemove="onMouseMove"
-		@mouseup="onMouseUp" 
-		@wheel="onWheel" 
-		@keydown="onKeydown" 
-		@keypress="onKeypress" 
-		@keyup="onKeyup"></canvas>
+		<canvas ref="canvas" class="main-canvas" :class="store.tool" tabindex="0" @mouseenter="onMouseEnter"
+			@mouseleave="onMouseLeave" @mousedown="onMouseDown" @mousemove="onMouseMove" @mouseup="onMouseUp"
+			@wheel="onWheel" @keydown="onKeydown" @keypress="onKeypress" @keyup="onKeyup"></canvas>
 	</div>
 </template>
 
@@ -42,7 +34,7 @@
 
 	let canvasManager : CanvasManager
 
-	const { init, handleMouseEvent, handleWheelEvent, handleKeyboradEvent } = store
+	const { init, handleMouseEvent, handleWheelEvent, handleKeyboardEvent } = store
 
 	onMounted(() => {
 		if (!container.value || !canvas.value) return
@@ -56,17 +48,24 @@
 
 		init(canvasManager)
 		canvasManager.render()
-		
+
 		canvas.value.focus()
+		canvas.value.addEventListener('blur', () => {
+			canvas.value?.focus()
+		})
 	})
 
 	const onMouseDown = (e : MouseEvent) => handleMouseEvent('down', e)
 	const onMouseMove = (e : MouseEvent) => handleMouseEvent('move', e)
 	const onMouseUp = (e : MouseEvent) => handleMouseEvent('up', e)
-	const onWheel = (e : WheelEvent) => handleWheelEvent(e) 
-	const onKeydown = (e : KeyboardEvent) => handleKeyboradEvent('down', e)
-	const onKeypress = (e : KeyboardEvent) => handleKeyboradEvent('press', e)
-	const onKeyup = (e : KeyboardEvent) => handleKeyboradEvent('up', e)
+	const onWheel = (e : WheelEvent) => handleWheelEvent(e)
+	const onKeydown = (e : KeyboardEvent) => handleKeyboardEvent('down', e)
+	const onKeypress = (e : KeyboardEvent) => handleKeyboardEvent('press', e)
+	const onKeyup = (e : KeyboardEvent) => handleKeyboardEvent('up', e)
+	const onMouseEnter = () => {
+		console.log('mouse enter')
+		canvas.value?.focus()
+	}
 </script>
 
 <style scoped lang="scss">
@@ -110,7 +109,7 @@
 		width: 100%;
 		height: 100%;
 	}
-	
+
 	.main-canvas:focus {
 		outline: none;
 	}
