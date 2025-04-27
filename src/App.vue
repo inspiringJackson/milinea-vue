@@ -45,7 +45,14 @@
 					<LeftMenu />
 				</template>
 				<template #2>
-					<CanvasBoard />
+					<!-- <n-split direction="horizontal" :min="0.2" :max="0.8"> -->
+						<!-- <template #1> -->
+							<CanvasBoard />
+						<!-- </template> -->
+						<!-- <template #2> -->
+							<!-- <CanvasBoard /> -->
+						<!-- </template> -->
+					<!-- </n-split> -->
 				</template>
 			</n-split>
 		</div>

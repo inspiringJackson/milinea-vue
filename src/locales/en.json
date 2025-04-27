@@ -16,6 +16,11 @@
 		"pen": "Pencil",
 		"text": "Text Tool",
 		"slice": "Slice Tool"
+	},
+	
+	"menuTabs": {
+		"layers": "Layers",
+		"components": "Components"
 	}
 
 }

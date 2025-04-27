@@ -1,12 +1,12 @@
 <template>
 	<div class="left-menu-panel">
-		<n-tabs type="line" animated :tabs-padding="20" :theme-overrides="tabsStyleOverrides">
-			<n-tab-pane name="layerMenu" tab="图层">
+		<n-tabs type="line" :animated="false" :tabs-padding="20" :theme-overrides="tabsStyleOverrides">
+			<n-tab-pane name="layerMenu" :tab="t('menuTabs.layers')">
 				<PageMenu class="page-menu"></PageMenu>
 				<n-divider></n-divider>
 				<MenuTree />
 			</n-tab-pane>
-			<n-tab-pane name="componentMenu" tab="组件">
+			<n-tab-pane name="componentMenu" :tab="t('menuTabs.components')">
 				
 			</n-tab-pane>
 		</n-tabs>
@@ -17,6 +17,9 @@
 	import { defineAsyncComponent } from 'vue'
 	import MenuTree from './MenuTree.vue'
 	import PageMenu from './PageMenu.vue'
+	import { useI18n } from 'vue-i18n'
+	
+	const { t } = useI18n()
 	
 	const tabsStyleOverrides = {
 		panePaddingMedium: '0px'

@@ -16,5 +16,10 @@
 		"pen": "铅笔工具",
 		"text": "文字工具",
 		"slice": "切图工具"
+	},
+	
+	"menuTabs": {
+		"layers": "图层",
+		"components": "组件"
 	}
 }
