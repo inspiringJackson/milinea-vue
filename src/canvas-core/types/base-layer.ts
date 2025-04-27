@@ -22,6 +22,6 @@ export interface BaseLayer {
 		stroke ?: StrokeStyle[] // 描边样式
 		shadow ?: ShadowStyle[] // 阴影样式
 	}
-	childrenId ?: string[] // 子图层ID
+	childrenIds ?: string[] // 子图层ID
 	parentId ?: string  // 用于构建树形结构
 }

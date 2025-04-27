@@ -51,6 +51,8 @@ export class MainContentRenderer {
 		// 应用缩放和位移
 		ctx.translate(store.offsetX, store.offsetY)
 		ctx.scale(store.zoom, store.zoom)
+		
+		
 
 		// 遍历所有图层进行渲染
 		store.layers.forEach(async (layer) => {

@@ -29,6 +29,7 @@ export const initialState = () => ({
 
 	contentWidth: 0,
 	contentHeight: 0,
+	pages: [] as Array<{ id: string; name: string; isOpening: boolean; layers: []}>,
 	layers: [] as BaseLayer[],
 	hoverLayer: null as BaseLayer | null,
 	selectedLayers: [] as BaseLayer[],

@@ -30,6 +30,7 @@ export default defineConfig({
 						'NSplit',
 						'NTree',
 						'UseMessage',
+						'NMenu'
 					]
 				}
 			]

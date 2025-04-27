@@ -16,6 +16,27 @@ export const useCanvasStore = defineStore('canvas', {
 		async init(manager : CanvasManager) {
 			this.canvasManager = manager
 			this.layers = await createDemoData()
+			const initialPage1 = {
+				id: 'demopage1',
+				name: 'Demo Page 1',
+				isOpening: true,
+				layers: this.layers,
+			}
+			const initialPage2 = {
+				id: 'demopage2',
+				name: 'Demo Page 2',
+				isOpening: false,
+				layers: [],
+			}
+			const initialPage3 = {
+				id: 'demopage3',
+				name: 'Demo Page 3',
+				isOpening: false,
+				layers: [],
+			}
+			this.pages.push(initialPage1)
+			this.pages.push(initialPage2)
+			this.pages.push(initialPage3)
 		},
 		setTool(tool : string) {
 			this.tool = tool

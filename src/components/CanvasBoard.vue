@@ -36,7 +36,7 @@
 
 	const { init, handleMouseEvent, handleWheelEvent, handleKeyboardEvent } = store
 
-	onMounted(() => {
+	onMounted(async () => {
 		if (!container.value || !canvas.value) return
 
 		preloadCursors()
@@ -46,7 +46,7 @@
 			canvas.value
 		)
 
-		init(canvasManager)
+		await init(canvasManager)
 		canvasManager.render()
 
 		canvas.value.focus()
@@ -63,7 +63,6 @@
 	const onKeypress = (e : KeyboardEvent) => handleKeyboardEvent('press', e)
 	const onKeyup = (e : KeyboardEvent) => handleKeyboardEvent('up', e)
 	const onMouseEnter = () => {
-		console.log('mouse enter')
 		canvas.value?.focus()
 	}
 </script>

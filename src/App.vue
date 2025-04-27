@@ -5,8 +5,12 @@
 	import SideTools from './layout/components/sideTools/SideTools.vue'
 	import LeftMenu from './layout/components/leftMenuPanel/LeftMenuPanel.vue'
 	import CanvasBoard from './components/CanvasBoard.vue'
-	import { useHistoryStore } from './stores/useHistoryStore'
-	import { onMounted } from 'vue'
+	import {
+		useHistoryStore
+	} from './stores/useHistoryStore'
+	import {
+		onMounted
+	} from 'vue'
 	import {
 		useI18n
 	} from 'vue-i18n'
@@ -14,9 +18,9 @@
 	const {
 		t
 	} = useI18n()
-	
+
 	const historyStore = useHistoryStore()
-	
+
 	onMounted(() => {
 		const handleKeydown = (e) => {
 			e.preventDefault()
@@ -26,19 +30,15 @@
 				historyStore.redo()
 			}
 		}
-		
+
 		window.addEventListener('keydown', handleKeydown)
 	})
-
 </script>
 
 <template>
-	<div id="app" 
-		@keydown="onKeydown" 
-		@keypress="onKeypress" 
-		@keyup="onKeyup">
+	<div id="app" @keydown="onKeydown" @keypress="onKeypress" @keyup="onKeyup">
 		<NavBar />
-		<div class="main">
+		<div class="main" @contextmenu.prevent="handleContextMenu">
 			<SideTools />
 			<n-split direction="horizontal" min="240px" :max="0.4" default-size="240px">
 				<template #1>

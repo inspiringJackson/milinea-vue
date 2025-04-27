@@ -1,14 +1,16 @@
 // /src/stores/demo-data.ts
-import type { BaseLayer } from "../canvas-core/types/base-layer";
-import { getImageDimensions } from "../utils/image-loader";
+import type { BaseLayer } from "../canvas-core/types/base-layer"
+import type { FrameLayer } from "../canvas-core/types/layers/frame-layer"
+import { MetroMap } from "../canvas-core/metro/MetroMap"
+import { getImageDimensions } from "../utils/image-loader"
 
-const LOCAL_IMAGE_PATH = 'src/assets/demo/demo_map.jpg';
+const LOCAL_IMAGE_PATH = 'src/assets/demo/demo_map.jpg'
 
 export async function createDemoData() : Promise<BaseLayer[]> {
 	// 获取图片尺寸
-	const dimensions = await getImageDimensions(LOCAL_IMAGE_PATH);
+	const dimensions = await getImageDimensions(LOCAL_IMAGE_PATH)
 
-	const demoLayer : BaseLayer = {
+	const demoLayer : FrameLayer = {
 		id: 'demo-frame',
 		name: 'demo-frame',
 		type: 'frame',
@@ -16,6 +18,7 @@ export async function createDemoData() : Promise<BaseLayer[]> {
 		locked: false,
 		isSelected: false,
 		componentType: 'none',
+		metroMap: new MetroMap(),
 		boundingBox: {
 			position: { x: 0, y: 0 },
 			size: {
@@ -23,16 +26,16 @@ export async function createDemoData() : Promise<BaseLayer[]> {
 				height: dimensions.height
 			}
 		},
-		childrenId: [],
+		childrenIds: [],
 		style: {
 			fill: [{
 				type: 'image',
 				src: LOCAL_IMAGE_PATH
 			}]
 		}
-	};
+	}
 
-	return [demoLayer];
+	return [demoLayer]
 }
 
 // 使用示例
