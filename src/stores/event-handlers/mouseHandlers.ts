@@ -25,7 +25,7 @@ export const handleMouseEvent = (
 	if (store.tool === 'selection') {
 		if (type === 'move') {
 			const hoverLayer = findLayer(store.layers, logicalX, logicalY)
-			if (store.hoverLayer !== hoverLayer && hoverLayer.type !== 'frame') {
+			if (store.hoverLayer !== hoverLayer && hoverLayer?.type !== 'frame' && !hoverLayer?.isSelected) {
 				store.hoverLayer = hoverLayer
 				canvasManager.hover()
 			}

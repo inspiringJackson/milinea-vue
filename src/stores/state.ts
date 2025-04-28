@@ -15,6 +15,7 @@ export const initialState = () => ({
 
 	isPanning: false,
 	isZooming: false,
+	isDragging: false,
 	isSelecting: false,
 	isPathEditing: false,
 	isPathDrawing: false,
