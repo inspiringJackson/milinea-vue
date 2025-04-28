@@ -1,12 +1,12 @@
 # Milinea Vue - Vector Design Tool
 
-We're (probably just me & AI, and welcome you!) developing a simple vector-based design tool that simplifies messy vector lines, which users draw, into something like clean subway-style route maps. Inspired by research like [this paper](https://i11www.iti.kit.edu/extra/publications/fhnrsw-dmmbc-12.pdf).
+We're (probably just me & AI, and welcome you!) developing a simple vector-based design tool that simplifies messy vector lines, which users draw, into something like clean subway-style route maps. Inspired by research like [this paper](http://www.jstott.me.uk/thesis/thesis-final.pdf).
 
 At this early stage, it may resemble platforms like Figma or JsDesign... 
 
-Current focus is on core functionality, improving scroll bars and grid guides...
+Current focus is on core functionality, vector path drawing...
 
-![Preview](https://github.com/inspiringJackson/mycdn/blob/main/milinea-vue/preview4-23.png)
+![Preview](https://github.com/inspiringJackson/mycdn/blob/main/milinea-vue/preview4-28.png)
 
 Built with Vue 3 `<script setup>` SFCs. Learn more about the template: [Vue 3 SFC Script Setup Docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup)
 
@@ -24,6 +24,7 @@ src/                        # Main source code directory
 │   ├── utils/              # Canvas utilities
 │   ├── types/              # Canvas type definition
 │   ├── renderers/          # Concrete renderer implementations
+│   │   ├── grid/           # Grid auxiliary line renderer
 │   │   ├── main/           # Main content renderer
 │   │   ├── ruler/          # Ruler measurement components
 │   │   └── scrollBar/      # Scrollbar components
@@ -41,6 +42,7 @@ src/                        # Main source code directory
 │
 ├── stores/                 # State management (Pinia)
 │   ├── event-handlers/     # Mouse & keyboard events handlers
+│   ├── commands/           # ​Incremental Command Pattern: Decompose complex operations into a series of revocable incremental steps
 │   ├── useCanvasStore.ts   # Canvas-related state & actions
 │   ├── layerUtils.ts       # Layers utils
 │   ├── state.ts            # Canvas-related state
@@ -54,8 +56,7 @@ src/                        # Main source code directory
 ## Development Goals Recently
 
 - [ ] Improve scroll bar functionality
-- [ ] Add grid guide system
-- [ ] Make the tools work (2 / 9 finished)
+- [ ] Make the tools work (2 / 9 completed)
 - [ ] Implement vector simplification algorithms (maybe use [Simplify.js](https://mourner.github.io/simplify-js/))
 - [ ] Optimize rendering performance
 
