@@ -1,0 +1,26 @@
+{
+	"language": {
+		"zh": "Simplified Chinese",
+		"en": "English"
+	},
+
+	"tools": {
+		"selection": "Selection Tool",
+		"moveView": "Move View",
+		"rectangle": "Rectangle",
+		"diagonal": "Line",
+		"ellipse": "Ellipse",
+		"triangle": "Triangle",
+		"picture": "Picture",
+		"calligraphyPen": "Calligraphy Pen",
+		"pen": "Pencil",
+		"text": "Text Tool",
+		"slice": "Slice Tool"
+	},
+	
+	"menuTabs": {
+		"layers": "Layers",
+		"components": "Components"
+	}
+
+}
