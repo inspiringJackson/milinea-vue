@@ -3,7 +3,7 @@ import paper from 'paper'
 export function createTestShapes() {
 	// 创建矩形
 	const rect = new paper.Path.Rectangle({
-		point: [100, 100],
+		point: [0, 0],
 		size: [200, 150],
 		fillColor: '#e74c3c',
 		strokeColor: 'black',
