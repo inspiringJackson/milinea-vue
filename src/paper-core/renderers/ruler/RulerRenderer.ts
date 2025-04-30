@@ -36,7 +36,6 @@ export class RulerRenderer {
 		const { scope } = store
 		const view = scope.view
 		// const step = getRulerStep(zoomScale)
-		this.rulerLayer.applyMatrix = false
 		this.rulerLayer.matrix = view.matrix.inverted()
 
 		this.clearRuler()
