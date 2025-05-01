@@ -46,19 +46,19 @@ export function initTool() {
 	view.element.addEventListener('wheel', (event) => {
 		event.preventDefault()
 		if (event.ctrlKey && !event.shiftKey && !event.altKey) {
-			ZoomView(view, event)
+			ZoomView(view, event, paperStore.renderEngine)
 		} else if (!event.ctrlKey && event.shiftKey && !event.altKey) {
 			// ←→
-			PanView('horizontal', view, event)
+			PanView('horizontal', view, event, paperStore.renderEngine)
 		} else if (event.ctrlKey && event.shiftKey && !event.altKey) {
 			// ↙↗
-			PanView('antiDiagonal', view, event)
+			PanView('antiDiagonal', view, event, paperStore.renderEngine)
 		} else if (!event.ctrlKey && event.shiftKey && event.altKey) {
 			// ↖↘
-			PanView('diagonal', view, event)
+			PanView('diagonal', view, event, paperStore.renderEngine)
 		} else {
 			// ↑↓
-			PanView('vertical', view, event)
+			PanView('vertical', view, event, paperStore.renderEngine)
 		}
 	})
 	
@@ -66,21 +66,21 @@ export function initTool() {
 	paperStore.tool.onMouseDown = (event) => {
 		const currentTool = paperStore.currentTool
 		if (currentTool === ToolModes.HAND_TOOL && event.event.button === 0) {
-			MoveView('down', event, view)
+			MoveView('down', event, view, paperStore.renderEngine)
 		}
 	}
 	
 	paperStore.tool.onMouseDrag = (event) => {
 		const currentTool = paperStore.currentTool
 		if (currentTool === ToolModes.HAND_TOOL && event.event.button === 0) {
-			MoveView('drag', event, view)
+			MoveView('drag', event, view, paperStore.renderEngine)
 		}
 	}
 	
 	paperStore.tool.onMouseMove = (event) => {
 		const currentTool = paperStore.currentTool
 		if (currentTool === ToolModes.HAND_TOOL && event.event.button === 0) {
-			MoveView('up', event, view)
+			MoveView('up', event, view, paperStore.renderEngine)
 		}
 	}
 	

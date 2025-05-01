@@ -1,11 +1,13 @@
 // src/paper-core/tools/MoveView.ts
 import { usePaperStore } from "../../../stores/usePaperStore"
+import { RenderEngine } from "../../renderers/RenderEngine"
 import paper from "paper"
 
 export function MoveView(
 	type: 'down' | 'up' | 'drag',
 	event: MouseEvent,
 	view: paper.View,
+	renderEngine: RenderEngine
 ) {
 	const store = usePaperStore()
 	
@@ -28,4 +30,5 @@ export function MoveView(
 			store.isViewMoving = false
 			break
 	}
+	renderEngine.render()
 }

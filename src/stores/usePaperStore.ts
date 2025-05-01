@@ -1,9 +1,8 @@
 // src/stores/usePaperStore.ts
 import { defineStore } from 'pinia'
 import paper from 'paper'
-import { RulerRenderer } from '../paper-core/renderers/ruler/RulerRenderer'
+import { RenderEngine } from '../paper-core/renderers/RenderEngine'
 import { initTool } from '../paper-core/tools/toolManager'
-import { createTestShapes } from '../demo/testShapes'
 
 export const usePaperStore = defineStore('paper', {
 	state: () => ({
@@ -11,7 +10,7 @@ export const usePaperStore = defineStore('paper', {
 		project: null as paper.Project | null,
 		scope: null as paper.PaperScope | null,
 		tool: null as paper.Tool | null,
-		rulerRenderer: null as RulerRenderer | null,
+		renderEngine: null as RenderEngine | null,
 
 		zoomScale: 1,
 		offsetX: 0,
@@ -32,22 +31,9 @@ export const usePaperStore = defineStore('paper', {
 			this.scope.setup(canvas)
 			this.canvas = canvas
 			this.project = this.scope.project
-			this.rulerRenderer = new RulerRenderer()
-
-			const view = this.scope.view
-			view.on('changed', () => {
-				this.rulerRenderer?.render()
-			})
-
-			const resizeObserver = new ResizeObserver(entries => {
-				const { width, height } = entries[0].contentRect
-				this.viewportSize = { width, height }
-				view.viewSize = new paper.Size(width, height)
-				this.rulerRenderer?.render()
-			})
-			resizeObserver.observe(canvas)
+			this.renderEngine = new RenderEngine(this.canvas)
+			this.renderEngine.render()
 			initTool()
-			createTestShapes()
 
 		},
 		clearCanvas() {
