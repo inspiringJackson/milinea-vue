@@ -1,6 +1,7 @@
 // src/paper-core/tools/ZoomView.ts
 import { MAX_ZOOM_SCALE, MIN_ZOOM_SCALE } from "../../../config/constants"
 import { RenderEngine } from "../../renderers/RenderEngine"
+import { usePaperStore } from "../../../stores/usePaperStore"
 import paper from "paper"
 
 export function ZoomView(
@@ -18,7 +19,9 @@ export function ZoomView(
 	const viewPosition = view.viewToProject(mousePoint)
 
 	if (clampedScale !== 1) {
+		const paperStore = usePaperStore()
 		view.scale(clampedScale, viewPosition)
+		paperStore.zoomScale = view.zoom
 	}
-	renderEngine.render()
+	renderEngine.renderRuler()
 }

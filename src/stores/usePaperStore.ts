@@ -9,6 +9,7 @@ export const usePaperStore = defineStore('paper', {
 		canvas: null as HTMLCanvasElement | null,
 		project: null as paper.Project | null,
 		scope: null as paper.PaperScope | null,
+		rulerScope: null as paper.PaperScope | null,
 		tool: null as paper.Tool | null,
 		renderEngine: null as RenderEngine | null,
 
@@ -27,12 +28,13 @@ export const usePaperStore = defineStore('paper', {
 	}),
 	actions: {
 		init(canvas : HTMLCanvasElement) {
+			this.rulerScope = new paper.PaperScope()
+			this.rulerScope.setup(canvas)
 			this.scope = new paper.PaperScope()
 			this.scope.setup(canvas)
 			this.canvas = canvas
 			this.project = this.scope.project
 			this.renderEngine = new RenderEngine(this.canvas)
-			this.renderEngine.render()
 			initTool()
 
 		},

@@ -44,6 +44,8 @@ export function initTool() {
 	}
 	
 	view.element.addEventListener('wheel', (event) => {
+		// console.log(event)
+		// paperStore.scope.activate()
 		event.preventDefault()
 		if (event.ctrlKey && !event.shiftKey && !event.altKey) {
 			ZoomView(view, event, paperStore.renderEngine)

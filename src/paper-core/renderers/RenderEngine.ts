@@ -9,9 +9,9 @@ import { PAPER_BACKGROUND_COLOR } from "../../config/constants"
 export class RenderEngine {
 	private ctx : CanvasRenderingContext2D
 	private rulerRenderer = new RulerRenderer()
-	private lastRenderTime = 0 // 记录上次渲染时间
-	private throttleInterval = 16 // 节流间隔（ms，约60fps）
-	private deltaThreshold = 5
+	private lastRenderTime = 0
+	private throttleInterval = 10
+	private deltaThreshold = 3
 
 	constructor(
 		private canvas : HTMLCanvasElement,
@@ -30,21 +30,33 @@ export class RenderEngine {
 		resizeObserver.observe(this.canvas)
 	}
 
-	public render() {
-
-		createTestShapes()
-		this.rulerRenderer.render()
-
+	private getViewMetrics() {
+		return {
+			viewWidth: this.canvas.width,
+			viewHeight: this.canvas.height
+		}
 	}
 
-	public renderRuler(delta?: paper.Point) {
+	public render() {
+		const paperStore = usePaperStore()
+		createTestShapes(paperStore.scope)
+		paperStore.scope.view.update()
+		this.rulerRenderer.render(this.ctx, this.getViewMetrics())
+	}
+
+
+	public renderRuler(delta ?: paper.Point) {
 		const now = performance.now()
-				const isDeltaLarge = delta && delta.length >= this.deltaThreshold
-				const isTimeElapsed = now - this.lastRenderTime >= this.throttleInterval
-		
-				if (isDeltaLarge || isTimeElapsed) {
-					this.rulerRenderer.render()
-					this.lastRenderTime = now
-				}
+		const paperStore = usePaperStore()
+		const isDeltaLarge = delta && delta.length >= this.deltaThreshold
+		const isTimeElapsed = now - this.lastRenderTime >= this.throttleInterval
+
+		if (isDeltaLarge || isTimeElapsed) {
+			this.lastRenderTime = now
+			requestAnimationFrame(() => {
+				paperStore.scope.view.update()
+				this.rulerRenderer.render(this.ctx, this.getViewMetrics())
+			})
+		}
 	}
 }

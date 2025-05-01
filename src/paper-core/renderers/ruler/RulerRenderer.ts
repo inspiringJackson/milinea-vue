@@ -1,117 +1,127 @@
 // src/paper-core/renderers/ruler/RulerRenderer.ts
-import paper from 'paper'
 import { usePaperStore } from '../../../stores/usePaperStore'
 import { getRulerStep } from '../../../config/rulerStep'
-import {
-	RULER_TICK_MARK_COLOR,
-	RULER_TEXT_COLOR,
-	RULER_TEXT_FONT_SIZE,
-	RULER_TEXT_FONT_FAMILY,
-	RULER_TICK_STROKE_WIDTH,
-	RULER_MAIN_TICK_HEIGHT,
-	RULER_SUB_TICK_HEIGHT
-} from '../../../config/constants'
+// import { renderBottomMask, renderTopMask } from './RulerMask'
+// import { renderSelectionHelper } from './RulerSelectionHelper'
 
 export class RulerRenderer {
-	private rulerLayer : paper.Layer
-	private maskLayer : paper.Layer
-	private tickColor : paper.Color
-	private textColor : paper.Color
-
-	constructor() {
+	public render(
+		ctx: CanvasRenderingContext2D, 
+		viewSize : {viewWidth : number, viewHeight : number}
+	) {
+		// renderBottomMask(ctx, viewSize)
 		const store = usePaperStore()
-		const previousLayer = store.scope.project.activeLayer
-		this.rulerLayer = new paper.Layer()
-		this.rulerLayer.applyMatrix = false
-		previousLayer.activate()
-		// this.maskLayer = new paper.Layer()
-		this.tickColor = new paper.Color(RULER_TICK_MARK_COLOR)
-		this.textColor = new paper.Color(RULER_TEXT_COLOR)
-		// this.maskLayer.activate()
+		const bounds = store.scope.view.bounds
+		const offsetX = -bounds.topLeft.x * store.zoomScale
+		const offsetY = -bounds.topLeft.y * store.zoomScale
+		const step = getRulerStep(store.zoomScale)
+		
+		ctx.save()
+		ctx.resetTransform()
+		
+		ctx.strokeStyle = '#444'
+		ctx.fillStyle = '#aaa'
+		const fontSize = 10
+		ctx.font = `${fontSize}px Arial` // '10px Arial'
+		ctx.lineWidth = 0.5
+		
+		// 水平标尺绘制
+		this.renderHorizontalRuler(ctx, viewSize, step, offsetX, store.zoomScale)
+		
+		// 垂直标尺绘制
+		this.renderVerticalRuler(ctx, viewSize, step, offsetY, store.zoomScale)
+		
+		
+		ctx.restore()
+		
+		// renderTopMask(ctx)
+		
+		// renderSelectionHelper(ctx)
 	}
-
-	public render() {
-		const store = usePaperStore()
-		const { scope } = store
-		const view = scope.view
-
-		this.clearRuler()
-		this.rulerLayer.activate()
-		this.rulerLayer.matrix = new paper.Matrix().translate(view.bounds.point)
-		// this.renderMasks()
-		const step = getRulerStep(view.zoom)
-		this.renderRuler(view, step, true)
-		this.renderRuler(view, step, false)
-	}
-
-	private clearRuler() {
-		this.rulerLayer.removeChildren()
-		// this.maskLayer.removeChildren()
-	}
-
-	private renderRuler(view : paper.View, step : number, isHorizontal : boolean) {
-		const bounds = view.bounds
-		const scaleFactor = 1 / view.zoom
-
-		// Calculate visible range
-		const axisStart = isHorizontal ? bounds.x : bounds.y
-		const axisLength = isHorizontal ? bounds.width : bounds.height
-		const visibleEnd = axisStart + axisLength
-
-		// Calculate starting point aligned to step
-		const startScene = Math.floor(axisStart / step) * step
-
-		// Pre-calculate tick sizes and stroke width
-		const mainTickSize = RULER_MAIN_TICK_HEIGHT * scaleFactor
-		const subTickSize = RULER_SUB_TICK_HEIGHT * scaleFactor
-		const strokeWidth = RULER_TICK_STROKE_WIDTH * scaleFactor
-		let count = 0
-		for (let scene = startScene; scene <= visibleEnd; scene += step) {
-			count++
-			const isMain = (scene / step) % 5 === 0
-			const tickSize = isMain ? mainTickSize : subTickSize
-
-			// Create tick mark
-			const path = new paper.Path({
-				strokeColor: this.tickColor,
-				strokeWidth: strokeWidth,
-				segments: isHorizontal
-					? [[scene - bounds.x, 0], [scene - bounds.x, tickSize]]
-					: [[0, scene - bounds.y], [tickSize, scene - bounds.y]]
-			})
-
-			// Add text label for main ticks
-			if (isMain) {
-				const textOffset = (RULER_MAIN_TICK_HEIGHT + 8) * scaleFactor
-				const textPosition = isHorizontal
-					? new paper.Point(scene - bounds.x, textOffset)
-					: new paper.Point(textOffset, scene - bounds.y)
-
-				this.createTextLabel(
-					Math.round(scene).toString(),
-					textPosition,
-					view.zoom,
-					!isHorizontal
-				)
-			}
+	
+	private renderHorizontalRuler(
+		ctx : CanvasRenderingContext2D, 
+		viewSize : { viewWidth : number, viewHeight : number }, 
+		step : number, 
+		offsetX : number, 
+		zoom : number
+	) {
+		ctx.save()
+	
+		// 计算可见区域的逻辑坐标范围
+		// english: calculate the logical coordinate range of the visible area
+		const visibleStart = -offsetX / zoom
+		const visibleEnd = visibleStart + viewSize.viewWidth / zoom 
+		
+		// 找到第一个刻度起点
+		// english: find the starting point of the first ruler scale
+		const startSceneX = Math.floor(visibleStart / step) * step
+	
+		ctx.beginPath()
+		for (let sceneX = startSceneX; sceneX <= visibleEnd; sceneX += step) {
+			const viewX = sceneX * zoom + offsetX // * zoom
+	
+			// 常规主副刻度逻辑
+			// english: normal main and sub ruler logic
+			const isMain = (sceneX / step) % 5 === 0
+			const height = isMain ? 15 : 10
+			ctx.moveTo(viewX, 0)
+			ctx.lineTo(viewX, height)
+			
+			this.renderText(ctx, viewX, sceneX, false)
 		}
-		console.log(count)
+		ctx.stroke()
+		ctx.restore()
+	}
+	
+	private renderVerticalRuler(
+		ctx : CanvasRenderingContext2D, 
+		viewSize : { viewWidth : number, viewHeight : number }, 
+		step : number, 
+		offsetY : number, 
+		zoom : number
+	) {
+		ctx.save()
+	
+		const visibleStart = -offsetY / zoom
+		const visibleEnd = visibleStart + viewSize.viewHeight / zoom
+	
+		const startSceneY = Math.floor(visibleStart / step) * step
+	
+		ctx.beginPath()
+		for (let sceneY = startSceneY; sceneY <= visibleEnd; sceneY += step) {
+			const viewY = sceneY * zoom + offsetY
+	
+			const isMain = (sceneY / step) % 5 === 0
+			const width = isMain ? 15 : 10
+			ctx.moveTo(0, viewY)
+			ctx.lineTo(width, viewY)
+				
+			this.renderText(ctx, viewY, sceneY, true)
+		}
+		ctx.stroke()
+	
+		ctx.restore()
 	}
 
-	private createTextLabel(
-		label : string,
-		position : paper.Point,
-		zoom : number,
+	private renderText(
+		ctx : CanvasRenderingContext2D, 
+		viewPos : number,
+		scenePos : number,
 		isVertical : boolean
 	) {
-		new paper.PointText({
-			point: position,
-			content: label,
-			fillColor: this.textColor,
-			fontSize: RULER_TEXT_FONT_SIZE / zoom,
-			fontFamily: RULER_TEXT_FONT_FAMILY,
-			justification: 'center',
-			rotation: isVertical ? -90 : 0
-		})
+		ctx.save()
+		ctx.textAlign = 'center'
+		ctx.textBaseline = 'middle'
+		
+		if (isVertical) {
+			ctx.translate(21, viewPos)
+			ctx.rotate(-Math.PI / 2)
+		} else {
+			ctx.translate(viewPos, 21)
+		}
+		
+		ctx.fillText(`${scenePos}`, 0, 0)
+		ctx.restore()
 	}
 }
