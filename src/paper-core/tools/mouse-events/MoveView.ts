@@ -22,6 +22,8 @@ export function MoveView(
 				const delta = store.dragStart.subtract(event.point)
 				view.center = view.center.add(delta)
 				store.dragStart = event.point.add(view.center.subtract(store.originalCenter))
+				// console.log(delta)
+				renderEngine.renderRuler(delta)
 			}
 			break
 		case 'up':
@@ -30,5 +32,4 @@ export function MoveView(
 			store.isViewMoving = false
 			break
 	}
-	renderEngine.render()
 }

@@ -22,6 +22,7 @@ export class RulerRenderer {
 		const store = usePaperStore()
 		const previousLayer = store.scope.project.activeLayer
 		this.rulerLayer = new paper.Layer()
+		this.rulerLayer.applyMatrix = false
 		previousLayer.activate()
 		// this.maskLayer = new paper.Layer()
 		this.tickColor = new paper.Color(RULER_TICK_MARK_COLOR)
@@ -33,16 +34,14 @@ export class RulerRenderer {
 		const store = usePaperStore()
 		const { scope } = store
 		const view = scope.view
-		// const step = getRulerStep(zoomScale)
-		this.rulerLayer.matrix = view.matrix.inverted()
-		// view.element.style.background = 'transparent'
 
 		this.clearRuler()
 		this.rulerLayer.activate()
-
+		this.rulerLayer.matrix = new paper.Matrix().translate(view.bounds.point)
 		// this.renderMasks()
-		this.renderHorizontalRuler(view)
-		this.renderVerticalRuler(view)
+		const step = getRulerStep(view.zoom)
+		this.renderRuler(view, step, true)
+		this.renderRuler(view, step, false)
 	}
 
 	private clearRuler() {
@@ -50,93 +49,69 @@ export class RulerRenderer {
 		// this.maskLayer.removeChildren()
 	}
 
-	private renderHorizontalRuler(
-		view : paper.View,
-	) {
-		const step = getRulerStep(view.zoom)
+	private renderRuler(view : paper.View, step : number, isHorizontal : boolean) {
 		const bounds = view.bounds
-		const visibleStart = bounds.x
-		const visibleEnd = visibleStart + bounds.width
+		const scaleFactor = 1 / view.zoom
 
-		const startSceneX = Math.floor(visibleStart / step) * step
+		// Calculate visible range
+		const axisStart = isHorizontal ? bounds.x : bounds.y
+		const axisLength = isHorizontal ? bounds.width : bounds.height
+		const visibleEnd = axisStart + axisLength
 
-		for (let sceneX = startSceneX; sceneX <= visibleEnd; sceneX += step) {
-			const isMain = (sceneX / step) % 5 === 0
-			const height = (isMain ? RULER_MAIN_TICK_HEIGHT : RULER_SUB_TICK_HEIGHT) / view.zoom
+		// Calculate starting point aligned to step
+		const startScene = Math.floor(axisStart / step) * step
 
-			const path = new paper.Path()
-			path.fillColor = null
-			path.strokeColor = this.tickColor
-			path.strokeWidth = RULER_TICK_STROKE_WIDTH / view.zoom
-			path.add(new paper.Point(sceneX, bounds.y))
-			path.add(new paper.Point(sceneX, bounds.y + height))
+		// Pre-calculate tick sizes and stroke width
+		const mainTickSize = RULER_MAIN_TICK_HEIGHT * scaleFactor
+		const subTickSize = RULER_SUB_TICK_HEIGHT * scaleFactor
+		const strokeWidth = RULER_TICK_STROKE_WIDTH * scaleFactor
+		let count = 0
+		for (let scene = startScene; scene <= visibleEnd; scene += step) {
+			count++
+			const isMain = (scene / step) % 5 === 0
+			const tickSize = isMain ? mainTickSize : subTickSize
 
+			// Create tick mark
+			const path = new paper.Path({
+				strokeColor: this.tickColor,
+				strokeWidth: strokeWidth,
+				segments: isHorizontal
+					? [[scene - bounds.x, 0], [scene - bounds.x, tickSize]]
+					: [[0, scene - bounds.y], [tickSize, scene - bounds.y]]
+			})
+
+			// Add text label for main ticks
 			if (isMain) {
+				const textOffset = (RULER_MAIN_TICK_HEIGHT + 8) * scaleFactor
+				const textPosition = isHorizontal
+					? new paper.Point(scene - bounds.x, textOffset)
+					: new paper.Point(textOffset, scene - bounds.y)
+
 				this.createTextLabel(
-					Math.round(sceneX).toString(),
-					new paper.Point(sceneX, height + 2),
-					bounds.y,
+					Math.round(scene).toString(),
+					textPosition,
 					view.zoom,
-					false
+					!isHorizontal
 				)
 			}
 		}
-	}
-
-	private renderVerticalRuler(
-		view : paper.View,
-	) {
-		const step = getRulerStep(view.zoom)
-		const bounds = view.bounds
-		const visibleStart = bounds.y
-		const visibleEnd = visibleStart + bounds.height
-
-		const startSceneY = Math.floor(visibleStart / step) * step
-
-		for (let sceneY = startSceneY; sceneY <= visibleEnd; sceneY += step) {
-			const isMain = (sceneY / step) % 5 === 0
-			const width = (isMain ? RULER_MAIN_TICK_HEIGHT : RULER_SUB_TICK_HEIGHT) / view.zoom
-
-			const path = new paper.Path()
-			path.fillColor = new paper.Color(0, 0, 0, 0)
-			path.strokeColor = this.tickColor
-			path.strokeWidth = RULER_TICK_STROKE_WIDTH / view.zoom
-			path.add(new paper.Point(bounds.x, sceneY))
-			path.add(new paper.Point(bounds.x + width, sceneY))
-
-			if (isMain) {
-				this.createTextLabel(
-					Math.round(sceneY).toString(),
-					new paper.Point(width + 2, sceneY),
-					bounds.x,
-					view.zoom,
-					true
-				)
-			}
-		}
+		console.log(count)
 	}
 
 	private createTextLabel(
 		label : string,
 		position : paper.Point,
-		bounds : number,
 		zoom : number,
 		isVertical : boolean
 	) {
-		const textItem = new paper.PointText(position)
-		textItem.content = label
-		textItem.fillColor = this.textColor
-		textItem.fontSize = RULER_TEXT_FONT_SIZE / zoom
-		textItem.fontFamily = RULER_TEXT_FONT_FAMILY
-
-		if (isVertical) {
-			textItem.rotation = -90
-			textItem.justification = 'center'
-			textItem.position = new paper.Point((RULER_MAIN_TICK_HEIGHT + 8) / zoom + bounds, position.y)
-		} else {
-			textItem.justification = 'center'
-			textItem.position = new paper.Point(position.x, (RULER_MAIN_TICK_HEIGHT + 8) / zoom + bounds)
-		}
-		
+		new paper.PointText({
+			point: position,
+			content: label,
+			fillColor: this.textColor,
+			fontSize: RULER_TEXT_FONT_SIZE / zoom,
+			fontFamily: RULER_TEXT_FONT_FAMILY,
+			justification: 'center',
+			rotation: isVertical ? -90 : 0
+		})
 	}
 }

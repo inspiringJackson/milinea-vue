@@ -75,35 +75,6 @@
 </script>
 
 <style scoped lang="scss">
-	// .main-canvas. {
-	// 	cursor: url('../assets/cursors/drag.png') 11 9, default;
-	// }
-
-	// .main-canvas.movingView {
-	// 	cursor: url('../assets/cursors/dragging.png') 11 12, default;
-	// }
-
-	// .main-canvas.selection {
-	// 	cursor: url('../assets/cursors/selection.png') 4 4, default;
-	// }
-
-	// .main-canvas.rectangle,
-	// .main-canvas.ellipse,
-	// .main-canvas.diagonal,
-	// .main-canvas.text,
-	// .main-canvas.slice {
-	// 	cursor: url('../assets/cursors/draw.png') 15 15, default;
-	// }
-
-	// .main-canvas.calligraphyPen {
-	// 	cursor: url('../assets/cursors/pen.png') 5 5, default;
-	// }
-
-	// .main-canvas.pen {
-	// 	cursor: url('../assets/cursors/pencil.png') 7 18, default;
-	// }
-
-	/* 默认样式 */
 	.canvas-container {
 		position: relative;
 		width: 100%;
@@ -114,6 +85,7 @@
 	.main-canvas {
 		width: 100%;
 		height: 100%;
+		background-color: #f5f5f5;
 	}
 
 	.main-canvas:focus {
