@@ -1,15 +1,25 @@
 // src/paper-core/renderers/ruler/RulerRenderer.ts
 import { usePaperStore } from '../../../stores/usePaperStore'
 import { getRulerStep } from '../../../config/rulerStep'
-// import { renderBottomMask, renderTopMask } from './RulerMask'
+import { renderBottomMask, renderTopMask } from './RulerMaskRenderer'
 // import { renderSelectionHelper } from './RulerSelectionHelper'
+
+import {
+	RULER_TICK_MARK_COLOR,
+	RULER_TICK_STROKE_WIDTH,
+	RULER_TEXT_COLOR,
+	RULER_TEXT_FONT_SIZE,
+	RULER_MAIN_TICK_HEIGHT,
+	RULER_SUB_TICK_HEIGHT,
+	RULER_TEXT_FONT_FAMILY
+} from '../../../config/constants'
 
 export class RulerRenderer {
 	public render(
 		ctx: CanvasRenderingContext2D, 
 		viewSize : {viewWidth : number, viewHeight : number}
 	) {
-		// renderBottomMask(ctx, viewSize)
+		renderBottomMask(ctx, viewSize)
 		const store = usePaperStore()
 		const bounds = store.scope.view.bounds
 		const offsetX = -bounds.topLeft.x * store.zoomScale
@@ -19,11 +29,10 @@ export class RulerRenderer {
 		ctx.save()
 		ctx.resetTransform()
 		
-		ctx.strokeStyle = '#444'
-		ctx.fillStyle = '#aaa'
-		const fontSize = 10
-		ctx.font = `${fontSize}px Arial` // '10px Arial'
-		ctx.lineWidth = 0.5
+		ctx.strokeStyle = RULER_TICK_MARK_COLOR
+		ctx.fillStyle = RULER_TEXT_COLOR
+		ctx.font = RULER_TEXT_FONT_SIZE + 'px ' + RULER_TEXT_FONT_FAMILY
+		ctx.lineWidth = RULER_TICK_STROKE_WIDTH
 		
 		// 水平标尺绘制
 		this.renderHorizontalRuler(ctx, viewSize, step, offsetX, store.zoomScale)
@@ -34,7 +43,7 @@ export class RulerRenderer {
 		
 		ctx.restore()
 		
-		// renderTopMask(ctx)
+		renderTopMask(ctx)
 		
 		// renderSelectionHelper(ctx)
 	}
@@ -64,7 +73,7 @@ export class RulerRenderer {
 			// 常规主副刻度逻辑
 			// english: normal main and sub ruler logic
 			const isMain = (sceneX / step) % 5 === 0
-			const height = isMain ? 15 : 10
+			const height = isMain ? RULER_MAIN_TICK_HEIGHT : RULER_SUB_TICK_HEIGHT
 			ctx.moveTo(viewX, 0)
 			ctx.lineTo(viewX, height)
 			
@@ -93,7 +102,7 @@ export class RulerRenderer {
 			const viewY = sceneY * zoom + offsetY
 	
 			const isMain = (sceneY / step) % 5 === 0
-			const width = isMain ? 15 : 10
+			const width = isMain ? RULER_MAIN_TICK_HEIGHT : RULER_SUB_TICK_HEIGHT
 			ctx.moveTo(0, viewY)
 			ctx.lineTo(width, viewY)
 				
@@ -115,10 +124,10 @@ export class RulerRenderer {
 		ctx.textBaseline = 'middle'
 		
 		if (isVertical) {
-			ctx.translate(21, viewPos)
+			ctx.translate(RULER_MAIN_TICK_HEIGHT + 6, viewPos)
 			ctx.rotate(-Math.PI / 2)
 		} else {
-			ctx.translate(viewPos, 21)
+			ctx.translate(viewPos, RULER_MAIN_TICK_HEIGHT + 6)
 		}
 		
 		ctx.fillText(`${scenePos}`, 0, 0)
