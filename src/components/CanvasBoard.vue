@@ -1,10 +1,9 @@
 <!-- src/components/CanvasBoard.vue -->
 <template>
 	<div class="canvas-container" ref="container">
-		<!-- 		<canvas ref="canvas" class="main-canvas" :class="store.tool" tabindex="0" @mouseenter="onMouseEnter"
-			@mouseleave="onMouseLeave" @mousedown="onMouseDown" @mousemove="onMouseMove" @mouseup="onMouseUp"
-			@wheel="onWheel" @keydown="onKeydown" @keypress="onKeypress" @keyup="onKeyup"></canvas> -->
-		<canvas ref="canvas" class="main-canvas" resize tabindex="0"></canvas>
+		<canvas ref="bottomCanvas" class="main-canvas" style="z-index: -1;" resize></canvas>
+		<canvas ref="canvas" class="main-canvas" resize style="position: absolute; left: 0; top: 0;z-index: 1;" tabindex="0"></canvas>
+		<canvas ref="topCanvas" class="main-canvas" style="position: absolute; left: 0; top: 0;z-index: -1;" resize></canvas>
 	</div>
 </template>
 
@@ -23,6 +22,8 @@
 	const cursorPencil = '../src/assets/cursors/pencil.png'
 
 	const canvas = ref<HTMLCanvasElement | null>(null)
+	const bottomCanvas = ref<HTMLCanvasElement | null>(null)
+	const topCanvas = ref<HTMLCanvasElement | null>(null)
 	const paperStore = usePaperStore()
 
 	// 光标配置映射表
@@ -64,7 +65,7 @@
 	onMounted(() => {
 		if (!canvas.value) return
 
-		paperStore.init(canvas.value)
+		paperStore.init(canvas.value, bottomCanvas.value, topCanvas.value)
 
 		updateCursor()
 	})
@@ -80,12 +81,13 @@
 		width: 100%;
 		height: 100%;
 		overflow: hidden;
+		background-color: #f5f5f5;
 	}
 
 	.main-canvas {
 		width: 100%;
 		height: 100%;
-		background-color: #f5f5f5;
+		background: transparent;
 	}
 
 	.main-canvas:focus {

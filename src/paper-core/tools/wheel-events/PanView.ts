@@ -7,9 +7,10 @@ export function PanView(
 	type: 'horizontal' | 'vertical' | 'diagonal' | 'antiDiagonal',
 	view: paper.View,
 	event: WheelEvent,
-	renderEngine: RenderEngine
+	renderEngine: RenderEngine,
+	zoom: number
 ) {
-	const delta = event.deltaY * PAN_STEP
+	const delta = event.deltaY * PAN_STEP / zoom
 	switch (type) {
 		case 'horizontal':
 			view.center = view.center.add(new paper.Point(delta, 0))

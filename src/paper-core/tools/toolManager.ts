@@ -51,16 +51,16 @@ export function initTool() {
 			ZoomView(view, event, paperStore.renderEngine)
 		} else if (!event.ctrlKey && event.shiftKey && !event.altKey) {
 			// ←→
-			PanView('horizontal', view, event, paperStore.renderEngine)
+			PanView('horizontal', view, event, paperStore.renderEngine, paperStore.zoomScale)
 		} else if (event.ctrlKey && event.shiftKey && !event.altKey) {
 			// ↙↗
-			PanView('antiDiagonal', view, event, paperStore.renderEngine)
+			PanView('antiDiagonal', view, event, paperStore.renderEngine, paperStore.zoomScale)
 		} else if (!event.ctrlKey && event.shiftKey && event.altKey) {
 			// ↖↘
-			PanView('diagonal', view, event, paperStore.renderEngine)
+			PanView('diagonal', view, event, paperStore.renderEngine, paperStore.zoomScale)
 		} else {
 			// ↑↓
-			PanView('vertical', view, event, paperStore.renderEngine)
+			PanView('vertical', view, event, paperStore.renderEngine, paperStore.zoomScale)
 		}
 	})
 	
