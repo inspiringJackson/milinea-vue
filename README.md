@@ -13,22 +13,24 @@ Built with Vue 3 `<script setup>` SFCs. Learn more about the template: [Vue 3 SF
 ## Project Structure
 ```
 src/
-├── assets/               # Static resource directory
-├── components/           # Common components
-├── config/               # Configuration file
+├── assets/                   # Static resource directory
+├── components/               # Common components
+├── config/                   # Configuration file
 ├── demo/
-│   └── testShapes.ts     # Graphic test module
+│   └── testShapes.ts         # Graphic test module
 ├── layout/
-│   └── components/       # Layout related components
-├── locales/              # Internationalization configuration
-├── paper-core/           # Core drawing module
-├── tools/
-│   ├── keyboard-events/  # Keyboard event handling
-│   ├── mouse-events/     # Mouse event handling
-│   ├── wheel-events/     # Wheel event handling
-│   └── toolManager.ts    # Tool management system
+│   └── components/           # Layout related components
+├── locales/                  # Internationalization configuration
+├── paper-core/               # Core drawing module
+│   ├── renderers/            # Graphics renderers
+│   ├── tools/
+│   │   ├── keyboard-events/  # Keyboard event handling
+│   │   ├── mouse-events/     # Mouse event handling
+│   │   ├── wheel-events/     # Wheel event handling
+│   │   └── toolManager.ts    # Tool management system
+│   └── utils/
 ├── stores/
-│   └── usePaperStore.ts  # Global state management
+│   └── usePaperStore.ts      # Global state management
 ├── App.vue
 └── main.js
 ```
