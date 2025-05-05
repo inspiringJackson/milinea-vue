@@ -17,6 +17,10 @@ export const GRID_LAYER_SCALE = 10
 export const GRID_LINE_COLOR = '#888888'
 export const GRID_STROKE_WIDTH = 0.5
 
+export const BOUNDING_BOX_STROKE_COLOR = '#18a058'
+export const BOUNDING_BOX_HOVER_STROKE_WIDTH = 1
+export const BOUNDING_BOX_SELECTED_STROKE_WIDTH = 1.5
+
 export const MAX_ZOOM_SCALE = 100
 export const MIN_ZOOM_SCALE = 0.05
 export const PAN_STEP = 0.4

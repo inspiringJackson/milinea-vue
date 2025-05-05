@@ -2,9 +2,9 @@
 import { defineStore } from 'pinia'
 import paper from 'paper'
 import { RenderEngine } from '../paper-core/renderers/RenderEngine'
-import { initTool } from '../paper-core/tools/toolManager'
+import { ToolManager } from '../paper-core/tools/ToolManager'
 
-import { DEFAULT_INITIAL_OFFSET_X, DEFAULT_INITIAL_OFFSET_Y } from '../config/constants'
+import { DEFAULT_INITIAL_OFFSET_X, DEFAULT_INITIAL_OFFSET_Y, BOUNDING_BOX_SELECTED_STROKE_WIDTH } from '../config/constants'
 
 export const usePaperStore = defineStore('paper', {
 	state: () => ({
@@ -22,6 +22,8 @@ export const usePaperStore = defineStore('paper', {
 		dragStart: null as paper.Point | null,
 		originalCenter: null as paper.Point | null,
 		currentTool: 'select',
+		
+		selectedPathIds: [] as string[],
 	}),
 	actions: {
 		init(
@@ -37,7 +39,7 @@ export const usePaperStore = defineStore('paper', {
 			this.scope.view.center = this.scope.view.center.add(new paper.Point(DEFAULT_INITIAL_OFFSET_X, DEFAULT_INITIAL_OFFSET_Y))
 			this.project = this.scope.project
 			this.renderEngine = new RenderEngine(this.canvas, this.bottomCanvas, this.topCanvas)
-			initTool()
+			this.toolManager = new ToolManager()
 
 		},
 		clearCanvas() {

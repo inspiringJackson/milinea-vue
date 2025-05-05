@@ -5,7 +5,7 @@ import paper from "paper"
 
 export function MoveView(
 	type: 'down' | 'up' | 'drag',
-	event: MouseEvent,
+	event: paper.MouseEvent,
 	view: paper.View,
 	renderEngine: RenderEngine
 ) {

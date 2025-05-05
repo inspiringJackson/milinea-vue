@@ -8,6 +8,7 @@ import paper from "paper"
 import { PAPER_BACKGROUND_COLOR, GRID_LAYER_SCALE } from "../../config/constants"
 
 export class RenderEngine {
+	private loaded = false
 	private ctx : CanvasRenderingContext2D
 	private bottomCtx : CanvasRenderingContext2D
 	private topCtx : CanvasRenderingContext2D
@@ -37,7 +38,11 @@ export class RenderEngine {
 			this.bottomCanvas.height = height
 			this.topCanvas.width = width
 			this.topCanvas.height = height
-			this.render()
+			if (!this.loaded) {
+				this.render()
+			}
+			this.renderRuler()
+
 		})
 		resizeObserver.observe(this.canvas)
 		resizeObserver.observe(this.bottomCanvas)
@@ -51,15 +56,11 @@ export class RenderEngine {
 	}
 
 	public render() {
-		const paperStore = usePaperStore()
-		createTestShapes(paperStore.scope)
-		paperStore.scope.view.update()
-		if (paperStore.zoomScale < GRID_LAYER_SCALE) {
-			this.gridRenderer.render(this.bottomCtx, this.getViewMetrics())
-		} else {
-			this.gridRenderer.render(this.ctx, this.getViewMetrics())
+		if (!this.loaded) {
+			const paperStore = usePaperStore()
+			createTestShapes(paperStore.scope)
+			this.renderRuler()
 		}
-		this.rulerRenderer.render(this.ctx, this.getViewMetrics())
 	}
 
 
@@ -69,18 +70,17 @@ export class RenderEngine {
 		const isDeltaLarge = delta && delta.length >= this.deltaThreshold
 		const isTimeElapsed = now - this.lastRenderTime >= this.throttleInterval
 
-		if (isDeltaLarge || isTimeElapsed) {
+		if (isDeltaLarge || isTimeElapsed || !this.loaded) {
 			this.lastRenderTime = now
-			requestAnimationFrame(() => {
-				paperStore.scope.view.update()
-				if (paperStore.zoomScale < GRID_LAYER_SCALE) {
-					this.gridRenderer.render(this.bottomCtx, this.getViewMetrics())
-				} else {
-					this.bottomCtx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-					this.gridRenderer.render(this.ctx, this.getViewMetrics())
-				}
-				this.rulerRenderer.render(this.ctx, this.getViewMetrics())
-			})
+			paperStore.scope.view.update()
+			if (paperStore.zoomScale < GRID_LAYER_SCALE) {
+				this.gridRenderer.render(this.bottomCtx, this.getViewMetrics())
+			} else {
+				this.bottomCtx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+				this.gridRenderer.render(this.ctx, this.getViewMetrics())
+			}
+			this.rulerRenderer.render(this.ctx, this.getViewMetrics())
+			this.loaded = true
 		}
 	}
 }
