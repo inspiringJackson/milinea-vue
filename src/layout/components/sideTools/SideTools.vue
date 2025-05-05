@@ -12,7 +12,7 @@
 	import { useI18n } from 'vue-i18n'
 	import { usePaperStore } from '../../../stores/usePaperStore'
 	import { onMounted } from 'vue'
-	import { ToolModes } from '../../../config/enums'
+	import { ToolModes } from '../../../paper-core/config/enums'
 
 	const { t } = useI18n()
 

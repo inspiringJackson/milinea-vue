@@ -3,18 +3,21 @@ import { usePaperStore } from "../../stores/usePaperStore"
 import { ZoomView } from "./wheel-events/ZoomView"
 import { MoveView } from "./mouse-events/MoveView"
 import { PanView } from "./wheel-events/PanView"
-import { ToolModes } from "../../config/enums"
+import { ToolModes } from "../config/enums"
 import { GraphicFactory } from "../factories/graphic/GraphicCreator"
+import { PenTool } from "./mouse-events/PenTool"
 import paper from "paper"
 
 export class ToolManager {
 	private paperStore : ReturnType<typeof usePaperStore>
 	private graphicFactory : GraphicFactory
+	private penTool : PenTool
 	private isViewMoving = false
 
 	constructor() {
 		this.paperStore = usePaperStore()
 		this.graphicFactory = new GraphicFactory()
+		this.penTool = new PenTool()
 		this.initialize()
 	}
 
@@ -35,14 +38,23 @@ export class ToolManager {
 	}
 
 	private setupToolEvents() {
-		const tool = this.paperStore.scope.tool!
+		const tool = new paper.Tool() // this.paperStore.scope.tool!
+		// tool.activate()
+
+		// tool.onMouseDown = null
+		// tool.onMouseDrag = null
+		// tool.onMouseMove = null
+		// tool.onMouseUp = null
+		// tool.onKeyDown = null
 
 		tool.onMouseDown = (event : paper.ToolEvent) =>
-			this.handleToolMouseDown(event)
+			this.handleToolMouseDown(event, tool)
 		tool.onMouseDrag = (event : paper.ToolEvent) =>
-			this.handleToolMouseDrag(event)
+			this.handleToolMouseDrag(event, tool)
+		tool.onMouseMove = (event : paper.ToolEvent) =>
+			this.handleToolMouseMove(event, tool)
 		tool.onKeyDown = (event : paper.KeyEvent) =>
-			this.handleKeyDown(event)
+			this.handleKeyDown(event, tool)
 	}
 
 	private handleViewMouseDown(event : paper.MouseEvent) {
@@ -67,26 +79,37 @@ export class ToolManager {
 		}
 	}
 
-	private handleToolMouseDown(event : paper.ToolEvent) {
-		console.log(event,this.paperStore.currentTool)
+	private handleToolMouseDown(event : paper.ToolEvent, tool : paper.Tool) {
+		// console.log(event,this.paperStore.currentTool)
 		switch (this.paperStore.currentTool) {
 			case ToolModes.RECTANGLE:
-				this.graphicFactory.createRectangle()
+				this.graphicFactory.createRectangle(tool)
 				break
 			case ToolModes.ELLIPSE:
-				this.graphicFactory.createEllipse()
+				this.graphicFactory.createEllipse(tool)
 				break
 			case ToolModes.LINE:
-				this.graphicFactory.createLine()
+				this.graphicFactory.createLine(tool)
+				break
+			case ToolModes.PEN:
+				this.penTool.createPath(tool)
 				break
 		}
 	}
 
-	private handleToolMouseDrag(event : paper.ToolEvent) {
+	private handleToolMouseMove(event : paper.ToolEvent, tool : paper.Tool) {
+		switch (this.paperStore.currentTool) {
+			// case ToolModes.PEN:
+			// 	this.penTool.createPath()
+			// 	break
+		}
+	}
+
+	private handleToolMouseDrag(event : paper.ToolEvent, tool : paper.Tool) {
 		// 处理工具相关的拖拽逻辑
 	}
 
-	private handleKeyDown(event : paper.KeyEvent) {
+	private handleKeyDown(event : paper.KeyEvent, tool : paper.Tool) {
 		// 处理快捷键逻辑
 	}
 

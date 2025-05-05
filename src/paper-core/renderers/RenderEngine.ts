@@ -5,7 +5,7 @@ import { createTestShapes } from "../../demo/testShapes"
 import { usePaperStore } from "../../stores/usePaperStore"
 import paper from "paper"
 
-import { PAPER_BACKGROUND_COLOR, GRID_LAYER_SCALE } from "../../config/constants"
+import { PAPER_BACKGROUND_COLOR, GRID_LAYER_SCALE } from "../config/constants"
 
 export class RenderEngine {
 	private loaded = false

@@ -4,7 +4,7 @@ import {
 	BOUNDING_BOX_STROKE_COLOR,
 	BOUNDING_BOX_HOVER_STROKE_WIDTH,
 	BOUNDING_BOX_SELECTED_STROKE_WIDTH
-} from '../config/constants'
+} from '../paper-core/config/constants'
 import { usePaperStore } from '../stores/usePaperStore'
 
 export function createTestShapes(scope : paper.PaperScope) {

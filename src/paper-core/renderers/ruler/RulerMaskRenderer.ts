@@ -4,7 +4,7 @@ import {
 	RULER_MAIN_TICK_HEIGHT,
 	RULER_TEXT_FONT_SIZE,
 	RULER_TOP_MASK_WIDTH
-} from '../../../config/constants'
+} from '../../config/constants'
 
 function initial(
 	ctx: CanvasRenderingContext2D

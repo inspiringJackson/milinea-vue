@@ -1,11 +1,11 @@
 // src/pape-core/renderers/grid/GridRenderer.ts
 import { usePaperStore } from "../../../stores/usePaperStore"
-import { getRulerStep } from "../../../config/rulerStep"
+import { getRulerStep } from "../../config/rulerStep"
 import {
 	GRID_LAYER_SCALE,
 	GRID_LINE_COLOR,
 	GRID_STROKE_WIDTH
-} from '../../../config/constants'
+} from '../../config/constants'
 
 export class GridRenderer {
 	public render(

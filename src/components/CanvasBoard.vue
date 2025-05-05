@@ -11,7 +11,7 @@
 	import { ref, watch, onMounted, onUnmounted } from 'vue'
 	import paper from 'paper'
 	import { usePaperStore } from '../stores/usePaperStore'
-	import { ToolModes } from '../config/enums'
+	import { ToolModes } from '../paper-core/config/enums'
 
 	// 导入光标资源
 	const cursorDrag = '../src/assets/cursors/drag.png'

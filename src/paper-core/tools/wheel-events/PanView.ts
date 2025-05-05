@@ -1,5 +1,5 @@
 // src/paper-core/tools/wheel-events/PanView.ts
-import { PAN_STEP } from '../../../config/constants'
+import { PAN_STEP } from '../../config/constants'
 import { RenderEngine } from '../../renderers/RenderEngine'
 import paper from 'paper'
 

@@ -35,6 +35,11 @@ abstract class BaseGraphicCreator implements IGraphicCreator {
 		this.startPoint = null
 		// this.currentItem?.remove()
 		this.currentItem = null
+		if (this.factory.tool) {
+			this.factory.tool.onMouseDown = null
+			this.factory.tool.onMouseDrag = null
+			this.factory.tool.onMouseUp = null
+		}
 	}
 
 	protected applyDefaultStyle(item : paper.Item, isClosed : boolean) : void {
@@ -81,7 +86,7 @@ class RectangleCreator extends BaseGraphicCreator {
 
 		this.width = this.rectBottomRight.x - this.rectTopLeft.x
 		this.height = this.rectBottomRight.y - this.rectTopLeft.y
-		
+
 		// 按下shift键时，创建正方形
 		// english: create a square when shift key is pressed
 		if (event.modifiers.shift) {
@@ -96,7 +101,7 @@ class RectangleCreator extends BaseGraphicCreator {
 		if (!this.startPoint || !this.currentItem) {
 			return
 		}
-		
+
 		this.currentItem.remove()
 		this.currentItem = new paper.Path.Rectangle({
 			name: `Rectangle${++this.rectangleIndex}`,
@@ -108,7 +113,7 @@ class RectangleCreator extends BaseGraphicCreator {
 		this.rectangleDispose()
 		console.log(usePaperStore().project)
 	}
-	
+
 	private rectangleDispose() : void {
 		this.rectTopLeft = null
 		this.rectBottomRight = null
@@ -166,22 +171,25 @@ class LineCreator extends BaseGraphicCreator {
 
 export class GraphicFactory {
 	private currentCreator : IGraphicCreator | null = null
-	readonly tool = new paper.Tool()
+	tool : paper.Tool | null = null
 
-	createRectangle() : void {
+	createRectangle(tool : paper.Tool) : void {
 		console.log('createRectangle')
+		this.tool = tool
 		this.currentCreator?.dispose()
 		this.currentCreator = new RectangleCreator(this)
 		this.currentCreator.startCreation()
 	}
 
-	createEllipse() : void {
+	createEllipse(tool : paper.Tool) : void {
+		this.tool = tool
 		this.currentCreator?.dispose()
 		this.currentCreator = new EllipseCreator(this)
 		this.currentCreator.startCreation()
 	}
 
-	createLine() : void {
+	createLine(tool : paper.Tool) : void {
+		this.tool = tool
 		this.currentCreator?.dispose()
 		this.currentCreator = new LineCreator(this)
 		this.currentCreator.startCreation()

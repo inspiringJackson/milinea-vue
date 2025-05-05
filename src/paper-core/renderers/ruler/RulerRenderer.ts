@@ -1,6 +1,6 @@
 // src/paper-core/renderers/ruler/RulerRenderer.ts
 import { usePaperStore } from '../../../stores/usePaperStore'
-import { getRulerStep } from '../../../config/rulerStep'
+import { getRulerStep } from '../../config/rulerStep'
 import { renderBottomMask, renderTopMask } from './RulerMaskRenderer'
 // import { renderSelectionHelper } from './RulerSelectionHelper'
 
@@ -12,7 +12,7 @@ import {
 	RULER_MAIN_TICK_HEIGHT,
 	RULER_SUB_TICK_HEIGHT,
 	RULER_TEXT_FONT_FAMILY
-} from '../../../config/constants'
+} from '../../config/constants'
 
 export class RulerRenderer {
 	public render(

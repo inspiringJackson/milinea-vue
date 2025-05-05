@@ -4,7 +4,7 @@ import paper from 'paper'
 import { RenderEngine } from '../paper-core/renderers/RenderEngine'
 import { ToolManager } from '../paper-core/tools/ToolManager'
 
-import { DEFAULT_INITIAL_OFFSET_X, DEFAULT_INITIAL_OFFSET_Y, BOUNDING_BOX_SELECTED_STROKE_WIDTH } from '../config/constants'
+import { DEFAULT_INITIAL_OFFSET_X, DEFAULT_INITIAL_OFFSET_Y, BOUNDING_BOX_SELECTED_STROKE_WIDTH } from '../paper-core/config/constants'
 
 export const usePaperStore = defineStore('paper', {
 	state: () => ({
