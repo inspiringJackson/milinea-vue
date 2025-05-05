@@ -5,15 +5,15 @@
 	},
 
 	"tools": {
-		"selection": "选择工具",
-		"moveView": "移动视图",
+		"selectTool": "选择工具",
+		"handTool": "移动视图",
 		"rectangle": "矩形",
 		"diagonal": "直线",
 		"ellipse": "圆形",
 		"triangle": "三角形",
 		"picture": "图片",
-		"calligraphyPen": "钢笔工具",
-		"pen": "铅笔工具",
+		"pen": "钢笔工具",
+		"pencil": "铅笔工具",
 		"text": "文字工具",
 		"slice": "切图工具"
 	},

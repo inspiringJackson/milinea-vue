@@ -5,15 +5,15 @@
 	},
 
 	"tools": {
-		"selection": "Selection Tool",
-		"moveView": "Move View",
+		"selectTool": "Select Tool",
+		"handTool": "Hand Tool",
 		"rectangle": "Rectangle",
 		"diagonal": "Line",
 		"ellipse": "Ellipse",
 		"triangle": "Triangle",
 		"picture": "Picture",
-		"calligraphyPen": "Calligraphy Pen",
-		"pen": "Pencil",
+		"pen": "Pen",
+		"pencil": "Pencil",
 		"text": "Text Tool",
 		"slice": "Slice Tool"
 	},

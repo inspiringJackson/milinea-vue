@@ -10,7 +10,7 @@
 			</n-button>
 			<n-divider vertical></n-divider>
 			<div class="zoomButtonPanel">
-				<div class="zoomNum">%</div>
+				<div class="zoomNum">{{ Math.round(usePaperStore().zoomScale * 100) }}%</div>
 				<n-icon size="16">
 					<img style="rotate: 0deg;" src="./../../assets/icons/menuArrow.svg" alt="preferencesMenu">
 				</n-icon>
@@ -41,7 +41,7 @@
 	import {
 		useI18n
 	} from 'vue-i18n'
-	// import { useCanvasStore } from '../../stores/useCanvasStore'
+	import { usePaperStore } from '../../stores/usePaperStore'
 
 	const {
 		locale,

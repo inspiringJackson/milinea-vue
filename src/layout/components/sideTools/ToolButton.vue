@@ -6,7 +6,7 @@
 				<template #icon>
 					<div class="icon-container">
 						<n-icon size="20" class="main-icon">
-							<img :src="currentTool.src" class="icon" />
+							<img :src="currentTool.src" class="icon" :alt="t(currentTool.i18nKey)" />
 						</n-icon>
 						<n-popselect v-if="toolGroup.length > 1" v-model:value="selectedIndex" placement="right"
 							:options="popSelectOptions" trigger="manual" :show="showPopselect"
@@ -66,7 +66,7 @@
 		return props.toolGroup.map((tool, index) => ({
 			label: () => h('div', { class: 'option-content' }, [
 				h(NIcon, { size: 16, class: 'option-icon' }, () =>
-					h('img', { src: tool.src, class: 'icon' })
+					h('img', { src: tool.src, class: 'icon', alt: t(tool.i18nKey)})
 				),
 				h('span', { class: 'option-label' }, t(tool.i18nKey)),
 				h('div', { class: 'option-hint' }, [

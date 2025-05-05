@@ -26,8 +26,8 @@
 
 	const tools : Tool[][] = [
 		[
-			{ src: 'src/assets/icons/mousePointer.svg', i18nKey: 'tools.selection', mode: ToolModes.SELECT, shortCut: 'V' },
-			{ src: 'src/assets/icons/move.svg', i18nKey: 'tools.moveView', mode: ToolModes.HAND_TOOL, shortCut: 'H' }
+			{ src: 'src/assets/icons/mousePointer.svg', i18nKey: 'tools.selectTool', mode: ToolModes.SELECT, shortCut: 'V' },
+			{ src: 'src/assets/icons/move.svg', i18nKey: 'tools.handTool', mode: ToolModes.HAND_TOOL, shortCut: 'H' }
 		],
 		[
 			{ src: 'src/assets/icons/rectangle.svg', i18nKey: 'tools.rectangle', mode: ToolModes.RECTANGLE, shortCut: 'R' },
@@ -37,8 +37,8 @@
 			// { src: 'src/assets/icons/picture.svg', i18nKey: 'tools.picture' }
 		],
 		[
-			{ src: 'src/assets/icons/calligraphyPen.svg', i18nKey: 'tools.calligraphyPen', mode: ToolModes.PEN, shortCut: 'P' },
-			{ src: 'src/assets/icons/pen.svg', i18nKey: 'tools.pen', mode: ToolModes.PENCIL, shortCut: 'M' }
+			{ src: 'src/assets/icons/calligraphyPen.svg', i18nKey: 'tools.pen', mode: ToolModes.PEN, shortCut: 'P' },
+			{ src: 'src/assets/icons/pen.svg', i18nKey: 'tools.pencil', mode: ToolModes.PENCIL, shortCut: 'M' }
 		],
 		[
 			{ src: 'src/assets/icons/text.svg', i18nKey: 'tools.text', mode: ToolModes.TEXT, shortCut: 'T' }
