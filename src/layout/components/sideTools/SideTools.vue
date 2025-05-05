@@ -1,13 +1,14 @@
 <template>
 	<div class="side-tools">
-		<ToolButton v-for="(group, index) in tools" :key="index" :tool-group="group" :selected-index="currentSelectedTool[index]" 
+		<ToolButton v-for="(group, index) in tools" :key="index" :tool-group="group"
+			:selected-index="currentSelectedTool[index]"
 			:active="activeTool.groupIndex === index && activeTool.toolIndex === currentSelectedTool[index]"
 			@tool-change="handleToolChange(index, $event)" />
 	</div>
 </template>
 
 <script setup lang="ts">
-	import { ref } from 'vue'
+	import { ref, watch } from 'vue'
 	import ToolButton from './ToolButton.vue'
 	import { useI18n } from 'vue-i18n'
 	import { usePaperStore } from '../../../stores/usePaperStore'
@@ -62,9 +63,9 @@
 		console.log(groupIndex, toolIndex)
 		currentSelectedTool.value[groupIndex] = toolIndex
 		activeTool.value = { groupIndex, toolIndex }
-		usePaperStore().currentTool = tools[groupIndex][toolIndex].mode
+		usePaperStore().setCurrentTool(tools[groupIndex][toolIndex].mode)
 	}
-	
+
 	onMounted(() => {
 		// 快捷键切换工具
 		// english: shortcut key to switch tools
@@ -89,9 +90,34 @@
 				handleToolChange(4, 0)
 			}
 		}
-		
+
 		document.addEventListener('keydown', handleKeyDown)
 	})
+
+	watch(
+		() => usePaperStore().currentTool,
+		(newTool) => {
+			let foundGroupIndex = -1
+			let foundToolIndex = -1
+
+			tools.forEach((group, groupIndex) => {
+				group.forEach((tool, toolIndex) => {
+					if (tool.mode === newTool) {
+						foundGroupIndex = groupIndex
+						foundToolIndex = toolIndex
+					}
+				})
+			})
+
+			if (foundGroupIndex !== -1 && foundToolIndex !== -1) {
+				activeTool.value = {
+					groupIndex: foundGroupIndex,
+					toolIndex: foundToolIndex
+				}
+				currentSelectedTool.value[foundGroupIndex] = foundToolIndex
+			}
+		}
+	)
 </script>
 
 <style scoped lang="scss">

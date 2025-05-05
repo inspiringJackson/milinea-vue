@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import paper from 'paper'
 import { RenderEngine } from '../paper-core/renderers/RenderEngine'
 import { ToolManager } from '../paper-core/tools/ToolManager'
+import { ToolModes } from '../paper-core/config/enums'
 
 import { DEFAULT_INITIAL_OFFSET_X, DEFAULT_INITIAL_OFFSET_Y, BOUNDING_BOX_SELECTED_STROKE_WIDTH } from '../paper-core/config/constants'
 
@@ -23,13 +24,18 @@ export const usePaperStore = defineStore('paper', {
 		originalCenter: null as paper.Point | null,
 		currentTool: 'select',
 		
+		rectangleIndex: 1,
+		ellipseIndex: 1,
+		lineIndex: 1,
+		pathIndex: 1,
+
 		selectedPathIds: [] as string[],
 	}),
 	actions: {
 		init(
-			canvas : HTMLCanvasElement, 
-			bottomCanvas : HTMLCanvasElement, 
-			topCanvas : HTMLCanvasElement, 
+			canvas : HTMLCanvasElement,
+			bottomCanvas : HTMLCanvasElement,
+			topCanvas : HTMLCanvasElement,
 		) {
 			this.scope = new paper.PaperScope()
 			this.scope.setup(canvas)
@@ -41,6 +47,11 @@ export const usePaperStore = defineStore('paper', {
 			this.renderEngine = new RenderEngine(this.canvas, this.bottomCanvas, this.topCanvas)
 			this.toolManager = new ToolManager()
 
+		},
+		setCurrentTool(toolName : ToolModes) {
+			if (this.currentTool?.name === toolName) return
+			this.currentTool = toolName
+			this.toolManager.switchTool(toolName)
 		},
 		clearCanvas() {
 			this.project?.clear()

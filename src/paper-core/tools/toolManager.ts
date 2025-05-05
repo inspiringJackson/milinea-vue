@@ -4,26 +4,27 @@ import { ZoomView } from "./wheel-events/ZoomView"
 import { MoveView } from "./mouse-events/MoveView"
 import { PanView } from "./wheel-events/PanView"
 import { ToolModes } from "../config/enums"
-import { GraphicFactory } from "../factories/graphic/GraphicCreator"
-import { PenTool } from "./mouse-events/PenTool"
 import paper from "paper"
+import { ITool } from "../types/tools"
+import { ShapeToolFactory } from "./tool-events/factories/shape/ShapeToolFactory"
+import { PenTool } from "./mouse-events/PenTool"
+import { ShapeType } from "../types/shape"
 
 export class ToolManager {
 	private paperStore : ReturnType<typeof usePaperStore>
-	private graphicFactory : GraphicFactory
-	private penTool : PenTool
+	private paper : paper.PaperScope
+	private tools : Map<ToolModes, ITool> = new Map()
+	private currentTool : ITool | null = null
 	private isViewMoving = false
 
 	constructor() {
 		this.paperStore = usePaperStore()
-		this.graphicFactory = new GraphicFactory()
-		this.penTool = new PenTool()
+		this.paper = this.paperStore.scope!
 		this.initialize()
 	}
 
 	private initialize() {
 		this.setupViewEvents()
-		this.setupToolEvents()
 	}
 
 	private setupViewEvents() {
@@ -37,24 +38,39 @@ export class ToolManager {
 			this.handleWheel(event))
 	}
 
-	private setupToolEvents() {
-		const tool = new paper.Tool() // this.paperStore.scope.tool!
-		// tool.activate()
-
-		// tool.onMouseDown = null
-		// tool.onMouseDrag = null
-		// tool.onMouseMove = null
-		// tool.onMouseUp = null
-		// tool.onKeyDown = null
-
-		tool.onMouseDown = (event : paper.ToolEvent) =>
-			this.handleToolMouseDown(event, tool)
-		tool.onMouseDrag = (event : paper.ToolEvent) =>
-			this.handleToolMouseDrag(event, tool)
-		tool.onMouseMove = (event : paper.ToolEvent) =>
-			this.handleToolMouseMove(event, tool)
-		tool.onKeyDown = (event : paper.KeyEvent) =>
-			this.handleKeyDown(event, tool)
+	switchTool(toolMode : ToolModes) {
+		if (this.currentTool?.name === toolMode) {
+			return
+		}
+		this.currentTool?.deactivate()
+		switch (toolMode) {
+			case ToolModes.SELECT:
+				this.currentTool = null
+				break
+			case ToolModes.RECTANGLE:
+				this.tools.set(ToolModes.RECTANGLE, ShapeToolFactory.createTool('rectangle', this.paper))
+				break
+			case ToolModes.ELLIPSE:
+				this.tools.set(ToolModes.ELLIPSE, ShapeToolFactory.createTool('ellipse', this.paper))
+				break
+			case ToolModes.LINE:
+				this.tools.set(ToolModes.LINE, ShapeToolFactory.createTool('line', this.paper))
+				break
+			case ToolModes.PEN:
+				this.tools.set(ToolModes.PEN, new PenTool(this.paper))
+				break
+			default:
+				this.currentTool = null
+				break
+		}
+		
+		const tool = this.tools.get(toolMode)
+		if (tool) {
+			tool.activate()
+			this.currentTool = tool
+		} else {
+			this.currentTool = null
+		}
 	}
 
 	private handleViewMouseDown(event : paper.MouseEvent) {
@@ -79,45 +95,11 @@ export class ToolManager {
 		}
 	}
 
-	private handleToolMouseDown(event : paper.ToolEvent, tool : paper.Tool) {
-		// console.log(event,this.paperStore.currentTool)
-		switch (this.paperStore.currentTool) {
-			case ToolModes.RECTANGLE:
-				this.graphicFactory.createRectangle(tool)
-				break
-			case ToolModes.ELLIPSE:
-				this.graphicFactory.createEllipse(tool)
-				break
-			case ToolModes.LINE:
-				this.graphicFactory.createLine(tool)
-				break
-			case ToolModes.PEN:
-				this.penTool.createPath(tool)
-				break
-		}
-	}
-
-	private handleToolMouseMove(event : paper.ToolEvent, tool : paper.Tool) {
-		switch (this.paperStore.currentTool) {
-			// case ToolModes.PEN:
-			// 	this.penTool.createPath()
-			// 	break
-		}
-	}
-
-	private handleToolMouseDrag(event : paper.ToolEvent, tool : paper.Tool) {
-		// 处理工具相关的拖拽逻辑
-	}
-
-	private handleKeyDown(event : paper.KeyEvent, tool : paper.Tool) {
-		// 处理快捷键逻辑
-	}
-
 	private handleWheel(event : WheelEvent) {
 		event.preventDefault()
 		const view = this.paperStore.scope!.view
 
-		if (event.ctrlKey) {
+		if (event.ctrlKey && !event.shiftKey) {
 			ZoomView(view, event, this.paperStore.renderEngine)
 		} else {
 			const panType = this.getPanType(event)
@@ -126,101 +108,9 @@ export class ToolManager {
 	}
 
 	private getPanType(event : WheelEvent) : 'horizontal' | 'vertical' | 'diagonal' | 'antiDiagonal' {
-		if (event.shiftKey && !event.altKey) return 'horizontal'
-		if (event.ctrlKey && event.shiftKey) return 'antiDiagonal'
-		if (event.shiftKey && event.altKey) return 'diagonal'
+		if (!event.ctrlKey && event.shiftKey && !event.altKey) return 'horizontal'
+		if (event.ctrlKey && event.shiftKey && !event.altKey) return 'antiDiagonal'
+		if (!event.ctrlKey && event.shiftKey && event.altKey) return 'diagonal'
 		return 'vertical'
 	}
-
-	public switchTool(toolMode : ToolModes) {
-		this.paperStore.currentTool = toolMode
-		this.graphicFactory.cancelCreation()
-	}
 }
-
-// export function initTool() {
-// 	const paperStore = usePaperStore()
-// 	const view = paperStore.scope.view
-// 	paperStore.tool = new paper.Tool()
-
-// 	view.onMouseDown = (event) => {
-// 		console.log(event)
-// 	}
-
-// 	view.onMouseDrag = (event) => {
-
-// 	}
-
-// 	view.onMouseMove = (event) => {
-
-// 	}
-
-// 	view.onMouseUp = (event) => {
-
-// 	}
-
-// 	view.onMouseEnter = (event) => {
-// 	}
-
-// 	view.onMouseLeave = (event) => {
-// 	}
-
-// 	view.onClick = (event) => {
-// 	}
-
-// 	view.onDoubleClick = (event) => {
-// 	}
-
-// 	view.element.addEventListener('wheel', (event) => {
-// 		// console.log(event)
-// 		// paperStore.scope.activate()
-// 		event.preventDefault()
-// 		if (event.ctrlKey && !event.shiftKey && !event.altKey) {
-// 			ZoomView(view, event, paperStore.renderEngine)
-// 		} else if (!event.ctrlKey && event.shiftKey && !event.altKey) {
-// 			// ←→
-// 			PanView('horizontal', view, event, paperStore.renderEngine, paperStore.zoomScale)
-// 		} else if (event.ctrlKey && event.shiftKey && !event.altKey) {
-// 			// ↙↗
-// 			PanView('antiDiagonal', view, event, paperStore.renderEngine, paperStore.zoomScale)
-// 		} else if (!event.ctrlKey && event.shiftKey && event.altKey) {
-// 			// ↖↘
-// 			PanView('diagonal', view, event, paperStore.renderEngine, paperStore.zoomScale)
-// 		} else {
-// 			// ↑↓
-// 			PanView('vertical', view, event, paperStore.renderEngine, paperStore.zoomScale)
-// 		}
-// 	})
-
-
-// 	paperStore.tool.onMouseDown = (event) => {
-// 		const currentTool = paperStore.currentTool
-// 		if (currentTool === ToolModes.HAND_TOOL && event.event.button === 0) {
-// 			MoveView('down', event, view, paperStore.renderEngine)
-// 		}
-// 	}
-
-// 	paperStore.tool.onMouseDrag = (event) => {
-// 		const currentTool = paperStore.currentTool
-// 		if (currentTool === ToolModes.HAND_TOOL && event.event.button === 0) {
-// 			MoveView('drag', event, view, paperStore.renderEngine)
-// 		}
-// 	}
-
-// 	paperStore.tool.onMouseMove = (event) => {
-// 		const currentTool = paperStore.currentTool
-// 		if (currentTool === ToolModes.HAND_TOOL && event.event.button === 0) {
-// 			MoveView('up', event, view, paperStore.renderEngine)
-// 		}
-// 	}
-
-// 	paperStore.tool.onMouseUp = (event) => {
-// 	}
-
-// 	paperStore.tool.onKeyDown = (event) => {
-// 	}
-
-// 	paperStore.tool.onKeyUp = (event) => {
-// 	}
-
-// }

@@ -3,6 +3,10 @@ export const PAPER_BACKGROUND_COLOR = '#F5F5F5'
 export const DEFAULT_INITIAL_OFFSET_X = -100
 export const DEFAULT_INITIAL_OFFSET_Y = -100
 
+export const MAX_ZOOM_SCALE = 100
+export const MIN_ZOOM_SCALE = 0.05
+export const PAN_STEP = 0.4
+
 export const RULER_TICK_MARK_COLOR = '#444444'
 export const RULER_TICK_STROKE_WIDTH = 0.5
 export const RULER_TEXT_COLOR = '#AAAAAA'
@@ -22,7 +26,7 @@ export const BOUNDING_BOX_HOVER_STROKE_WIDTH = 1
 export const BOUNDING_BOX_SELECTED_STROKE_WIDTH = 1.5
 
 export const DEFAULT_PATH_STROKE_COLOR = '#000000'
+export const DEFAULT_PATH_STROKE_WIDTH = 2
+export const DEFAULT_SHAPE_FILL_COLOR = '#CCCCCC'
 
-export const MAX_ZOOM_SCALE = 100
-export const MIN_ZOOM_SCALE = 0.05
-export const PAN_STEP = 0.4
+export const AUTO_ADSORB_DISTANCE = 5
