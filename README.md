@@ -1,4 +1,4 @@
-# <img src="https://github.com/inspiringJackson/mycdn/blob/main/milinea-vue/logo5-1.svg" alt="logo" style="width: 60px; height: 60px;"> Milinea Vue - Vector Design Tool
+# <img src="https://github.com/inspiringJackson/mycdn/blob/main/milinea-vue/logo5-6.svg" alt="logo" style="width: 60px; height: 60px;"> Milinea Vue - Vector Design Tool
 
 We're (probably just me & AI, and welcome you!) developing a simple vector-based design tool that simplifies messy vector lines, which users draw, into something like clean subway-style route maps. Inspired by research like [this paper](http://www.jstott.me.uk/thesis/thesis-final.pdf).
 
