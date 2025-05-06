@@ -25,5 +25,5 @@ export function PanView(
 			view.center = view.center.add(new paper.Point(-delta, delta))
 			break
 	}
-	renderEngine.renderRuler()
+	renderEngine.updateRender()
 }

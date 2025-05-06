@@ -23,5 +23,5 @@ export function ZoomView(
 		view.scale(clampedScale, viewPosition)
 		paperStore.zoomScale = view.zoom
 	}
-	renderEngine.renderRuler()
+	renderEngine.updateRender()
 }

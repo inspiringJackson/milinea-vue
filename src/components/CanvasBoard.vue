@@ -3,7 +3,7 @@
 	<div class="canvas-container" ref="container">
 		<canvas ref="bottomCanvas" class="main-canvas" style="z-index: -1;" resize></canvas>
 		<canvas ref="canvas" class="main-canvas" resize style="position: absolute; left: 0; top: 0;z-index: 1;" tabindex="0"></canvas>
-		<canvas ref="topCanvas" class="main-canvas" style="position: absolute; left: 0; top: 0;z-index: -1;" resize></canvas>
+		<canvas ref="topCanvas" class="main-canvas" style="position: absolute; left: 0; top: 0;z-index: 1; pointer-events: none;" resize></canvas>
 	</div>
 </template>
 

@@ -55,7 +55,7 @@ export function createTestShapes(scope : paper.PaperScope) {
 				this.strokeColor = BOUNDING_BOX_STROKE_COLOR
 				this.strokeWidth = BOUNDING_BOX_HOVER_STROKE_WIDTH / usePaperStore().zoomScale
 			}
-			usePaperStore().renderEngine.renderRuler()
+			usePaperStore().renderEngine.updateRender()
 		})
 
 		hitArea.on('mouseleave', function () {
@@ -63,13 +63,13 @@ export function createTestShapes(scope : paper.PaperScope) {
 				this.strokeColor = null
 				this.strokeWidth = 0
 			}
-			usePaperStore().renderEngine.renderRuler()
+			usePaperStore().renderEngine.updateRender()
 		})
 		
 		hitArea.on('mousedown', function() {
 			if (!this.selected) {
 				this.selected = true
-				usePaperStore().renderEngine.renderRuler()
+				usePaperStore().renderEngine.updateRender()
 				console.log('Selected bounds:', bounds)
 			}
 		})

@@ -8,6 +8,7 @@ import {
 import { ITool } from '../../types/tools'
 import { usePaperStore } from '../../../stores/usePaperStore'
 import { ToolModes } from '../../config/enums'
+import { RenderEngine } from '../../renderers/RenderEngine'
 
 export class PenTool implements ITool {
 	private tool: paper.Tool
@@ -16,6 +17,7 @@ export class PenTool implements ITool {
 	
 	constructor(
 		protected paper : paper.PaperScope,
+		protected renderEngine: RenderEngine
 	) {
 		this.tool = new this.paper.Tool()
 		this.setupEventHandlers()
@@ -25,36 +27,36 @@ export class PenTool implements ITool {
 		this.tool.onMouseDown = (e: paper.ToolEvent) => {
 			if (e.event.button === 0) {
 				if (!this.path) {
-					console.log('create path')
 					this.startPoint = e.point
 					this.path = this.createPath(e.point)
 					this.path.add(e.point)
-					console.log(this.path)
 				} else {
 					if (this.startPoint &&
-							e.point.getDistance(this.startPoint) < AUTO_ADSORB_DISTANCE / usePaperStore().zoomScale && 
+							e.point.getDistance(this.startPoint) < AUTO_ADSORB_DISTANCE &&
 							this.path.segments.length > 1) {
 						this.path.lastSegment.point = this.startPoint
 						this.path.closePath()
 						this.path = null
 						usePaperStore().setCurrentTool(ToolModes.SELECT)
-						// tofix: SideTools component should be updated but it's not
 					} else {
 						this.path.add(e.point)
 					}
 				} 
+			} else if (e.event.button === 2 && this.path.segments.length > 1) {
+				if (this.path) {
+					// this.path.remove()
+					this.path = null
+					usePaperStore().setCurrentTool(ToolModes.SELECT)
+				}
 			}
+			// this.renderEngine.updateRender()
 		}
 		
 		this.tool.onMouseMove = (e: paper.ToolEvent) => {
-			if (e.modifiers.space && this.path) {
-				this.path.remove()
-				this.path = null
-				usePaperStore().setCurrentTool(ToolModes.SELECT)
-			}
 			if (this.path) {
 				this.path.lastSegment.point = e.point
 			}
+			// this.renderEngine.updateRender()
 		}
 	}
 	

@@ -22,7 +22,7 @@ export function MoveView(
 				const delta = store.dragStart.subtract(event.point)
 				view.center = view.center.add(delta)
 				store.dragStart = event.point.add(view.center.subtract(store.originalCenter))
-				renderEngine.renderRuler(delta)
+				renderEngine.updateRender(delta)
 			}
 			break
 		case 'up':

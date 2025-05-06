@@ -20,10 +20,10 @@ export class GridRenderer {
 		
 		ctx.save()
 		ctx.resetTransform()
-		if (store.zoomScale < 10) {
+		// if (store.zoomScale < 10) {
 			// ctx.scale(store.zoomScale, store.zoomScale)
 			ctx.clearRect(0, 0, viewSize.viewWidth, viewSize.viewHeight)
-		}
+		// }
 		
 		
 		ctx.strokeStyle = GRID_LINE_COLOR

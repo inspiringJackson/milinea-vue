@@ -2,6 +2,7 @@
 import { BaseShapeTool } from "./BaseShapeTool"
 import type { ShapeType } from "../../../../types/shape"
 import { usePaperStore } from "../../../../../stores/usePaperStore"
+import { RenderEngine } from "../../../../renderers/RenderEngine"
 import {
 	BOUNDING_BOX_STROKE_COLOR,
 	DEFAULT_SHAPE_FILL_COLOR
@@ -11,15 +12,16 @@ import paper from "paper"
 export class ShapeToolFactory {
 	static createTool(
 		type : ShapeType,
-		paper : paper.PaperScope
+		paper : paper.PaperScope,
+		renderEngine: RenderEngine
 	) : BaseShapeTool {
 		switch (type) {
 			case "rectangle":
-				return new RectangleTool(paper)
+				return new RectangleTool(paper, renderEngine)
 			case "ellipse":
-				return new EllipseTool(paper)
+				return new EllipseTool(paper, renderEngine)
 			case "line":
-				return new LineTool(paper)
+				return new LineTool(paper, renderEngine)
 		}
 	}
 }
@@ -63,6 +65,7 @@ class RectangleTool extends BaseShapeTool {
 			to: rectBottomRight,
 			fillColor: DEFAULT_SHAPE_FILL_COLOR
 		})
+		// this.renderEngine.updateRender()
 	}
 }
 

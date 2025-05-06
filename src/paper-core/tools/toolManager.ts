@@ -48,16 +48,16 @@ export class ToolManager {
 				this.currentTool = null
 				break
 			case ToolModes.RECTANGLE:
-				this.tools.set(ToolModes.RECTANGLE, ShapeToolFactory.createTool('rectangle', this.paper))
+				this.tools.set(ToolModes.RECTANGLE, ShapeToolFactory.createTool('rectangle', this.paper, this.paperStore.renderEngine))
 				break
 			case ToolModes.ELLIPSE:
-				this.tools.set(ToolModes.ELLIPSE, ShapeToolFactory.createTool('ellipse', this.paper))
+				this.tools.set(ToolModes.ELLIPSE, ShapeToolFactory.createTool('ellipse', this.paper, this.paperStore.renderEngine))
 				break
 			case ToolModes.LINE:
-				this.tools.set(ToolModes.LINE, ShapeToolFactory.createTool('line', this.paper))
+				this.tools.set(ToolModes.LINE, ShapeToolFactory.createTool('line', this.paper, this.paperStore.renderEngine))
 				break
 			case ToolModes.PEN:
-				this.tools.set(ToolModes.PEN, new PenTool(this.paper))
+				this.tools.set(ToolModes.PEN, new PenTool(this.paper, this.paperStore.renderEngine))
 				break
 			default:
 				this.currentTool = null

@@ -4,6 +4,7 @@ import {
 	DEFAULT_SHAPE_FILL_COLOR,
 } from "../../../../config/constants"
 import { usePaperStore } from "../../../../../stores/usePaperStore"
+import { RenderEngine } from "../../../../renderers/RenderEngine"
 import { ToolModes } from "../../../../config/enums"
 import paper from "paper"
 
@@ -14,6 +15,7 @@ export abstract class BaseShapeTool implements ITool {
 
 	constructor(
 		protected paper : paper.PaperScope,
+		protected renderEngine: RenderEngine
 	) {
 		this.tool = new this.paper.Tool()
 		this.setupEventHandlers()
@@ -24,6 +26,7 @@ export abstract class BaseShapeTool implements ITool {
 			if (e.event.button === 0) {
 				this.startPoint = e.point
 				this.currentShape = this.createShape(e.point)
+				// this.renderEngine.updateRender()
 			}
 			
 		}
@@ -31,6 +34,7 @@ export abstract class BaseShapeTool implements ITool {
 		this.tool.onMouseDrag = (e : paper.ToolEvent) => {
 			if (this.currentShape && this.startPoint) {
 				this.updateShape(e)
+				
 			}
 		}
 
@@ -38,6 +42,7 @@ export abstract class BaseShapeTool implements ITool {
 			this.finalizeShape()
 			this.startPoint = null
 			this.currentShape = null
+			// this.renderEngine.updateRender()
 			usePaperStore().setCurrentTool(ToolModes.SELECT)
 		}
 	}

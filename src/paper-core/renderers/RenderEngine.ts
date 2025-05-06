@@ -41,7 +41,7 @@ export class RenderEngine {
 			if (!this.loaded) {
 				this.render()
 			}
-			this.renderRuler()
+			this.updateRender()
 
 		})
 		resizeObserver.observe(this.canvas)
@@ -59,12 +59,12 @@ export class RenderEngine {
 		if (!this.loaded) {
 			const paperStore = usePaperStore()
 			createTestShapes(paperStore.scope)
-			this.renderRuler()
+			this.updateRender()
 		}
 	}
 
 
-	public renderRuler(delta ?: paper.Point) {
+	public updateRender(delta ?: paper.Point) {
 		const now = performance.now()
 		const paperStore = usePaperStore()
 		const isDeltaLarge = delta && delta.length >= this.deltaThreshold
@@ -74,12 +74,13 @@ export class RenderEngine {
 			this.lastRenderTime = now
 			paperStore.scope.view.update()
 			if (paperStore.zoomScale < GRID_LAYER_SCALE) {
+				this.topCtx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 				this.gridRenderer.render(this.bottomCtx, this.getViewMetrics())
 			} else {
 				this.bottomCtx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-				this.gridRenderer.render(this.ctx, this.getViewMetrics())
+				this.gridRenderer.render(this.topCtx, this.getViewMetrics())
 			}
-			this.rulerRenderer.render(this.ctx, this.getViewMetrics())
+			this.rulerRenderer.render(this.topCtx, this.getViewMetrics())
 			this.loaded = true
 		}
 	}
