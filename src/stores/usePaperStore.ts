@@ -5,7 +5,11 @@ import { RenderEngine } from '../paper-core/renderers/RenderEngine'
 import { ToolManager } from '../paper-core/tools/ToolManager'
 import { ToolModes } from '../paper-core/config/enums'
 
-import { DEFAULT_INITIAL_OFFSET_X, DEFAULT_INITIAL_OFFSET_Y, BOUNDING_BOX_SELECTED_STROKE_WIDTH } from '../paper-core/config/constants'
+import { 
+	DEFAULT_INITIAL_OFFSET_X, 
+	DEFAULT_INITIAL_OFFSET_Y, 
+	DEFAULT_HANDLE_SIZE
+} from '../paper-core/config/constants'
 
 export const usePaperStore = defineStore('paper', {
 	state: () => ({
@@ -39,6 +43,7 @@ export const usePaperStore = defineStore('paper', {
 		) {
 			this.scope = new paper.PaperScope()
 			this.scope.setup(canvas)
+			this.scope.settings.handleSize = DEFAULT_HANDLE_SIZE
 			this.canvas = canvas
 			this.bottomCanvas = bottomCanvas
 			this.topCanvas = topCanvas

@@ -5,11 +5,13 @@ import {
 	PAPER_BACKGROUND_COLOR,
 	BOUNDING_BOX_HOVER_STROKE_WIDTH
 } from '../config/constants'
+import { ToolModes } from '../config/enums'
 import { usePaperStore } from '../../stores/usePaperStore'
 
 // 给图形添加悬停、鼠标选中交互
 // english: add hover and select interaction to the item
 export function addHoverAndSelect(item : paper.Item) {
+	const paperStore = usePaperStore()
 	const bounds = item.bounds
 	item.selectedColor = new paper.Color(BOUNDING_BOX_STROKE_COLOR)
 	const hitArea = new paper.Path.Rectangle({
@@ -28,35 +30,36 @@ export function addHoverAndSelect(item : paper.Item) {
 	})
 
 	item.on('mouseenter', function () {
-		if (!bounds.selected && !hitArea.visible) {
+		if (!bounds.selected && !hitArea.visible && paperStore.currentTool === ToolModes.SELECT) {
 			hitArea.visible = true
 		}
 	})
 	
 	item.on('mouseleave', function () {
-		if (!bounds.selected && hitArea.visible) {
+		if (!bounds.selected && hitArea.visible && paperStore.currentTool === ToolModes.SELECT) {
 			hitArea.visible = false
 		}
 	})
 
 	item.on('mousedown', function (e : paper.MouseEvent) {
-		const paperStore = usePaperStore()
-
-		if (!e.event.shiftKey) {
-			// 非shift按下，取消所有选中
-			// english: cancel all selected when not shift key
-			paperStore.project.getItems({}).forEach(otherItem => {
-				if (otherItem !== this) {
-					bounds.selected = false
-				}
-			})
-		}
-		
-		if (bounds.selected) {
-			bounds.selected = false
-		} else {
-			hitArea.visible = false
-			bounds.selected = true
+		if (paperStore.currentTool === ToolModes.SELECT && e.event.button === 0) {
+			if (!e.event.shiftKey) {
+				console.log('clear all selected')
+				// 非shift按下，取消所有选中
+				// english: cancel all selected when not shift key
+				paperStore.project.getItems({}).forEach(otherItem => {
+					if (otherItem !== this) {
+						otherItem.bounds.selected = false
+					}
+				})
+			}
+			
+			if (bounds.selected) {
+				bounds.selected = false
+			} else {
+				hitArea.visible = false
+				bounds.selected = true
+			}
 		}
 	})
 }

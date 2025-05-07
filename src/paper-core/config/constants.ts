@@ -2,6 +2,7 @@
 export const PAPER_BACKGROUND_COLOR = '#F5F5F5'
 export const DEFAULT_INITIAL_OFFSET_X = -100
 export const DEFAULT_INITIAL_OFFSET_Y = -100
+export const DEFAULT_HANDLE_SIZE = 6
 
 export const MAX_ZOOM_SCALE = 100
 export const MIN_ZOOM_SCALE = 0.05
