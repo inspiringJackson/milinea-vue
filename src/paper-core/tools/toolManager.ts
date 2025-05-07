@@ -49,15 +49,27 @@ export class ToolManager {
 				this.currentTool = null
 				break
 			case ToolModes.RECTANGLE:
+				this.paperStore.project.getItems({}).forEach(item => {
+					item.bounds.selected = false
+				})
 				this.tools.set(ToolModes.RECTANGLE, ShapeToolFactory.createTool('rectangle', this.paper, this.paperStore.renderEngine))
 				break
 			case ToolModes.ELLIPSE:
+				this.paperStore.project.getItems({}).forEach(item => {
+					item.bounds.selected = false
+				})
 				this.tools.set(ToolModes.ELLIPSE, ShapeToolFactory.createTool('ellipse', this.paper, this.paperStore.renderEngine))
 				break
 			case ToolModes.LINE:
+				this.paperStore.project.getItems({}).forEach(item => {
+					item.bounds.selected = false
+				})
 				this.tools.set(ToolModes.LINE, ShapeToolFactory.createTool('line', this.paper, this.paperStore.renderEngine))
 				break
 			case ToolModes.PEN:
+				this.paperStore.project.getItems({}).forEach(item => {
+					item.bounds.selected = false
+				})
 				this.tools.set(ToolModes.PEN, new PenTool(this.paper, this.paperStore.renderEngine))
 				break
 			default:

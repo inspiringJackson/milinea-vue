@@ -6,6 +6,7 @@ import {
 import { usePaperStore } from "../../../../../stores/usePaperStore"
 import { RenderEngine } from "../../../../renderers/RenderEngine"
 import { ToolModes } from "../../../../config/enums"
+import { addHoverAndSelect } from "../../../../utils/shape"
 import paper from "paper"
 
 export abstract class BaseShapeTool implements ITool {
@@ -62,7 +63,6 @@ export abstract class BaseShapeTool implements ITool {
 
 	private finalizeShape() {
 		if (this.currentShape) {
-			// 应用最终样式到正式图层
 			this.applyFinalStyle(this.currentShape)
 		}
 	}
@@ -70,5 +70,7 @@ export abstract class BaseShapeTool implements ITool {
 	protected applyFinalStyle(item : paper.Item) {
 		// item.strokeColor = new this.paper.Color(this.style.stroke)
 		item.fillColor = new this.paper.Color(DEFAULT_SHAPE_FILL_COLOR)
+		addHoverAndSelect(item)
+		item.bounds.selected = true
 	}
 }

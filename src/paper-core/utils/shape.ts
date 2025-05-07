@@ -1,6 +1,10 @@
 // src/paper-core/utils/shape.ts
 import paper from 'paper'
-import { BOUNDING_BOX_HOVER_STROKE_WIDTH, BOUNDING_BOX_STROKE_COLOR, PAPER_BACKGROUND_COLOR } from '../config/constants'
+import { 
+	BOUNDING_BOX_STROKE_COLOR, 
+	PAPER_BACKGROUND_COLOR,
+	BOUNDING_BOX_HOVER_STROKE_WIDTH
+} from '../config/constants'
 import { usePaperStore } from '../../stores/usePaperStore'
 
 // 给图形添加悬停、鼠标选中交互
@@ -14,7 +18,8 @@ export function addHoverAndSelect(item : paper.Item) {
 		point: bounds.topLeft,
 		size: bounds.size,
 		strokeColor: new paper.Color(BOUNDING_BOX_STROKE_COLOR),
-		strokeWidth: BOUNDING_BOX_HOVER_STROKE_WIDTH / usePaperStore().zoomScale,
+		strokeWidth: BOUNDING_BOX_HOVER_STROKE_WIDTH,
+		strokeScaling: false,
 		visible: false,
 		parent: item,
 		data: {

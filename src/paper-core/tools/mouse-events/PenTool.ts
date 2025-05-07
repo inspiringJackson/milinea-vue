@@ -9,6 +9,7 @@ import { ITool } from '../../types/tools'
 import { usePaperStore } from '../../../stores/usePaperStore'
 import { ToolModes } from '../../config/enums'
 import { RenderEngine } from '../../renderers/RenderEngine'
+import { addHoverAndSelect } from '../../utils/shape'
 
 export class PenTool implements ITool {
 	private tool: paper.Tool
@@ -36,6 +37,8 @@ export class PenTool implements ITool {
 							this.path.segments.length > 1) {
 						this.path.lastSegment.point = this.startPoint
 						this.path.closePath()
+						addHoverAndSelect(this.path)
+						this.path.bounds.selected = true
 						this.path = null
 						usePaperStore().setCurrentTool(ToolModes.SELECT)
 					} else {
@@ -45,6 +48,9 @@ export class PenTool implements ITool {
 			} else if (e.event.button === 2 && this.path.segments.length > 1) {
 				if (this.path) {
 					// this.path.remove()
+					this.path.lastSegment.remove()
+					addHoverAndSelect(this.path)
+					this.path.bounds.selected = true
 					this.path = null
 					usePaperStore().setCurrentTool(ToolModes.SELECT)
 				}

@@ -5,7 +5,9 @@ import { usePaperStore } from "../../../../../stores/usePaperStore"
 import { RenderEngine } from "../../../../renderers/RenderEngine"
 import {
 	BOUNDING_BOX_STROKE_COLOR,
-	DEFAULT_SHAPE_FILL_COLOR
+	DEFAULT_SHAPE_FILL_COLOR,
+	DEFAULT_PATH_STROKE_COLOR,
+	DEFAULT_PATH_STROKE_WIDTH
 } from "../../../../config/constants"
 import paper from "paper"
 
@@ -35,7 +37,7 @@ class RectangleTool extends BaseShapeTool {
 		return new this.paper.Path.Rectangle({
 			point: startPoint,
 			size: [0, 0],
-			fillColor: DEFAULT_SHAPE_FILL_COLOR
+			fillColor: new paper.Color(DEFAULT_SHAPE_FILL_COLOR)
 		})
 	}
 
@@ -63,9 +65,8 @@ class RectangleTool extends BaseShapeTool {
 			name: this.name,
 			from: rectTopLeft,
 			to: rectBottomRight,
-			fillColor: DEFAULT_SHAPE_FILL_COLOR
+			fillColor: new paper.Color(DEFAULT_SHAPE_FILL_COLOR)
 		})
-		// this.renderEngine.updateRender()
 	}
 }
 
@@ -77,16 +78,36 @@ class EllipseTool extends BaseShapeTool {
 		return new this.paper.Path.Ellipse({
 			point: startPoint,
 			size: [0, 0],
-			strokeColor: BOUNDING_BOX_STROKE_COLOR,
-			strokeWidth: 1,
+			fillColor: new paper.Color(DEFAULT_SHAPE_FILL_COLOR),
 		})
 	}
 
 	protected updateShape(e : paper.ToolEvent) {
 		const currentPoint = e.point
-		const ellipse = this.currentShape as paper.Path.Ellipse
-		const delta = currentPoint.subtract(this.startPoint!)
-		ellipse.bounds = new this.paper.Rectangle(this.startPoint!, delta)
+		const rectTopLeft = new paper.Point(
+			Math.min(this.startPoint.x, currentPoint.x),
+			Math.min(this.startPoint.y, currentPoint.y)
+		)
+		const rectBottomRight = new paper.Point(
+			Math.max(this.startPoint.x, currentPoint.x),
+			Math.max(this.startPoint.y, currentPoint.y)
+		)
+		let width = rectBottomRight.x - rectTopLeft.x
+		let height = rectBottomRight.y - rectTopLeft.y
+		if (e.modifiers.shift) {
+			const maxSize = Math.max(width, height)
+			width = height = maxSize
+			rectBottomRight.x = rectTopLeft.x + maxSize
+			rectBottomRight.y = rectTopLeft.y + maxSize
+		}
+		
+		this.currentShape.remove()
+		this.currentShape = new paper.Path.Ellipse({
+			name: this.name,
+			from: rectTopLeft,
+			to: rectBottomRight,
+			fillColor: new paper.Color(DEFAULT_SHAPE_FILL_COLOR)
+		})
 	}
 }
 
@@ -98,8 +119,8 @@ class LineTool extends BaseShapeTool {
 		return new this.paper.Path.Line({
 			from: startPoint,
 			to: startPoint,
-			strokeColor: BOUNDING_BOX_STROKE_COLOR,
-			strokeWidth: 1,
+			strokeColor: new paper.Color(DEFAULT_PATH_STROKE_COLOR),
+			strokeWidth: DEFAULT_PATH_STROKE_WIDTH
 		})
 	}
 
