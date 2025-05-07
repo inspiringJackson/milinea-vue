@@ -1,11 +1,5 @@
 import paper from 'paper'
-import { 
-	PAPER_BACKGROUND_COLOR,
-	BOUNDING_BOX_STROKE_COLOR,
-	BOUNDING_BOX_HOVER_STROKE_WIDTH,
-	BOUNDING_BOX_SELECTED_STROKE_WIDTH
-} from '../paper-core/config/constants'
-import { usePaperStore } from '../stores/usePaperStore'
+import { addHoverAndSelect } from '../paper-core/utils/shape'
 
 export function createTestShapes(scope : paper.PaperScope) {
 	// 创建矩形
@@ -39,40 +33,7 @@ export function createTestShapes(scope : paper.PaperScope) {
 	// 将图形组合方便后续操作
 	const group = new scope.Group([rect, circle, star])
 	group.children.forEach(shape => {
-		const bounds = shape.bounds
-		const hitArea = new paper.Path.Rectangle({
-			selected: false,
-			selectedColor: BOUNDING_BOX_STROKE_COLOR,
-			point: bounds.topLeft,
-			size: bounds.size,
-			fillColor: PAPER_BACKGROUND_COLOR + '01',
-			strokeColor: null,
-			parent: shape
-		})
-
-		hitArea.on('mouseenter', function () {
-			if (!this.selected) {
-				this.strokeColor = BOUNDING_BOX_STROKE_COLOR
-				this.strokeWidth = BOUNDING_BOX_HOVER_STROKE_WIDTH / usePaperStore().zoomScale
-			}
-			usePaperStore().renderEngine.updateRender()
-		})
-
-		hitArea.on('mouseleave', function () {
-			if (!this.selected) {
-				this.strokeColor = null
-				this.strokeWidth = 0
-			}
-			usePaperStore().renderEngine.updateRender()
-		})
-		
-		hitArea.on('mousedown', function() {
-			if (!this.selected) {
-				this.selected = true
-				usePaperStore().renderEngine.updateRender()
-				console.log('Selected bounds:', bounds)
-			}
-		})
+		addHoverAndSelect(shape)
 	})
 	
 	group.pivot = new scope.Point(0, 0)
