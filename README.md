@@ -1,14 +1,14 @@
 # <img src="https://github.com/inspiringJackson/mycdn/blob/main/milinea-vue/logo5-6.svg" alt="logo (inspired by Chinese character '线' which means 'line')" style="width: 60px; height: 60px;"> Milinea Vue - Vector Design Tool
 
-我们（目前只有我和AI，但也欢迎你来！）正在开发一个简单的基于[Paper.js](https://github.com/paperjs/paper.js)的设计工具，将手绘的杂乱矢量线条简化成像是地铁路线图那样的图形。可以参考[这篇论文](http://www.jstott.me.uk/thesis/thesis-final.pdf)。
+我们（目前只有我和AI，但也欢迎你来！）正在开发一个简单的基于[Paper.js](https://github.com/paperjs/paper.js)的设计工具，将手绘的杂乱矢量线条简化成像是地铁路线图那样的图形。可以参考[这篇论文](http://www.jstott.me.uk/thesis/thesis-final.pdf)。<br>
 We're (probably just me & AI, and welcome you!) developing a simple [Paper.js](https://github.com/paperjs/paper.js)-based design tool that simplifies messy vector lines, which users draw, into something like clean subway-style route maps. Inspired by research like [this paper](http://www.jstott.me.uk/thesis/thesis-final.pdf).
 
-早期正在搭建轻量化的，类似在线设计工具的框架。当前的目标是实现基础功能。
+早期正在搭建轻量化的，类似在线设计工具的框架。当前的目标是实现基础功能。<br>
 At this early stage, it may resemble platforms like mainstream online design tools. Current focus is on core functionality, vector path drawing.
 
 ![Preview](https://github.com/inspiringJackson/mycdn/blob/main/milinea-vue/preview4-28.png)
 
-使用Vue 3`<script setup>`SFCs构建。了解有关模板的更多信息：[Vue 3 SFC Script Setup Docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup)
+使用Vue 3`<script setup>`SFCs构建。了解有关模板的更多信息：[Vue 3 SFC Script Setup Docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup)<br>
 Built with Vue 3 `<script setup>` SFCs. Learn more about the template: [Vue 3 SFC Script Setup Docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup)
 
 ## 项目架构 Project Structure
