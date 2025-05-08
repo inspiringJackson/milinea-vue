@@ -6,7 +6,7 @@ import {
 import { usePaperStore } from "../../../../../stores/usePaperStore"
 import { RenderEngine } from "../../../../renderers/RenderEngine"
 import { ToolModes } from "../../../../config/enums"
-import { addHoverAndSelect } from "../../../../utils/shape"
+import { addHoverAndSelect, shapeDrawingFinished } from "../../../../utils/shape"
 import paper from "paper"
 
 export abstract class BaseShapeTool implements ITool {
@@ -27,7 +27,6 @@ export abstract class BaseShapeTool implements ITool {
 			if (e.event.button === 0) {
 				this.startPoint = e.point
 				this.currentShape = this.createShape(e.point)
-				// this.renderEngine.updateRender()
 			}
 			
 		}
@@ -43,7 +42,6 @@ export abstract class BaseShapeTool implements ITool {
 			this.finalizeShape()
 			this.startPoint = null
 			this.currentShape = null
-			// this.renderEngine.updateRender()
 			usePaperStore().setCurrentTool(ToolModes.SELECT)
 		}
 	}
@@ -68,9 +66,9 @@ export abstract class BaseShapeTool implements ITool {
 	}
 
 	protected applyFinalStyle(item : paper.Item) {
-		// item.strokeColor = new this.paper.Color(this.style.stroke)
 		item.fillColor = new this.paper.Color(DEFAULT_SHAPE_FILL_COLOR)
 		addHoverAndSelect(item)
-		item.bounds.selected = true
+		// item.bounds.selected = true
+		shapeDrawingFinished(item)
 	}
 }

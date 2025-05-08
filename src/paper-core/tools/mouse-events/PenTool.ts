@@ -9,7 +9,7 @@ import { ITool } from '../../types/tools'
 import { usePaperStore } from '../../../stores/usePaperStore'
 import { ToolModes } from '../../config/enums'
 import { RenderEngine } from '../../renderers/RenderEngine'
-import { addHoverAndSelect } from '../../utils/shape'
+import { addHoverAndSelect, shapeDrawingFinished } from '../../utils/shape'
 
 export class PenTool implements ITool {
 	private tool: paper.Tool
@@ -37,32 +37,23 @@ export class PenTool implements ITool {
 							this.path.segments.length > 1) {
 						this.path.lastSegment.point = this.startPoint
 						this.path.closePath()
-						addHoverAndSelect(this.path)
-						this.path.bounds.selected = true
-						this.path = null
-						usePaperStore().setCurrentTool(ToolModes.SELECT)
+						this.finish(this.path)
 					} else {
 						this.path.add(e.point)
 					}
 				} 
 			} else if (e.event.button === 2 && this.path.segments.length > 1) {
 				if (this.path) {
-					// this.path.remove()
 					this.path.lastSegment.remove()
-					addHoverAndSelect(this.path)
-					this.path.bounds.selected = true
-					this.path = null
-					usePaperStore().setCurrentTool(ToolModes.SELECT)
+					this.finish(this.path)
 				}
 			}
-			// this.renderEngine.updateRender()
 		}
 		
 		this.tool.onMouseMove = (e: paper.ToolEvent) => {
 			if (this.path) {
 				this.path.lastSegment.point = e.point
 			}
-			// this.renderEngine.updateRender()
 		}
 	}
 	
@@ -73,6 +64,14 @@ export class PenTool implements ITool {
 			strokeWidth: DEFAULT_PATH_STROKE_WIDTH,
 		})
 		return path
+	}
+	
+	private finish(item: paper.Item) {
+		addHoverAndSelect(item)
+		this.path.bounds.selected = true
+		this.path = null
+		shapeDrawingFinished(item)
+		usePaperStore().setCurrentTool(ToolModes.SELECT)
 	}
 	
 	get name() {

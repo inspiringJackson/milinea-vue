@@ -11,10 +11,26 @@
 	import {
 		useI18n
 	} from 'vue-i18n'
+	import { useHistoryStore } from './stores/useHistoryStore'
 
 	const {
 		t
 	} = useI18n()
+	
+	const historyStore = useHistoryStore()
+	
+	onMounted(() => {
+		const handleKeydown = (event) => {
+			event.preventDefault()
+			if (event.ctrlKey && event.key === 'z') {
+				historyStore.undo()
+			} else if (event.ctrlKey && event.key === 'y') {
+				historyStore.redo()
+			}
+		}
+		
+		window.addEventListener('keydown', handleKeydown)
+	})
 </script>
 
 <template>

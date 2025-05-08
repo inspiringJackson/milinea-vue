@@ -10,6 +10,8 @@ import { ShapeToolFactory } from "./tool-events/factories/shape/ShapeToolFactory
 import { PenTool } from "./mouse-events/PenTool"
 import { ShapeType } from "../types/shape"
 import { BOUNDING_BOX_STROKE_COLOR } from "../config/constants"
+import { useHistoryStore } from "../../stores/useHistoryStore"
+import { cancelAllSelectedItems } from "../utils/shape"
 
 export class ToolManager {
 	private paperStore : ReturnType<typeof usePaperStore>
@@ -49,27 +51,19 @@ export class ToolManager {
 				this.currentTool = null
 				break
 			case ToolModes.RECTANGLE:
-				this.paperStore.project.getItems({}).forEach(item => {
-					item.bounds.selected = false
-				})
+				cancelAllSelectedItems()
 				this.tools.set(ToolModes.RECTANGLE, ShapeToolFactory.createTool('rectangle', this.paper, this.paperStore.renderEngine))
 				break
 			case ToolModes.ELLIPSE:
-				this.paperStore.project.getItems({}).forEach(item => {
-					item.bounds.selected = false
-				})
+				cancelAllSelectedItems()
 				this.tools.set(ToolModes.ELLIPSE, ShapeToolFactory.createTool('ellipse', this.paper, this.paperStore.renderEngine))
 				break
 			case ToolModes.LINE:
-				this.paperStore.project.getItems({}).forEach(item => {
-					item.bounds.selected = false
-				})
+				cancelAllSelectedItems()
 				this.tools.set(ToolModes.LINE, ShapeToolFactory.createTool('line', this.paper, this.paperStore.renderEngine))
 				break
 			case ToolModes.PEN:
-				this.paperStore.project.getItems({}).forEach(item => {
-					item.bounds.selected = false
-				})
+				cancelAllSelectedItems()
 				this.tools.set(ToolModes.PEN, new PenTool(this.paper, this.paperStore.renderEngine))
 				break
 			default:
@@ -95,9 +89,7 @@ export class ToolManager {
 		} else if (this.paperStore.currentTool === ToolModes.SELECT) {
 			if (event.event.button === 0) {
 				if (!this.paper.project.hitTest(event.point)) {
-					this.paperStore.project.getItems({}).forEach(item => {
-						item.bounds.selected = false
-					})
+					cancelAllSelectedItems()
 				}
 			} else if (event.event.button === 2) {
 				this.paperStore.project.getItems({}).forEach(item => {

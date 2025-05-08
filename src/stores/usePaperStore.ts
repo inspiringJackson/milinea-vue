@@ -34,6 +34,7 @@ export const usePaperStore = defineStore('paper', {
 		pathIndex: 1,
 
 		selectedPathIds: [] as string[],
+		selectedItems: [] as paper.Item[]
 	}),
 	actions: {
 		init(

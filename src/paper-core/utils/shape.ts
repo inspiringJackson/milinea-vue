@@ -7,11 +7,16 @@ import {
 } from '../config/constants'
 import { ToolModes } from '../config/enums'
 import { usePaperStore } from '../../stores/usePaperStore'
+import { useHistoryStore } from '../../stores/useHistoryStore'
 
-// 给图形添加悬停、鼠标选中交互
-// english: add hover and select interaction to the item
+/**
+ * 给图形添加悬停、鼠标选中交互
+ * english: add hover and select interaction to the item
+ */
+
 export function addHoverAndSelect(item : paper.Item) {
 	const paperStore = usePaperStore()
+	const historyStore = useHistoryStore()
 	const bounds = item.bounds
 	item.selectedColor = new paper.Color(BOUNDING_BOX_STROKE_COLOR)
 	const hitArea = new paper.Path.Rectangle({
@@ -42,6 +47,8 @@ export function addHoverAndSelect(item : paper.Item) {
 	})
 
 	item.on('mousedown', function (e : paper.MouseEvent) {
+		const prevSelectedItems = [...paperStore.selectedItems]
+		
 		if (paperStore.currentTool === ToolModes.SELECT && e.event.button === 0) {
 			if (!e.event.shiftKey) {
 				console.log('clear all selected')
@@ -52,15 +59,54 @@ export function addHoverAndSelect(item : paper.Item) {
 						otherItem.bounds.selected = false
 					}
 				})
+				paperStore.selectedItems = [] as paper.Item[]
 			}
 			
 			if (bounds.selected) {
 				bounds.selected = false
+				paperStore.selectedItems = paperStore.selectedItems.filter(item => item.id !== this.id)
 			} else {
 				hitArea.visible = false
 				bounds.selected = true
+				paperStore.selectedItems.push(this)
 			}
+			
+			const selectedItems = paperStore.selectedItems
+			historyStore.commitSelectItemChange(prevSelectedItems, selectedItems)
 		}
 	})
 }
 
+/**
+ * 取消所有选择项目
+ * english: Cancel all paper items' bounds that selected
+ */
+
+export function cancelAllSelectedItems() {
+	const paperStore = usePaperStore()
+	const historyStore = useHistoryStore()
+	const prevSelectedItems = [...paperStore.selectedItems]
+	paperStore.project.getItems({}).forEach(item => {
+		item.bounds.selected = false
+	})
+	paperStore.selectedItems = [] as paper.Item[]
+	const selectedItems = paperStore.selectedItems
+	historyStore.commitSelectItemChange(prevSelectedItems, selectedItems)
+}
+
+/**
+ * 图形完成绘制后，立刻切回select工具模式，并且图形自动被选中
+ * english: After the drawing of the graph is completed, 
+ * it immediately switches back to the select tool mode, 
+ * and the graph is automatically selected
+ */
+
+export function shapeDrawingFinished(item : paper.Item) {
+	if (!item) return
+	const paperStore = usePaperStore()
+	const historyStore = useHistoryStore()
+	const prevSelectedItems = [...paperStore.selectedItems]
+	paperStore.selectedItems.push(item)
+	const selectedItems = paperStore.selectedItems
+	historyStore.commitSelectItemChange(prevSelectedItems, selectedItems)
+}
