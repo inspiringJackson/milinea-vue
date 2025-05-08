@@ -5,9 +5,9 @@ import { RenderEngine } from '../paper-core/renderers/RenderEngine'
 import { ToolManager } from '../paper-core/tools/ToolManager'
 import { ToolModes } from '../paper-core/config/enums'
 
-import { 
-	DEFAULT_INITIAL_OFFSET_X, 
-	DEFAULT_INITIAL_OFFSET_Y, 
+import {
+	DEFAULT_INITIAL_OFFSET_X,
+	DEFAULT_INITIAL_OFFSET_Y,
 	DEFAULT_HANDLE_SIZE
 } from '../paper-core/config/constants'
 
@@ -27,7 +27,7 @@ export const usePaperStore = defineStore('paper', {
 		dragStart: null as paper.Point | null,
 		originalCenter: null as paper.Point | null,
 		currentTool: 'select',
-		
+
 		rectangleIndex: 1,
 		ellipseIndex: 1,
 		lineIndex: 1,
@@ -58,6 +58,17 @@ export const usePaperStore = defineStore('paper', {
 			if (this.currentTool?.name === toolName) return
 			this.currentTool = toolName
 			this.toolManager.switchTool(toolName)
+		},
+		addItem(item : paper.Item) {
+			if (!this.selectedItems.some(i => i.id === item.id)) {
+				this.selectedItems.push(item);
+			}
+		},
+		removeItem(item : paper.Item) {
+			this.selectedItems = this.selectedItems.filter(i => i.id !== item.id);
+		},
+		setItems(items : paper.Item[]) {
+			this.selectedItems = items;
 		},
 		clearCanvas() {
 			this.project?.clear()
