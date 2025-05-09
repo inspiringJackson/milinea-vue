@@ -54,7 +54,6 @@ export const usePaperStore = defineStore('paper', {
 			this.project = this.scope.project
 			this.renderEngine = new RenderEngine(this.canvas, this.bottomCanvas, this.topCanvas)
 			this.toolManager = new ToolManager()
-
 		},
 		setCurrentTool(toolName : ToolModes) {
 			if (this.currentTool?.name === toolName) return

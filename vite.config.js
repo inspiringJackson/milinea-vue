@@ -18,6 +18,7 @@ export default defineConfig({
 				'vue',
 				{
 					'naive-ui': [
+						'NConfigProvider',
 						'NButton',
 						'NIcon',
 						'NDivider',

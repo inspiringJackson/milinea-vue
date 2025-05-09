@@ -1,5 +1,6 @@
 // src/config/constants.ts
 export const PAPER_BACKGROUND_COLOR = '#F5F5F5'
+export const PAPER_BACKGROUND_COLOR_DARK = '#222222'
 export const DEFAULT_INITIAL_OFFSET_X = -100
 export const DEFAULT_INITIAL_OFFSET_Y = -100
 export const DEFAULT_HANDLE_SIZE = 6

@@ -110,7 +110,7 @@
 		cursor: default;
 
 		.icon {
-			filter: brightness(0);
+			filter: var(--filter);
 			transition: filter 0.2s ease;
 			width: 16px;
 			height: 16px;
@@ -187,7 +187,7 @@
 		.icon {
 			width: 16px;
 			height: 16px;
-			filter: brightness(0);
+			filter: var(--filter);
 		}
 	}
 	

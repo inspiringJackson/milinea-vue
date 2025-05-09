@@ -129,6 +129,7 @@
 		height: 12px;
 		transition: transform 0.2s;
 		cursor: pointer;
+		filter: var(--filter);
 		transform: rotate(-90deg);
 	}
 

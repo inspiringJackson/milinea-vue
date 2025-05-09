@@ -3,6 +3,7 @@ import { RulerRenderer } from "./ruler/RulerRenderer"
 import { GridRenderer } from "./grid/GridRenderer"
 import { createTestShapes } from "../../demo/testShapes"
 import { usePaperStore } from "../../stores/usePaperStore"
+import { useGlobalStore } from "../../stores/useGlobalStore"
 import paper from "paper"
 
 import { PAPER_BACKGROUND_COLOR, GRID_LAYER_SCALE } from "../config/constants"
@@ -59,6 +60,7 @@ export class RenderEngine {
 		if (!this.loaded) {
 			const paperStore = usePaperStore()
 			createTestShapes(paperStore.scope)
+			useGlobalStore().init()
 			this.updateRender()
 		}
 	}

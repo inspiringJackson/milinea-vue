@@ -6,20 +6,35 @@
 	import LeftMenu from './layout/components/leftMenuPanel/LeftMenuPanel.vue'
 	import CanvasBoard from './components/CanvasBoard.vue'
 	import {
-		onMounted
+		onMounted,
+		watchEffect
 	} from 'vue'
 	import {
 		useI18n
 	} from 'vue-i18n'
-	import { useHistoryStore } from './stores/useHistoryStore'
+	import {
+		useHistoryStore
+	} from './stores/useHistoryStore'
+	import {
+		useGlobalStore
+	} from './stores/useGlobalStore'
+	import {
+		lightTheme,
+		darkTheme
+	} from 'naive-ui'
 
 	const {
 		t
 	} = useI18n()
-	
+
 	const historyStore = useHistoryStore()
-	
+	const globalStore = useGlobalStore()
+	const theme = computed(() =>
+		globalStore.isDarkMode ? darkTheme : lightTheme
+	)
+
 	onMounted(() => {
+		theme.value = globalStore.theme
 		const handleKeydown = (event) => {
 			event.preventDefault()
 			if (event.ctrlKey && event.key === 'z') {
@@ -28,33 +43,36 @@
 				historyStore.redo()
 			}
 		}
-		
+
 		window.addEventListener('keydown', handleKeydown)
 	})
 </script>
 
 <template>
-	<div id="app" @keydown="onKeydown" @keypress="onKeypress" @keyup="onKeyup">
-		<NavBar />
-		<div class="main" @contextmenu.prevent="handleContextMenu">
-			<SideTools />
-			<n-split direction="horizontal" min="240px" :max="0.4" default-size="240px">
-				<template #1>
-					<LeftMenu />
-				</template>
-				<template #2>
-					<!-- <n-split direction="horizontal" :min="0.2" :max="0.8"> -->
+	<n-config-provider :theme="theme">
+		<div id="app" @keydown="onKeydown" @keypress="onKeypress" @keyup="onKeyup">
+			<NavBar />
+			<div class="main" @contextmenu.prevent="handleContextMenu">
+				<SideTools />
+				<n-split direction="horizontal" min="240px" :max="0.4" default-size="240px">
+					<template #1>
+						<LeftMenu />
+					</template>
+					<template #2>
+						<!-- <n-split direction="horizontal" :min="0.2" :max="0.8"> -->
 						<!-- <template #1> -->
-							<CanvasBoard />
+						<CanvasBoard />
 						<!-- </template> -->
 						<!-- <template #2> -->
-							<!-- <CanvasBoard /> -->
+						<!-- <CanvasBoard /> -->
 						<!-- </template> -->
-					<!-- </n-split> -->
-				</template>
-			</n-split>
+						<!-- </n-split> -->
+					</template>
+				</n-split>
+			</div>
 		</div>
-	</div>
+	</n-config-provider>
+
 </template>
 
 <style scoped lang="scss">
@@ -79,5 +97,29 @@
 		.n-split {
 			height: 100%;
 		}
+	}
+</style>
+
+<style>
+	:root {
+		--bg-color: #ffffff;
+		--border-color: #eeeeee;
+		--text-color: #000000;
+		--filter: brightness(0);
+		--canvas-color: #f5f5f5;
+	}
+
+	[data-theme="dark"] {
+		--bg-color: rgb(24, 24, 28);
+		--border-color: #333333;
+		--text-color: #ffffff;
+		--filter: brightness(0) invert(1) drop-shadow(0 0 0.5px white);
+		--canvas-color: #222222;
+	}
+
+	body {
+		background-color: var(--bg-color);
+		color: var(--text-color);
+		transition: background-color 0.3s, color 0.3s;
 	}
 </style>
