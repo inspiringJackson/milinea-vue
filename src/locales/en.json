@@ -1,7 +1,19 @@
 {
 	"language": {
-		"zh": "Simplified Chinese",
+		"zh": "Simplified Chinese(简体中文)",
 		"en": "English"
+	},
+
+	"error": {
+		"invalidImageFormat": "Unsupported image format, please select PNG/JPG/SVG/BMP/WEBP/ICO files"
+	},
+
+	"menu": {
+		"file": "File"
+	},
+
+	"menu-file": {
+		"placeImage": "Place image..."
 	},
 
 	"tools": {
@@ -17,7 +29,7 @@
 		"text": "Text Tool",
 		"slice": "Slice Tool"
 	},
-	
+
 	"menuTabs": {
 		"layers": "Layers",
 		"components": "Components"

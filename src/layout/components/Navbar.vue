@@ -2,13 +2,15 @@
 <template>
 	<div class="navbar">
 		<div class="leftMenu">
-			<n-button text>
-				<template #icon>
-					<n-icon size="30">
-						<img src="./../../assets/icons/menu.svg" class="icon" alt="menu">
-					</n-icon>
-				</template>
-			</n-button>
+			<n-dropdown trigger="click" :options="menuOptions" @select="handleMenuSelect">
+				<n-button text>
+					<template #icon>
+						<n-icon size="30">
+							<img src="./../../assets/icons/menu.svg" class="icon" alt="menu">
+						</n-icon>
+					</template>
+				</n-button>
+			</n-dropdown>
 			<n-divider vertical></n-divider>
 			<div class="zoomButtonPanel">
 				<div class="zoomNum">{{ Math.round(usePaperStore().zoomScale * 100) }}%</div>
@@ -20,8 +22,7 @@
 		</div>
 
 		<div class="rightMenu">
-			<n-switch v-model:value="isDarkMode" size="medium" @update:value="toggleTheme"
-				class="theme-switch">
+			<n-switch v-model:value="isDarkMode" size="medium" @update:value="toggleTheme" class="theme-switch">
 				<template #icon>
 					{{ themeIcon }}
 				</template>
@@ -55,6 +56,7 @@
 	import {
 		useGlobalStore
 	} from '../../stores/useGlobalStore'
+	import { useMessage } from 'naive-ui'
 
 	const {
 		locale,
@@ -69,6 +71,8 @@
 	})
 
 	const globalStore = useGlobalStore()
+	const paperStore = usePaperStore()
+	const message = useMessage()
 
 	const isDarkMode = computed(() => globalStore.isDarkMode)
 	const themeIcon = computed(() => isDarkMode.value ? '🌙' : '☀️')
@@ -83,19 +87,42 @@
 		isDarkMode.value = savedTheme === 'dark'
 	})
 
-	const languageOptions = [{
-			label: t('language.zh'),
-			key: 'zh-CN'
-		},
-		{
-			label: t('language.en'),
-			key: 'en'
-		}
-	]
+	const languageOptions = computed(() => {
+		return [{
+				label: t('language.zh'),
+				key: 'zh-CN'
+			},
+			{
+				label: t('language.en'),
+				key: 'en'
+			},
+		]
+	})
+
+	const menuOptions = computed(() => {
+		return [{
+			label: t('menu.file'),
+			key: 'file',
+			children: [{
+				label: t('menu-file.placeImage'),
+				key: 'placeImage'
+			}]
+		}, ]
+	})
 
 	const currentLanguageLabel = computed(() => {
 		return locale.value === 'zh-CN' ? t('language.zh') : t('language.en')
 	})
+
+	const handleMenuSelect = async (key) => {
+		switch (key) {
+			case 'placeImage':
+				await openImagePicker()
+				break
+			default:
+				break
+		}
+	}
 
 	const handleLanguageSelect = (key) => {
 		locale.value = key
@@ -104,6 +131,38 @@
 
 	const toggleTheme = () => {
 		globalStore.toggleTheme()
+	}
+
+	const openImagePicker = () => {
+		return new Promise((resolve) => {
+			const input = document.createElement('input')
+			input.type = 'file'
+			input.accept = '.png,.jpg,.jpeg,.svg,.bmp,.webp,.ico'
+			input.multiple = false
+
+			input.onchange = (e) => {
+				const file = e.target.files[0]
+				if (!file) return resolve()
+
+				const validTypes = [
+					'image/png', 'image/jpeg', 'image/svg+xml',
+					'image/bmp', 'image/webp', 'image/x-icon'
+				]
+
+				if (!validTypes.includes(file.type)) {
+					message.error(t('error.invalidImageFormat'))
+					return resolve()
+				}
+
+				// 创建临时URL并处理图片
+				const imageUrl = URL.createObjectURL(file)
+				paperStore.handleImageUpload(imageUrl, file.name)
+				resolve()
+			}
+
+			// 触发文件选择
+			input.click()
+		})
 	}
 </script>
 

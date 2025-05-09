@@ -60,7 +60,6 @@
 	const currentSelectedTool = ref<number[]>(tools.map(() => 0))
 
 	const handleToolChange = (groupIndex : number, toolIndex : number) => {
-		console.log(groupIndex, toolIndex)
 		currentSelectedTool.value[groupIndex] = toolIndex
 		activeTool.value = { groupIndex, toolIndex }
 		usePaperStore().setCurrentTool(tools[groupIndex][toolIndex].mode)

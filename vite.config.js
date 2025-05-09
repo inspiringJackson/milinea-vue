@@ -19,6 +19,7 @@ export default defineConfig({
 				{
 					'naive-ui': [
 						'NConfigProvider',
+						'NMessageProvider',
 						'NButton',
 						'NIcon',
 						'NDivider',

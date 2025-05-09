@@ -10,7 +10,7 @@ import {
 	DEFAULT_INITIAL_OFFSET_Y,
 	DEFAULT_HANDLE_SIZE
 } from '../paper-core/config/constants'
-import { cancelAllSelectedItems } from '../paper-core/utils/shape'
+import { addHoverAndSelect, cancelAllSelectedItems } from '../paper-core/utils/shape'
 import { useHistoryStore } from './useHistoryStore'
 
 export const usePaperStore = defineStore('paper', {
@@ -85,6 +85,27 @@ export const usePaperStore = defineStore('paper', {
 			this.selectedItems = items
 			const selectedItems = this.selectedItems
 			useHistoryStore().commitSelectItemChange(prevSelectedItems, selectedItems)
+		},
+		handleImageUpload(imageUrl : string, filename : string) {
+			const img = new Image()
+			img.src = imageUrl
+
+			img.onload = () => {
+				const raster = new paper.Raster({
+					source: imageUrl,
+					position: this.scope.view.center,
+					smoothing: false,
+					name: filename
+				})
+				
+				addHoverAndSelect(raster)
+
+				URL.revokeObjectURL(imageUrl)
+			}
+
+			img.onerror = () => {
+				URL.revokeObjectURL(imageUrl)
+			}
 		},
 		clearCanvas() {
 			this.project?.clear()

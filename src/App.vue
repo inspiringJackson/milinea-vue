@@ -50,27 +50,30 @@
 
 <template>
 	<n-config-provider :theme="theme">
-		<div id="app" @keydown="onKeydown" @keypress="onKeypress" @keyup="onKeyup">
-			<NavBar />
-			<div class="main" @contextmenu.prevent="handleContextMenu">
-				<SideTools />
-				<n-split direction="horizontal" min="240px" :max="0.4" default-size="240px">
-					<template #1>
-						<LeftMenu />
-					</template>
-					<template #2>
-						<!-- <n-split direction="horizontal" :min="0.2" :max="0.8"> -->
-						<!-- <template #1> -->
-						<CanvasBoard />
-						<!-- </template> -->
-						<!-- <template #2> -->
-						<!-- <CanvasBoard /> -->
-						<!-- </template> -->
-						<!-- </n-split> -->
-					</template>
-				</n-split>
+		<n-message-provider>
+			<div id="app" @keydown="onKeydown" @keypress="onKeypress" @keyup="onKeyup">
+				<NavBar />
+				<div class="main" @contextmenu.prevent="handleContextMenu">
+					<SideTools />
+					<n-split direction="horizontal" min="240px" :max="0.4" default-size="240px">
+						<template #1>
+							<LeftMenu />
+						</template>
+						<template #2>
+							<!-- <n-split direction="horizontal" :min="0.2" :max="0.8"> -->
+							<!-- <template #1> -->
+							<CanvasBoard />
+							<!-- </template> -->
+							<!-- <template #2> -->
+							<!-- <CanvasBoard /> -->
+							<!-- </template> -->
+							<!-- </n-split> -->
+						</template>
+					</n-split>
+				</div>
 			</div>
-		</div>
+		</n-message-provider>
+
 	</n-config-provider>
 
 </template>
