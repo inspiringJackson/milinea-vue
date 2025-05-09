@@ -36,7 +36,6 @@ export const useHistoryStore = defineStore("history", {
 		},
 		
 		undo() {
-			console.log("undo")
 			if (this.currentIndex >= 0) {
 				this.commands[this.currentIndex].undo()
 				this.currentIndex--
@@ -57,12 +56,12 @@ export const useHistoryStore = defineStore("history", {
 		
 		commitSelectItemChange(prevSelectedItems: any[], selectedItems: any[]) {
 			// 判断新旧数组是否相同，如果相同直接返回
+			// english: if the new and old arrays are the same, return directly
 			if (JSON.stringify(prevSelectedItems) === JSON.stringify(selectedItems)) {
-				console.log("commitSelectItemChange same")
 				return
 			}
-			console.log("commitSelectItemChange")
 			// 否则，添加命令
+			// otherwise, add a command
 			this.addCommand(
 				new SelectItemCommand(prevSelectedItems, selectedItems, usePaperStore())
 			)

@@ -36,13 +36,19 @@
 					children: [],
 					raw: item
 				}
-
-				if (item instanceof paper.Group || item instanceof paper.Layer) {
-					node.children = item.children.map(c => c.id)
-					traverse(item.children, depth + 1, item.id)
+				
+				if (!item.data?.isHitArea) {
+					if (item instanceof paper.Group || item instanceof paper.Layer) {
+						node.children = item.children.map(c => c.id)
+						result.push(node)
+						if (node.isOpen) {
+							traverse(item.children, depth + 1, item.id)
+						}
+						
+					} else {
+						result.push(node)
+					}
 				}
-
-				result.push(node)
 			})
 		}
 
@@ -57,14 +63,16 @@
 
 	// 处理多选逻辑
 	const handleItemClick = (item : PaperItemNode, event : MouseEvent) => {
-		if (event.ctrlKey || event.metaKey) {
-			if (store.selectedItems.some(i => i.id === item.id)) {
-				store.removeItem(item.raw)
+		if (event.button === 0) {
+			if (event.ctrlKey) {
+				if (store.selectedItems.some(i => i.id === item.id)) {
+					store.removeItem(item.raw)
+				} else {
+					store.addItem(item.raw)
+				}
 			} else {
-				store.addItem(item.raw)
+				store.setItems([item.raw])
 			}
-		} else {
-			store.setItems([item.raw])
 		}
 	}
 
@@ -84,22 +92,21 @@
 
 	// 处理键盘事件
 	window.addEventListener('keydown', (e) => {
-		ctrlPressed.value = e.ctrlKey || e.metaKey
+		ctrlPressed.value = e.ctrlKey
 	})
 	window.addEventListener('keyup', () => {
 		ctrlPressed.value = false
 	})
+	
 </script>
 
 <style scoped>
 	.project-tree {
-		font-family: monospace;
 		user-select: none;
 	}
 
 	.tree-node {
 		padding: 8px 12px;
-		cursor: pointer;
 		transition: background 0.2s;
 	}
 
@@ -108,8 +115,7 @@
 	}
 
 	.selected {
-		background: #e3f2fd;
-		font-weight: bold;
+		background: rgb(231, 245, 238) !important;
 	}
 
 	.node-content {
@@ -123,10 +129,11 @@
 		height: 12px;
 		transition: transform 0.2s;
 		cursor: pointer;
+		transform: rotate(-90deg);
 	}
 
 	.rotated {
-		transform: rotate(90deg);
+		transform: rotate(0deg);
 	}
 
 	.node-label {

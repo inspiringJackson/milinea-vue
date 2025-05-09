@@ -51,7 +51,6 @@ export function addHoverAndSelect(item : paper.Item) {
 		
 		if (paperStore.currentTool === ToolModes.SELECT && e.event.button === 0) {
 			if (!e.event.shiftKey) {
-				console.log('clear all selected')
 				// 非shift按下，取消所有选中
 				// english: cancel all selected when not shift key
 				paperStore.project.getItems({}).forEach(otherItem => {

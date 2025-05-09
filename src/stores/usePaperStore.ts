@@ -10,6 +10,8 @@ import {
 	DEFAULT_INITIAL_OFFSET_Y,
 	DEFAULT_HANDLE_SIZE
 } from '../paper-core/config/constants'
+import { cancelAllSelectedItems } from '../paper-core/utils/shape'
+import { useHistoryStore } from './useHistoryStore'
 
 export const usePaperStore = defineStore('paper', {
 	state: () => ({
@@ -61,14 +63,29 @@ export const usePaperStore = defineStore('paper', {
 		},
 		addItem(item : paper.Item) {
 			if (!this.selectedItems.some(i => i.id === item.id)) {
-				this.selectedItems.push(item);
+				const prevSelectedItems = [...this.selectedItems]
+				item.bounds.selected = true
+				this.selectedItems.push(item)
+				const selectedItems = this.selectedItems
+				useHistoryStore().commitSelectItemChange(prevSelectedItems, selectedItems)
 			}
 		},
 		removeItem(item : paper.Item) {
-			this.selectedItems = this.selectedItems.filter(i => i.id !== item.id);
+			const prevSelectedItems = [...this.selectedItems]
+			item.bounds.selected = false
+			this.selectedItems = this.selectedItems.filter(i => i.id !== item.id)
+			const selectedItems = this.selectedItems
+			useHistoryStore().commitSelectItemChange(prevSelectedItems, selectedItems)
 		},
 		setItems(items : paper.Item[]) {
-			this.selectedItems = items;
+			if (this.selectedItems.length > 0) {
+				cancelAllSelectedItems()
+			}
+			const prevSelectedItems = [...this.selectedItems]
+			items.forEach(item => item.bounds.selected = true)
+			this.selectedItems = items
+			const selectedItems = this.selectedItems
+			useHistoryStore().commitSelectItemChange(prevSelectedItems, selectedItems)
 		},
 		clearCanvas() {
 			this.project?.clear()
