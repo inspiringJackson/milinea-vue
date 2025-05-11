@@ -4,6 +4,7 @@
 	import NavBar from './layout/components/Navbar.vue'
 	import SideTools from './layout/components/sideTools/SideTools.vue'
 	import LeftMenu from './layout/components/leftMenuPanel/LeftMenuPanel.vue'
+	import StyleSider from './layout/components/styleSider/StyleSider.vue'
 	import CanvasBoard from './components/CanvasBoard.vue'
 	import {
 		onMounted,
@@ -55,21 +56,26 @@
 				<NavBar />
 				<div class="main" @contextmenu.prevent="handleContextMenu">
 					<SideTools />
-					<n-split direction="horizontal" min="240px" :max="0.4" default-size="240px">
-						<template #1>
-							<LeftMenu />
-						</template>
-						<template #2>
-							<!-- <n-split direction="horizontal" :min="0.2" :max="0.8"> -->
-							<!-- <template #1> -->
-							<CanvasBoard />
-							<!-- </template> -->
-							<!-- <template #2> -->
-							<!-- <CanvasBoard /> -->
-							<!-- </template> -->
-							<!-- </n-split> -->
-						</template>
-					</n-split>
+					
+					<n-layout has-sider sider-placement="right">
+						<n-split direction="horizontal" min="240px" :max="0.4" default-size="240px">
+							<template #1>
+								<LeftMenu />
+							</template>
+							<template #2>
+								<!-- <n-split direction="horizontal" :min="0.2" :max="0.8"> -->
+								<!-- <template #1> -->
+								<CanvasBoard />
+								<!-- </template> -->
+								<!-- <template #2> -->
+								<!-- <CanvasBoard /> -->
+								<!-- </template> -->
+								<!-- </n-split> -->
+							</template>
+							
+						</n-split>
+						<StyleSider />
+					</n-layout>
 				</div>
 			</div>
 		</n-message-provider>
@@ -109,7 +115,9 @@
 		--border-color: #eeeeee;
 		--text-color: #000000;
 		--filter: brightness(0);
+		--input-icon-filter: brightness(0) invert(0.8) drop-shadow(0 0 0.5px white);
 		--canvas-color: #f5f5f5;
+		--tree-selected-color: rgb(231, 245, 238);
 	}
 
 	[data-theme="dark"] {
@@ -117,7 +125,9 @@
 		--border-color: #333333;
 		--text-color: #ffffff;
 		--filter: brightness(0) invert(1) drop-shadow(0 0 0.5px white);
+		--input-icon-filter: brightness(0) invert(0.6) drop-shadow(0 0 0.5px white);
 		--canvas-color: #222222;
+		--tree-selected-color: rgb(31, 45, 38)
 	}
 
 	body {

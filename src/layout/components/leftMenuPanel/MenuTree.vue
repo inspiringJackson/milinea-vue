@@ -100,7 +100,7 @@
 	
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 	.project-tree {
 		user-select: none;
 	}
@@ -115,7 +115,7 @@
 	}
 
 	.selected {
-		background: rgb(231, 245, 238) !important;
+		background: var(--tree-selected-color) !important;
 	}
 
 	.node-content {

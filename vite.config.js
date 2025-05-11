@@ -20,9 +20,12 @@ export default defineConfig({
 					'naive-ui': [
 						'NConfigProvider',
 						'NMessageProvider',
+						'NLayout',
+						'NLayoutContent',
 						'NButton',
 						'NIcon',
 						'NDivider',
+						'NLayoutSider',
 						'NTooltip',
 						'NDropdown',
 						// 'NLayout',
@@ -32,7 +35,8 @@ export default defineConfig({
 						'NSplit',
 						'NTree',
 						'UseMessage',
-						'NMenu'
+						'NMenu',
+						'NInputNumber'
 					]
 				}
 			]
