@@ -3,9 +3,14 @@
 		<n-input-number :value="modelValue" @update:value="handleValueUpdate" :default-value="defaultValue" :min="min"
 			:max="max" :step="step" :size="size" :show-button="false">
 			<template #prefix v-if="hasPrefix">
-				<n-icon size="28" class="icon" @mousedown="handleDragStart">
-					<img :src="prefixIcon" class="prefix-icon" :alt="prefixHint" />
-				</n-icon>
+				<n-tooltip placement="bottom" trigger="hover">
+					<template #trigger>
+						<n-icon size="28" class="icon" @mousedown="handleDragStart">
+							<img :src="prefixIcon" class="prefix-icon" :alt="prefixHint" />
+						</n-icon>
+					</template>
+					{{prefixHint}}
+				</n-tooltip>
 			</template>
 			<template #suffix v-if="hasSuffix">
 				{{ suffix }}
@@ -16,20 +21,25 @@
 </template>
 
 <script setup lang="ts">
-	import { defineProps, defineEmits, ref } from 'vue'
+	import { defineProps, defineEmits, computed, ref } from 'vue'
+	import { useGlobalStore } from '../../../../stores/useGlobalStore'
 
-	const themeOverrides = {
+	const store = useGlobalStore()
+
+	const themeOverrides = computed(() => ({
 		Input: {
 			paddingTiny: "0 0",
 			paddingSmall: "0 0",
 			paddingMedium: "0 0",
 			paddingLarge: "0 0",
+			border: "none",
 			borderHover: "none",
 			// borderFocus: "none",
 			boxShadowFocus: "none",
 			caretColor: "none",
+			color: store.isDarkMode ? "rgb(48, 48, 51)" : "rgb(247, 247, 250)"
 		}
-	}
+	}))
 
 	const props = defineProps({
 		modelValue: {
@@ -77,8 +87,6 @@
 	const isDragging = ref(false)
 	const lastDeltaX = ref(0)
 
-
-
 	const handleDragStart = (e : MouseEvent) => {
 		e.preventDefault()
 		dragStartX.value = e.clientX
@@ -97,13 +105,12 @@
 		if (Math.abs(deltaX - lastDeltaX.value) >= sensitivity) {
 			const newValue = (props.modelValue || 0) + (deltaX > 0 ? 1 : -1)
 
-			// 确保数值在min/max范围内
 			if (props.max !== undefined && newValue > props.max) return
 			if (props.min !== undefined && newValue < props.min) return
 
 			handleValueUpdate(newValue)
 			lastDeltaX.value = deltaX
-			dragStartX.value = e.clientX // 重置起点避免累积
+			dragStartX.value = e.clientX
 		}
 	}
 
@@ -117,7 +124,7 @@
 
 <style scoped lang="scss">
 	.icon {
-		filter: var(--input-icon-filter);
+		filter: var(--base-icon-filter);
 		cursor: ew-resize;
 	}
 </style>

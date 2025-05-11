@@ -22,6 +22,7 @@ export default defineConfig({
 						'NMessageProvider',
 						'NLayout',
 						'NLayoutContent',
+						'NButtonGroup',
 						'NButton',
 						'NIcon',
 						'NDivider',
@@ -36,7 +37,9 @@ export default defineConfig({
 						'NTree',
 						'UseMessage',
 						'NMenu',
-						'NInputNumber'
+						'NInputNumber',
+						'NInput',
+						'NColorPicker'
 					]
 				}
 			]
