@@ -6,7 +6,7 @@
 				<n-button text>
 					<template #icon>
 						<n-icon size="30">
-							<img src="./../../assets/icons/menu.svg" class="icon" alt="menu">
+							<img src="@/assets/icons/menu.svg" class="icon" alt="menu">
 						</n-icon>
 					</template>
 				</n-button>
@@ -15,7 +15,7 @@
 			<div class="zoomButtonPanel">
 				<div class="zoomNum">{{ Math.round(usePaperStore().zoomScale * 100) }}%</div>
 				<n-icon size="16">
-					<img style="rotate: 0deg;" src="./../../assets/icons/menuArrow.svg" class="icon"
+					<img style="rotate: 0deg;" src="@/assets/icons/menuArrow.svg" class="icon"
 						alt="preferencesMenu">
 				</n-icon>
 			</div>
@@ -31,7 +31,7 @@
 				<n-button quaternary type="primary">
 					<template #icon>
 						<n-icon size="20">
-							<img src="src/assets/icons/language.svg" class="icon" alt="language">
+							<img src="@/assets/icons/language.svg" class="icon" alt="language">
 						</n-icon>
 					</template>
 					<span class="language-label">{{ currentLanguageLabel }}</span>

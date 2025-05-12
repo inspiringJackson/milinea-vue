@@ -12,7 +12,7 @@
 							:options="popSelectOptions" trigger="manual" :show="showPopselect"
 							@update:value="handleToolSelect" @clickoutside="showPopselect = false">
 							<n-icon size="5" class="extension-icon" @click.stop="togglePopselect">
-								<img src="src/assets/icons/extension.svg" class="icon" />
+								<img src="@/assets/icons/extension.svg" class="icon" />
 							</n-icon>
 						</n-popselect>
 					</div>

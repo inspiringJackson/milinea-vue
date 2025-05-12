@@ -33,5 +33,13 @@
 	"menuTabs": {
 		"layers": "图层",
 		"components": "组件"
+	},
+	
+	"fill": {
+		"title": "填充",
+		"solidMode": "颜色",
+		"gradientMode": "渐变色",
+		"patternMode": "花纹",
+		"imageMode": "图片"
 	}
 }

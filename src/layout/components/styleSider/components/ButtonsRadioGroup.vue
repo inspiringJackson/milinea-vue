@@ -25,7 +25,10 @@
 		Tabs: {
 			tabPaddingSmallSegment: "0 0",
 			tabPaddingMediumSegment: "0 0",
-			tabPaddingLargeSegment: "0 0"
+			tabPaddingLargeSegment: "0 0",
+			panePaddingSmall: "4px 0 0 0",
+			panePaddingMedium: "4px 0 0 0",
+			panePaddingLarge: "4px 0 0 0",
 		}
 	}
 

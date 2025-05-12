@@ -33,6 +33,14 @@
 	"menuTabs": {
 		"layers": "Layers",
 		"components": "Components"
+	},
+	
+	"fill": {
+		"title": "Fill",
+		"solidMode": "Solid",
+		"gradientMode": "Gradient",
+		"patternMode": "Pattern",
+		"imageMode": "Image"
 	}
 
 }

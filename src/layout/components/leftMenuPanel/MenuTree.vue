@@ -3,7 +3,7 @@
 		<div v-for="item in flatTree" :key="item.id" class="tree-node" :style="{ paddingLeft: `${item.depth * 24}px` }"
 			@click="handleItemClick(item, $event)" :class="{ 'selected': isSelected(item) }">
 			<div class="node-content">
-				<img v-if="item.children.length" src="src/assets/icons/menuArrow.svg" class="arrow-icon" :class="{ rotated: item.isOpen }"
+				<img v-if="item.children.length" src="@/assets/icons/menuArrow.svg" class="arrow-icon" :class="{ rotated: item.isOpen }"
 					@click.stop="toggleExpand(item)" />
 				<span class="node-label">{{ item.name }}</span>
 			</div>

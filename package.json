@@ -11,17 +11,18 @@
     "lodash-es": "^4.17.21",
     "paper": "^0.12.18",
     "pinia": "^3.0.2",
-    "vue": "^3.2.8",
+    "vue": "^3.3.10",
     "vue-i18n": "^9.14.4",
-    "vuedraggable": "^2.24.3"
+    "vuedraggable": "^2.24.3",
+    "vuetify": "^3.8.4"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^1.6.0",
+    "@vitejs/plugin-vue": "^5.2.4",
     "@vue/compiler-sfc": "^3.2.6",
     "naive-ui": "^2.41.0",
-    "sass": "^1.86.3",
+    "sass": "^1.88.0",
     "unplugin-auto-import": "^19.1.2",
     "unplugin-vue-components": "^28.5.0",
-    "vite": "^2.5.2"
+    "vite": "^6.3.5"
   }
 }
