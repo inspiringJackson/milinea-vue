@@ -12,17 +12,33 @@
 			</template>
 		</n-input>
 		<DraggablePanel ref="panelRef" :title="t('fill.title')">
-			<ButtonsRadioGroup v-model="selectedTabButtonId" :buttons="tabButtons"></ButtonsRadioGroup>
-			<v-color-picker canvas-height="200" width="200" hide-inputs @update:modelValue="handleColorChange">
-
-			</v-color-picker>
+			<!-- <ButtonsRadioGroup v-model="selectedTabButtonId" :buttons="tabButtons"></ButtonsRadioGroup> -->
+			<n-config-provider :theme-overrides="themeOverrides">
+				<n-tabs type="segment" size="small" animated @update:value="$emit('update:modelValue', $event)">
+					<n-tab-pane :name="button.id" v-for="(button, index) in tabButtons" :key="button.id">
+						<template #tab>
+							<n-tooltip placement="bottom" trigger="hover">
+								<template #trigger>
+									<n-icon size="22" class="icon"
+										:style="{ filter: modelValue === button.id ? 'var(--filter)' : 'var(--base-icon-filter)' }">
+										<img :src="button.iconUrl" :alt="button.name" />
+									</n-icon>
+								</template>
+								{{button.name}}
+							</n-tooltip>
+						</template>
+						<v-color-picker v-if="button.mode === 'solid'" canvas-height="200" width="200" hide-inputs
+							@update:modelValue="handleColorChange" theme="dark"></v-color-picker>
+					</n-tab-pane>
+				</n-tabs>
+			</n-config-provider>
 		</DraggablePanel>
 	</n-config-provider>
 	<!-- <iframe v-if="showIframe" src="https://example.com" class="custom-iframe"></iframe> -->
 </template>
 
 <script setup lang="ts">
-	import { defineProps, defineEmits, computed, ref, watch } from 'vue'
+	import { defineProps, defineEmits, computed, ref, watch, onMounted } from 'vue'
 	import { useI18n } from 'vue-i18n'
 	import { VColorPicker } from 'vuetify/components/VColorPicker'
 	import { useGlobalStore } from '../../../../stores/useGlobalStore'
@@ -82,10 +98,12 @@
 
 
 	const tabButtons = computed(() => ([
-		{ id: 0, name: t('fill.solidMode'), iconUrl: "src/assets/icons/text.svg" },
-		{ id: 1, name: t('fill.gradientMode'), iconUrl: "src/assets/icons/text.svg" },
-		{ id: 2, name: t('fill.patternMode'), iconUrl: "src/assets/icons/text.svg" },
-		{ id: 3, name: t('fill.imageMode'), iconUrl: "src/assets/icons/text.svg" },
+		{ id: 0, mode: 'solid', name: t('fill.solidMode'), iconUrl: "src/assets/icons/text.svg" },
+		// todo: 以下功能后续再扩展
+		// english: the following functionality will be extended later
+		// { id: 1, mode: 'gradient', name: t('fill.gradientMode'), iconUrl: "src/assets/icons/text.svg" },
+		// { id: 2, mode: 'pattern', name: t('fill.patternMode'), iconUrl: "src/assets/icons/text.svg" },
+		{ id: 3, mode: 'image', name: t('fill.imageMode'), iconUrl: "src/assets/icons/text.svg" },
 	]))
 	const selectedTabButtonId = ref(0)
 	watch(selectedTabButtonId, (newValue, oldValue) => {
@@ -100,6 +118,10 @@
 		emit('update:modelValue', value ?? undefined)
 		currentColor.value = value
 	}
+
+	onMounted(() => {
+
+	})
 </script>
 
 <style scoped lang="scss">
@@ -118,8 +140,13 @@
 </style>
 
 <style>
+	.v-sheet {
+		background: var(--vuetify-bg-color);
+		transition: background-color 0.2s ease-in-out;
+	}
+
 	.v-color-picker__controls {
-		padding: 7px;
+		padding: 7px 0;
 	}
 
 	.v-color-picker-preview {
@@ -128,7 +155,9 @@
 	}
 
 	.v-color-picker-preview__eye-dropper {
-		order: 1;
+		order: 0;
+		background-color: #000;
+		margin-left: ;
 	}
 
 	.v-color-picker-preview__dot {
@@ -137,14 +166,20 @@
 	}
 
 	.v-color-picker-preview__sliders {
-		order: 0;
-		width: 100%;
+		order: 1;
+		padding-inline-end: 0;
+
 	}
 
 	.v-slider.v-input--horizontal>.v-input__control {
 		min-height: 20px;
 		display: flex;
 		align-items: center;
+	}
+
+	.v-slider-track__background,
+	.v-slider-track__fill {
+		border-radius: 7px;
 	}
 
 	.v-slider.v-input--horizontal .v-slider-track {
@@ -155,8 +190,15 @@
 		height: 14px;
 	}
 
+	.v-slider-thumb__surface {
+		box-sizing: border-box;
+		background-color: transparent;
+		border: 3px solid #fff;
+	}
+
 	.v-slider.v-input--horizontal .v-slider-thumb {
-		/* inset-inline-start: calc(var(--v-slider-thumb-position) * 0.93); /*200*x=186*/ 
+		inset-inline-start: calc(var(--v-slider-thumb-position) * (138 / 152));
+		/*152*x=138 */
 	}
 
 	.v-slider-thumb__ripple {

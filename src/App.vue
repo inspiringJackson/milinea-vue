@@ -4,7 +4,7 @@
 	import NavBar from './layout/components/Navbar.vue'
 	import SideTools from './layout/components/sideTools/SideTools.vue'
 	import LeftMenu from './layout/components/leftMenuPanel/LeftMenuPanel.vue'
-	import StyleSider from './layout/components/styleSider/StyleSider.vue'
+	import RightSider from './layout/components/rightSider/RightSider.vue'
 	import CanvasBoard from './components/CanvasBoard.vue'
 	import {
 		onMounted,
@@ -74,7 +74,7 @@
 							</template>
 							
 						</n-split>
-						<StyleSider />
+						<RightSider />
 					</n-layout>
 				</div>
 			</div>
@@ -112,27 +112,31 @@
 <style>
 	:root {
 		--bg-color: #ffffff;
+		--vuetify-bg-color: #ffffff;
 		--border-color: #eeeeee;
 		--text-color: #000000;
 		--filter: brightness(0);
 		--base-icon-filter: brightness(0) invert(0.8) drop-shadow(0 0 0.5px white);
 		--canvas-color: #f5f5f5;
 		--tree-selected-color: rgb(231, 245, 238);
+		--v-theme-background: 255, 255, 255;
 	}
 
 	[data-theme="dark"] {
 		--bg-color: rgb(24, 24, 28);
+		--vuetify-bg-color: rgb(16, 16, 20);
 		--border-color: #333333;
 		--text-color: #ffffff;
 		--filter: brightness(0) invert(1) drop-shadow(0 0 0.5px white);
 		--base-icon-filter: brightness(0) invert(0.6) drop-shadow(0 0 0.5px white);
 		--canvas-color: #222222;
-		--tree-selected-color: rgb(31, 45, 38)
+		--tree-selected-color: rgb(31, 45, 38);
+		
 	}
 
 	body {
 		background-color: var(--bg-color);
 		color: var(--text-color);
-		transition: background-color 0.3s, color 0.3s;
+		transition: background-color 0.2s, color 0.2s;
 	}
 </style>

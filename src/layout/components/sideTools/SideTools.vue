@@ -130,6 +130,6 @@
 		gap: 15px;
 		background-color: var(--n-color);
 		border-right: 1px solid var(--border-color);
-		transition: border-right 0.3s, color 0.3s;
+		transition: border-right 0.2s, color 0.2s;
 	}
 </style>

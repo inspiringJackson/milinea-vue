@@ -179,7 +179,7 @@
 		justify-content: space-between;
 		/* 左右分开 */
 		border-bottom: 1px solid var(--border-color);
-		transition: border-bottom 0.3s, color 0.3s;
+		transition: border-bottom 0.2s, color 0.2s;
 
 		.leftMenu {
 			display: flex;
