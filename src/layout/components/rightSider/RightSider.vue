@@ -25,7 +25,7 @@
 	const myColor = ref("#000000")
 	watch(myColor, (newValue, oldValue) => {
 		if (newValue !== oldValue) {
-			console.log(newValue)
+			// console.log(newValue)
 		}
 	})
 

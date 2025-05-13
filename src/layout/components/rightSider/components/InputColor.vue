@@ -3,8 +3,8 @@
 		<n-input :value="modelValue" @update:value="handleValueUpdate" type="text" :default-value="defaultValue"
 			:size="size">
 			<template #prefix>
-				<div class="colorBox" :alt="currentColor" @click="handleShowPanel">
-					<div class="colorBlock" :style="{background: currentColor}"></div>
+				<div class="colorBox" :alt="solidColor" @click="handleShowPanel">
+					<div class="colorBlock" :style="{background: solidColor}"></div>
 				</div>
 			</template>
 			<template #suffix v-if="hasSuffix">
@@ -12,7 +12,6 @@
 			</template>
 		</n-input>
 		<DraggablePanel ref="panelRef" :title="t('fill.title')">
-			<!-- <ButtonsRadioGroup v-model="selectedTabButtonId" :buttons="tabButtons"></ButtonsRadioGroup> -->
 			<n-config-provider :theme-overrides="themeOverrides">
 				<n-tabs type="segment" size="small" animated @update:value="$emit('update:modelValue', $event)">
 					<n-tab-pane :name="button.id" v-for="(button, index) in tabButtons" :key="button.id">
@@ -27,14 +26,12 @@
 								{{button.name}}
 							</n-tooltip>
 						</template>
-						<v-color-picker v-if="button.mode === 'solid'" canvas-height="200" width="200" hide-inputs
-							@update:modelValue="handleColorChange" theme="dark"></v-color-picker>
+						<SolidColorPickerPaneVue v-if="button.mode === 'solid'" :currentColor="solidColor" v-model:model-value="solidColor" />
 					</n-tab-pane>
 				</n-tabs>
 			</n-config-provider>
 		</DraggablePanel>
 	</n-config-provider>
-	<!-- <iframe v-if="showIframe" src="https://example.com" class="custom-iframe"></iframe> -->
 </template>
 
 <script setup lang="ts">
@@ -42,8 +39,8 @@
 	import { useI18n } from 'vue-i18n'
 	import { VColorPicker } from 'vuetify/components/VColorPicker'
 	import { useGlobalStore } from '../../../../stores/useGlobalStore'
-	import ButtonsRadioGroup from './ButtonsRadioGroup.vue'
 	import DraggablePanel from './DraggablePanel.vue'
+	import SolidColorPickerPaneVue from './SolidColorPickerPane.vue'
 
 	const store = useGlobalStore()
 	const { t } = useI18n()
@@ -112,12 +109,13 @@
 		}
 	})
 
-	let currentColor = ref('#000000')
-
-	const handleColorChange = (value : string) => {
-		emit('update:modelValue', value ?? undefined)
-		currentColor.value = value
-	}
+	let solidColor = ref('#000000')
+	
+	watch(solidColor, (newValue, oldValue) => {
+		if (newValue !== oldValue) {
+			emit('update:modelValue', newValue ?? undefined)
+		}
+	})
 
 	onMounted(() => {
 
@@ -136,76 +134,5 @@
 			border-radius: 2px;
 			cursor: pointer;
 		}
-	}
-</style>
-
-<style>
-	.v-sheet {
-		background: var(--vuetify-bg-color);
-		transition: background-color 0.2s ease-in-out;
-	}
-
-	.v-color-picker__controls {
-		padding: 7px 0;
-	}
-
-	.v-color-picker-preview {
-		display: flex;
-		flex-wrap: wrap;
-	}
-
-	.v-color-picker-preview__eye-dropper {
-		order: 0;
-		background-color: #000;
-		margin-left: ;
-	}
-
-	.v-color-picker-preview__dot {
-		display: none;
-		order: 2;
-	}
-
-	.v-color-picker-preview__sliders {
-		order: 1;
-		padding-inline-end: 0;
-
-	}
-
-	.v-slider.v-input--horizontal>.v-input__control {
-		min-height: 20px;
-		display: flex;
-		align-items: center;
-	}
-
-	.v-slider-track__background,
-	.v-slider-track__fill {
-		border-radius: 7px;
-	}
-
-	.v-slider.v-input--horizontal .v-slider-track {
-		height: 14px;
-	}
-
-	.v-slider.v-input--horizontal .v-slider-track__background {
-		height: 14px;
-	}
-
-	.v-slider-thumb__surface {
-		box-sizing: border-box;
-		background-color: transparent;
-		border: 3px solid #fff;
-	}
-
-	.v-slider.v-input--horizontal .v-slider-thumb {
-		inset-inline-start: calc(var(--v-slider-thumb-position) * (138 / 152));
-		/*152*x=138 */
-	}
-
-	.v-slider-thumb__ripple {
-		display: none;
-	}
-
-	.v-slider-thumb--focused .v-slider-thumb__surface::before {
-		display: none;
 	}
 </style>

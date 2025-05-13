@@ -86,17 +86,21 @@
 </script>
 
 <style scoped lang="scss">
+	$--panel-padding-x: 12px;
+	$--panel-padding-y: 4px;
+	$--panel-offset-x: 4px;
+	
 	.draggable-panel {
 		position: fixed;
-		top: 0;
-		left: 0;
+		top: -20vh;
+		left: calc(50% - 240px - 200px - 2 * $--panel-padding-x - $--panel-offset-x);
 		border-radius: 4px;
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 		user-select: none;
 		z-index: 1000;
 		
 		.header {
-			padding: 4px 12px;
+			padding: $--panel-padding-y $--panel-padding-x;
 			cursor: move;
 			display: flex;
 			justify-content: space-between;
@@ -112,7 +116,7 @@
 		}
 		
 		.content {
-			padding: 4px 12px;
+			padding: $--panel-padding-y $--panel-padding-x;
 		}
 	}
 </style>

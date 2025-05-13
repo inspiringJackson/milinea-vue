@@ -48,6 +48,7 @@ export default defineConfig({
 						'NMenu',
 						'NInputNumber',
 						'NInput',
+						'NSelect'
 					],
 					'vuetify': [
 						'VColorPicker',

@@ -117,6 +117,7 @@
 		--text-color: #000000;
 		--filter: brightness(0);
 		--base-icon-filter: brightness(0) invert(0.8) drop-shadow(0 0 0.5px white);
+		--input-bg-color: #f7f7fA;
 		--canvas-color: #f5f5f5;
 		--tree-selected-color: rgb(231, 245, 238);
 		--v-theme-background: 255, 255, 255;
@@ -129,6 +130,7 @@
 		--text-color: #ffffff;
 		--filter: brightness(0) invert(1) drop-shadow(0 0 0.5px white);
 		--base-icon-filter: brightness(0) invert(0.6) drop-shadow(0 0 0.5px white);
+		--input-bg-color: #303033;
 		--canvas-color: #222222;
 		--tree-selected-color: rgb(31, 45, 38);
 		
