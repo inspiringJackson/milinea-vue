@@ -44,5 +44,6 @@ src/
 ## 当前目标 Development Goals Recently
 
 - [ ] 实现工具 Make the tools work (6 / 9 completed)
+- [ ] 实现布局、样式工具 Implement layout, appearance tools (0 / 11 completed, develop some design UI component currently)
 - [ ] 实现算法 Implement vector simplification algorithms (maybe use [Simplify.js](https://mourner.github.io/simplify-js/))
 - [ ] 优化性能 Optimize rendering performance
