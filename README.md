@@ -7,7 +7,7 @@ We're (probably just me & AI, and welcome you!) developing a simple [Paper.js](h
 早期正在搭建轻量化的，类似在线设计工具的框架。当前的目标是实现基础功能。<br>
 At this early stage, it may resemble platforms like mainstream online design tools. Current focus is on core functionality, vector path drawing.
 
-![Preview](https://github.com/inspiringJackson/mycdn/blob/main/milinea-vue/preview4-28.png)
+![Preview](https://github.com/inspiringJackson/mycdn/blob/main/milinea-vue/preview5-13.png)
 
 使用Vue 3`<script setup>`SFCs构建。了解有关模板的更多信息：[Vue 3 SFC Script Setup Docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup)<br>
 Built with Vue 3 `<script setup>` SFCs. Learn more about the template: [Vue 3 SFC Script Setup Docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup)
@@ -35,8 +35,9 @@ src/
 │   ├── types/                # 类型设定目录 Interfaces and types definitions
 │   └── utils/
 ├── stores/
+│   ├── useGlobalStore.ts     # 全局数据储存 Store global data
 │   ├── useHistoryStore.ts    # 操作历史储存 Undo/redo stack （基于增量命令模式 base on Incremental Command Pattern)
-│   └── usePaperStore.ts      # 全局数据储存 Global state management
+│   └── usePaperStore.ts      # 画布数据储存 Store canvas/paper data
 ├── App.vue
 └── main.js
 ```
@@ -45,5 +46,5 @@ src/
 
 - [ ] 实现工具 Make the tools work (6 / 9 completed)
 - [ ] 实现布局、样式工具 Implement layout, appearance tools (0 / 11 completed, develop some design UI component currently)
-- [ ] 实现算法 Implement vector simplification algorithms (maybe use [Simplify.js](https://mourner.github.io/simplify-js/))
+- [ ] 实现算法 Implement automatic simplification and format algorithms of vector (maybe use [Simplify.js](https://mourner.github.io/simplify-js/))
 - [ ] 优化性能 Optimize rendering performance
