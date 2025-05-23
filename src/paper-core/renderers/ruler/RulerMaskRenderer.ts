@@ -7,6 +7,7 @@ import {
 	RULER_TOP_MASK_WIDTH
 } from '../../config/constants'
 import { useGlobalStore } from '../../../stores/useGlobalStore'
+import { usePaperStore } from '../../../stores/usePaperStore'
 
 function initial(
 	ctx: CanvasRenderingContext2D
@@ -21,15 +22,19 @@ export function renderBottomMask(
 	ctx: CanvasRenderingContext2D,
 	viewSize: {
 		viewWidth: number,
-		viewHeight: number
+		viewHeight: number,
+		dpr?: number
 	}
 ) {
 	initial(ctx)
 	
 	const { viewWidth, viewHeight } = viewSize
 	const { isDarkMode } = useGlobalStore()
+	const store = usePaperStore()
+	const dpr = viewSize.dpr || store.devicePixelRatio
 	const color = isDarkMode? PAPER_BACKGROUND_COLOR_DARK : PAPER_BACKGROUND_COLOR
 	
+	ctx.scale(dpr, dpr)
 	ctx.fillStyle = color
 	ctx.fillRect(0, 0, viewWidth, RULER_MAIN_TICK_HEIGHT + RULER_TEXT_FONT_SIZE + 1)
 	ctx.fillStyle = color
@@ -42,10 +47,13 @@ export function renderTopMask(
 ) {
 	initial(ctx)
 	const { isDarkMode } = useGlobalStore()
+	const store = usePaperStore()
+	const dpr = store.devicePixelRatio
 	const color = isDarkMode? PAPER_BACKGROUND_COLOR_DARK : PAPER_BACKGROUND_COLOR
 	// 宽高以水平矩形为准
 	// english: mask width and height are based on the horizontal rectangle
 	
+	ctx.scale(dpr, dpr)
 	const horizontalGradient = ctx.createLinearGradient(RULER_TOP_MASK_WIDTH, 0, 0, 0)
 	horizontalGradient.addColorStop(0, color + '00')
 	horizontalGradient.addColorStop(0.5, color + 'FF')

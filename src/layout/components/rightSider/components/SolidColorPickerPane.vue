@@ -112,8 +112,6 @@
 
 		.n-select {
 			width: 55px;
-
-
 		}
 	}
 </style>

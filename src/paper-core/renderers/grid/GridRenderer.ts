@@ -10,16 +10,18 @@ import {
 export class GridRenderer {
 	public render(
 		ctx: CanvasRenderingContext2D,
-		viewSize: { viewWidth: number; viewHeight: number },
+		viewSize: { viewWidth: number; viewHeight: number; dpr?: number },
 	) {
 		const store = usePaperStore()
 		const bounds = store.scope.view.bounds
 		const offsetX = -bounds.topLeft.x * store.zoomScale
 		const offsetY = -bounds.topLeft.y * store.zoomScale
 		const step = getRulerStep(store.zoomScale)
+		const dpr = viewSize.dpr || store.devicePixelRatio
 		
 		ctx.save()
 		ctx.resetTransform()
+		ctx.scale(dpr, dpr)
 		// if (store.zoomScale < 10) {
 			// ctx.scale(store.zoomScale, store.zoomScale)
 			ctx.clearRect(0, 0, viewSize.viewWidth, viewSize.viewHeight)
@@ -44,7 +46,7 @@ export class GridRenderer {
 	) {
 		ctx.save()
 		const visibleStart = -offsetX / zoom
-		const visibleEnd = visibleStart + viewSize.viewWidth / zoom 
+		const visibleEnd = visibleStart + viewSize.viewWidth / zoom
 		const startSceneX = Math.floor(visibleStart / step) * step
 		
 		ctx.beginPath()
@@ -52,7 +54,7 @@ export class GridRenderer {
 			const viewX = sceneX * zoom + offsetX
 			
 			ctx.moveTo(viewX, 0)
-			ctx.lineTo(viewX, viewSize.viewHeight)
+			ctx.lineTo(viewX, viewSize.viewHeight )
 		}
 		ctx.stroke()
 		ctx.restore()
@@ -67,7 +69,7 @@ export class GridRenderer {
 	) {
 		ctx.save()
 		const visibleStart = -offsetY / zoom
-		const visibleEnd = visibleStart + viewSize.viewHeight / zoom 
+		const visibleEnd = visibleStart + viewSize.viewHeight / zoom
 		const startSceneY = Math.floor(visibleStart / step) * step
 		
 		ctx.beginPath()

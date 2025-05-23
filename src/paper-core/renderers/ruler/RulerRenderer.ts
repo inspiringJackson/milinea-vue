@@ -17,7 +17,7 @@ import {
 export class RulerRenderer {
 	public render(
 		ctx: CanvasRenderingContext2D, 
-		viewSize : {viewWidth : number, viewHeight : number}
+		viewSize : {viewWidth : number, viewHeight : number, dpr?: number}
 	) {
 		renderBottomMask(ctx, viewSize)
 		const store = usePaperStore()
@@ -25,9 +25,11 @@ export class RulerRenderer {
 		const offsetX = -bounds.topLeft.x * store.zoomScale
 		const offsetY = -bounds.topLeft.y * store.zoomScale
 		const step = getRulerStep(store.zoomScale)
+		const dpr = viewSize.dpr || store.devicePixelRatio
 		
 		ctx.save()
 		ctx.resetTransform()
+		ctx.scale(dpr, dpr)
 		
 		ctx.strokeStyle = RULER_TICK_MARK_COLOR
 		ctx.fillStyle = RULER_TEXT_COLOR

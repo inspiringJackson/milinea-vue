@@ -12,6 +12,7 @@ import {
 } from '../paper-core/config/constants'
 import { addHoverAndSelect, cancelAllSelectedItems } from '../paper-core/utils/shape'
 import { useHistoryStore } from './useHistoryStore'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 export const usePaperStore = defineStore('paper', {
 	state: () => ({
@@ -24,6 +25,7 @@ export const usePaperStore = defineStore('paper', {
 		renderEngine: null as RenderEngine | null,
 
 		zoomScale: 1,
+		devicePixelRatio: window.devicePixelRatio || 1,
 
 		isViewMoving: false,
 		dragStart: null as paper.Point | null,
@@ -54,6 +56,32 @@ export const usePaperStore = defineStore('paper', {
 			this.project = this.scope.project
 			this.renderEngine = new RenderEngine(this.canvas, this.bottomCanvas, this.topCanvas)
 			this.toolManager = new ToolManager()
+			this.setupDPRListener()
+		},
+		setupDPRListener() {
+			this.devicePixelRatio = window.devicePixelRatio || 1
+			
+			const mediaQueryList = window.matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`)
+			
+			const updatePixelRatio = () => {
+				this.devicePixelRatio = window.devicePixelRatio || 1
+				if (this.renderEngine) {
+					this.renderEngine.updateRender()
+					this.scope.view.update()
+				}
+			}
+			
+			if (mediaQueryList.addEventListener) {
+				mediaQueryList.addEventListener('change', updatePixelRatio)
+			} else if (mediaQueryList.addListener) {
+				mediaQueryList.addListener(updatePixelRatio)
+			}
+			
+			window.addEventListener('resize', () => {
+				if (window.devicePixelRatio !== this.devicePixelRatio) {
+					updatePixelRatio()
+				}
+			})
 		},
 		setCurrentTool(toolName : ToolModes) {
 			if (this.currentTool?.name === toolName) return
@@ -109,6 +137,12 @@ export const usePaperStore = defineStore('paper', {
 		},
 		clearCanvas() {
 			this.project?.clear()
+		},
+		updateDPR() {
+			this.devicePixelRatio = window.devicePixelRatio || 1
+			if (this.renderEngine) {
+				this.renderEngine.updateRender()
+			}
 		}
 	}
 })

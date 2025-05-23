@@ -35,10 +35,18 @@ export class RenderEngine {
 		const resizeObserver = new ResizeObserver(entries => {
 			const { width, height } = entries[0].contentRect
 			paperStore.scope.view.viewSize = new paper.Size(width, height)
-			this.bottomCanvas.width = width
-			this.bottomCanvas.height = height
-			this.topCanvas.width = width
-			this.topCanvas.height = height
+			
+			const dpr = paperStore.devicePixelRatio
+			this.bottomCanvas.width = width * dpr
+			this.bottomCanvas.height = height * dpr
+			this.topCanvas.width = width * dpr
+			this.topCanvas.height = height * dpr
+			
+			this.bottomCanvas.style.width = `${width}px`
+			this.bottomCanvas.style.height = `${height}px`
+			this.topCanvas.style.width = `${width}px`
+			this.topCanvas.style.height = `${height}px`
+			
 			if (!this.loaded) {
 				this.render()
 			}
@@ -46,13 +54,15 @@ export class RenderEngine {
 
 		})
 		resizeObserver.observe(this.canvas)
-		resizeObserver.observe(this.bottomCanvas)
+		// resizeObserver.observe(this.bottomCanvas)
 	}
 
 	private getViewMetrics() {
+		const paperStore = usePaperStore()
 		return {
 			viewWidth: this.canvas.width,
-			viewHeight: this.canvas.height
+			viewHeight: this.canvas.height,
+			dpr: paperStore.devicePixelRatio
 		}
 	}
 
@@ -64,25 +74,38 @@ export class RenderEngine {
 			this.updateRender()
 		}
 	}
-
+	
+	// public handleDPRChange() {
+	// 	const paperStore = usePaperStore()
+	// 	const dpr = paperStore.devicePixelRatio
+	// }
 
 	public updateRender(delta ?: paper.Point) {
 		const now = performance.now()
 		const paperStore = usePaperStore()
 		const isDeltaLarge = delta && delta.length >= this.deltaThreshold
 		const isTimeElapsed = now - this.lastRenderTime >= this.throttleInterval
+		const dpr = paperStore.devicePixelRatio
 
 		if (isDeltaLarge || isTimeElapsed || !this.loaded) {
 			this.lastRenderTime = now
 			paperStore.scope.view.update()
+
+			this.bottomCtx.resetTransform()
+			this.topCtx.resetTransform()
+			this.bottomCtx.scale(dpr, dpr)
+			this.topCtx.scale(dpr, dpr)
+			
+			const viewMetrics = this.getViewMetrics()
+			
 			if (paperStore.zoomScale < GRID_LAYER_SCALE) {
-				this.topCtx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-				this.gridRenderer.render(this.bottomCtx, this.getViewMetrics())
+				this.topCtx.clearRect(0, 0, viewMetrics.viewWidth, viewMetrics.viewHeight)
+				this.gridRenderer.render(this.bottomCtx, viewMetrics)
 			} else {
-				this.bottomCtx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-				this.gridRenderer.render(this.topCtx, this.getViewMetrics())
+				this.bottomCtx.clearRect(0, 0, viewMetrics.viewWidth, viewMetrics.viewHeight)
+				this.gridRenderer.render(this.topCtx, viewMetrics)
 			}
-			this.rulerRenderer.render(this.topCtx, this.getViewMetrics())
+			this.rulerRenderer.render(this.topCtx, viewMetrics)
 			this.loaded = true
 		}
 	}
