@@ -92,30 +92,33 @@ export class ToolManager {
 					cancelAllSelectedItems()
 				}
 			} else if (event.event.button === 2) {
-				this.paperStore.project.getItems({}).forEach(item => {
-					if (item.data.isHitArea) {
-						console.log(item.visible)
-						item.strokeColor = null
-						item.visible = false
-						console.log(item.visible)
-					}
-					item.bounds.selected = false
-				})
-				console.log(1)
-				// tofix: hitArea实现的悬停交互效果不能被导出
-				// english: the hover effect of hitArea cannot be exported
-				const canvas = this.paper.view.element
-				const dataURL = canvas.toDataURL('image/png')
-				const a = document.createElement('a')
-				a.href = dataURL
-				a.download = 'image.png'
-				a.click()
-				this.paperStore.project.getItems({}).forEach(item => {
-					if (item.data.isHitArea) {
-						item.strokeColor = new paper.Color(BOUNDING_BOX_STROKE_COLOR)
-					}
-					item.bounds.selected = false
-				})
+				// 临时的导出图片功能
+				// temporary export image function
+				
+				// this.paperStore.project.getItems({}).forEach(item => {
+				// 	if (item.data.isHitArea) {
+				// 		console.log(item.visible)
+				// 		item.strokeColor = null
+				// 		item.visible = false
+				// 		console.log(item.visible)
+				// 	}
+				// 	item.bounds.selected = false
+				// })
+				// console.log(1)
+				// // tofix: hitArea实现的悬停交互效果不能被导出
+				// // english: the hover effect of hitArea cannot be exported
+				// const canvas = this.paper.view.element
+				// const dataURL = canvas.toDataURL('image/png')
+				// const a = document.createElement('a')
+				// a.href = dataURL
+				// a.download = 'image.png'
+				// a.click()
+				// this.paperStore.project.getItems({}).forEach(item => {
+				// 	if (item.data.isHitArea) {
+				// 		item.strokeColor = new paper.Color(BOUNDING_BOX_STROKE_COLOR)
+				// 	}
+				// 	item.bounds.selected = false
+				// })
 			}
 		}
 	}

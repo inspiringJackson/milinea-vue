@@ -1,6 +1,7 @@
 // src/paper-score/stores/useHistoryStore.ts
 import { defineStore } from "pinia"
 import { SelectItemCommand } from "../paper-core/commands/SelectItemCommand"
+import { ModeChangeCommand } from "../paper-core/commands/ModeChangeCommand"
 import { usePaperStore } from "./usePaperStore"
 
 export interface Command {
@@ -64,6 +65,17 @@ export const useHistoryStore = defineStore("history", {
 			// otherwise, add a command
 			this.addCommand(
 				new SelectItemCommand(prevSelectedItems, selectedItems, usePaperStore())
+			)
+		},
+		
+		commitModeChange(prevMode: string, mode: string, item: paper.Item) {
+			// 判断新旧模式是否相同，如果相同直接返回
+			// english: if the new and old modes are the same, return directly
+			if (prevMode === mode) {
+				return
+			}
+			this.addCommand(
+				new ModeChangeCommand(prevMode, mode, item, usePaperStore())
 			)
 		}
 	}

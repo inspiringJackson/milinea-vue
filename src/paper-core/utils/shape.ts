@@ -35,21 +35,38 @@ export function addHoverAndSelect(item : paper.Item) {
 	})
 
 	item.on('mouseenter', function () {
-		if (!bounds.selected && !hitArea.visible && paperStore.currentTool === ToolModes.SELECT) {
+		if (
+			!bounds.selected && 
+			!hitArea.visible && 
+			paperStore.currentTool === ToolModes.SELECT &&
+			paperStore.currentMode === "DEFAULT"
+		) {
+			console.log('enter')
 			hitArea.visible = true
 		}
 	})
 	
 	item.on('mouseleave', function () {
-		if (!bounds.selected && hitArea.visible && paperStore.currentTool === ToolModes.SELECT) {
+		console.log('lea')
+		if (
+			!bounds.selected && 
+			hitArea.visible && 
+			paperStore.currentTool === ToolModes.SELECT &&
+			paperStore.currentMode === "DEFAULT"
+		) {
+			console.log('leave')
 			hitArea.visible = false
 		}
 	})
 
-	item.on('mousedown', function (e : paper.MouseEvent) {
+	item.onClick = function (e : paper.MouseEvent) {
 		const prevSelectedItems = [...paperStore.selectedItems]
-		
-		if (paperStore.currentTool === ToolModes.SELECT && e.event.button === 0) {
+
+		if (
+			paperStore.currentTool === ToolModes.SELECT && 
+			paperStore.currentMode === "DEFAULT" &&
+			e.event.button === 0
+		) {
 			if (!e.event.shiftKey) {
 				// 非shift按下，取消所有选中
 				// english: cancel all selected when not shift key
@@ -73,7 +90,23 @@ export function addHoverAndSelect(item : paper.Item) {
 			const selectedItems = paperStore.selectedItems
 			historyStore.commitSelectItemChange(prevSelectedItems, selectedItems)
 		}
-	})
+	}
+	
+	item.onDoubleClick = function (e : paper.MouseEvent) {
+		if (paperStore.currentTool === ToolModes.SELECT && paperStore.currentMode === "DEFAULT") {
+			// 进入矢量编辑模式
+			// english: enter vector editing mode
+			paperStore.selectedItems = paperStore.selectedItems.filter(item => item.id !== this.id)
+			paperStore.selectedItems = [] as paper.Item[]
+			hitArea.visible = false
+			bounds.selected = false
+			this.selected = true
+			
+			historyStore.commitModeChange(paperStore.currentMode, "VE", this)
+			paperStore.currentMode = "VE"
+			paperStore.currentVEItem = this
+		}
+	}
 }
 
 /**

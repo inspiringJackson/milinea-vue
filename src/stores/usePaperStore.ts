@@ -31,14 +31,16 @@ export const usePaperStore = defineStore('paper', {
 		dragStart: null as paper.Point | null,
 		originalCenter: null as paper.Point | null,
 		currentTool: 'select',
-
+		currentMode: 'DEFAULT', // DEFAULT, VE, SC...(VE: 矢量编辑模式/vector editing mode, SC: 等比放大模式/proportional scaling mode...)
+		currentVEItem: null as paper.Item | null,
+		
 		rectangleIndex: 1,
 		ellipseIndex: 1,
 		lineIndex: 1,
 		pathIndex: 1,
 
 		selectedPathIds: [] as string[],
-		selectedItems: [] as paper.Item[]
+		selectedItems: [] as paper.Item[],
 	}),
 	actions: {
 		init(
