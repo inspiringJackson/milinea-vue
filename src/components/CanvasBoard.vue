@@ -1,17 +1,18 @@
 <!-- src/components/CanvasBoard.vue -->
 <template>
 	<div class="canvas-container" ref="container">
-		<canvas ref="bottomCanvas" class="main-canvas" style="z-index: -1;" resize></canvas>
+		<!-- <canvas ref="bottomCanvas" class="main-canvas" style="z-index: -1;" resize></canvas> -->
 		<canvas ref="canvas" class="main-canvas" resize style="position: absolute; left: 0; top: 0;z-index: 1;" tabindex="0"></canvas>
-		<canvas ref="topCanvas" class="main-canvas" style="position: absolute; left: 0; top: 0;z-index: 1; pointer-events: none;" resize></canvas>
+		<!-- <canvas ref="topCanvas" class="main-canvas" style="position: absolute; left: 0; top: 0;z-index: 1; pointer-events: none;" resize></canvas> -->
 	</div>
 </template>
 
 <script setup lang="ts">
 	import { ref, watch, onMounted, onUnmounted } from 'vue'
-	import paper from 'paper'
-	import { usePaperStore } from '../stores/usePaperStore'
-	import { ToolModes } from '../paper-core/config/enums'
+	// import paper from 'paper'
+	// import { usePaperStore } from '../stores/usePaperStore'
+	import { useFabricStore } from '../stores/useFabricStore'
+	import { ToolModes } from '../fabric-core/config/enums'
 
 	// 导入光标资源
 	const cursorDrag = '../src/assets/cursors/drag.png'
@@ -21,10 +22,12 @@
 	const cursorPen = '../src/assets/cursors/pen.png'
 	const cursorPencil = '../src/assets/cursors/pencil.png'
 
+	const container = ref<HTMLDivElement | null>(null)
 	const canvas = ref<HTMLCanvasElement | null>(null)
 	const bottomCanvas = ref<HTMLCanvasElement | null>(null)
 	const topCanvas = ref<HTMLCanvasElement | null>(null)
-	const paperStore = usePaperStore()
+	// const paperStore = usePaperStore()
+	const fabricStore = useFabricStore()
 
 	// 光标配置映射表
 	const CURSOR_MAP = {
@@ -43,14 +46,15 @@
 	// 更新光标样式
 	function updateCursor() {
 		if (!canvas.value) return
+		
+		const currentTool = fabricStore.currentTool
 
-		const currentTool = paperStore.currentTool
 		let cursorStyle = 'auto'
 
 		if (currentTool in CURSOR_MAP) {
 			const config = CURSOR_MAP[currentTool as keyof typeof CURSOR_MAP]
 			cursorStyle = typeof config === 'function'
-				? config(paperStore.isViewMoving)
+				? config(fabricStore.isViewMoving)
 				: config
 		}
 
@@ -58,20 +62,22 @@
 	}
 
 	watch(
-		() => [paperStore.currentTool, paperStore.isViewMoving],
+		() => [fabricStore.currentTool, fabricStore.isViewMoving],
 		() => updateCursor()
 	)
 
 	onMounted(() => {
 		if (!canvas.value) return
 
-		paperStore.init(canvas.value, bottomCanvas.value, topCanvas.value)
+		// paperStore.init(canvas.value, bottomCanvas.value, topCanvas.value)
+		fabricStore.init(container.value, canvas.value, bottomCanvas.value, topCanvas.value)
 
 		updateCursor()
 	})
 
 	onUnmounted(() => {
-		paperStore.clearCanvas()
+		// paperStore.clearCanvas()
+		fabricStore.clearCanvas()
 	})
 </script>
 

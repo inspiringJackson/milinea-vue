@@ -1,6 +1,7 @@
 // src/stores/useGlobalStore.ts
 import { defineStore } from "pinia"
-import { usePaperStore } from "./usePaperStore"
+// import { usePaperStore } from "./usePaperStore"
+import { ToolModes } from '../paper-core/config/enums'
 
 export const useGlobalStore = defineStore("global", {
 	state: () => ({
@@ -26,8 +27,8 @@ export const useGlobalStore = defineStore("global", {
 		applyTheme() {
 			const theme = this.isDarkMode ? 'dark' : 'light'
 			document.documentElement.setAttribute('data-theme', theme)
-			usePaperStore().renderEngine.updateRender()
+			// usePaperStore().renderEngine.updateRender()
 			localStorage.setItem('theme', theme)
-		}
+		},
 	}
 })

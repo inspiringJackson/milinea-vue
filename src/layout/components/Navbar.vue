@@ -13,7 +13,7 @@
 			</n-dropdown>
 			<n-divider vertical></n-divider>
 			<div class="zoomButtonPanel">
-				<div class="zoomNum">{{ Math.round(usePaperStore().zoomScale * 100) }}%</div>
+				<!-- <div class="zoomNum">{{ Math.round(usePaperStore().zoomScale * 100) }}%</div> -->
 				<n-icon size="16">
 					<img style="rotate: 0deg;" src="@/assets/icons/menuArrow.svg" class="icon"
 						alt="preferencesMenu">
@@ -50,9 +50,9 @@
 	import {
 		useI18n
 	} from 'vue-i18n'
-	import {
-		usePaperStore
-	} from '../../stores/usePaperStore'
+	// import {
+	// 	usePaperStore
+	// } from '../../stores/usePaperStore'
 	import {
 		useGlobalStore
 	} from '../../stores/useGlobalStore'
@@ -71,11 +71,11 @@
 	})
 
 	const globalStore = useGlobalStore()
-	const paperStore = usePaperStore()
+	// const paperStore = usePaperStore()
 	const message = useMessage()
 
 	const isDarkMode = computed(() => globalStore.isDarkMode)
-	const themeIcon = computed(() => isDarkMode.value ? 'ğŸŒ™' : 'â˜€ï¸')
+	const themeIcon = computed(() => isDarkMode.value ? '' : '')
 
 	onMounted(() => {
 		const savedLocale = localStorage.getItem('locale')
@@ -154,13 +154,13 @@
 					return resolve()
 				}
 
-				// åˆ›å»ºä¸´æ—¶URLå¹¶å¤„ç†å›¾ç‰‡
+				// ´´½¨ÁÙÊ±URL²¢´¦ÀíÍ¼Æ¬
 				const imageUrl = URL.createObjectURL(file)
-				paperStore.handleImageUpload(imageUrl, file.name)
+				// paperStore.handleImageUpload(imageUrl, file.name)
 				resolve()
 			}
 
-			// è§¦å‘æ–‡ä»¶é€‰æ‹©
+			// ´¥·¢ÎÄ¼şÑ¡Ôñ
 			input.click()
 		})
 	}
@@ -177,7 +177,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		/* å·¦å³åˆ†å¼€ */
+		/* ×óÓÒ·Ö¿ª */
 		border-bottom: 1px solid var(--border-color);
 		transition: border-bottom 0.2s, color 0.2s;
 

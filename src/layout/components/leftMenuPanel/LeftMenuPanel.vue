@@ -4,7 +4,7 @@
 			<n-tab-pane name="layerMenu" :tab="t('menuTabs.layers')">
 				<PageMenu class="page-menu"></PageMenu>
 				<n-divider style="margin: 2px 0;"></n-divider>
-				<MenuTree />
+				<!-- <MenuTree /> -->
 			</n-tab-pane>
 			<n-tab-pane name="componentMenu" :tab="t('menuTabs.components')">
 				
@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 	import { defineAsyncComponent } from 'vue'
-	import MenuTree from './MenuTree.vue'
+	// import MenuTree from './MenuTree.vue'
 	import PageMenu from './PageMenu.vue'
 	import { useI18n } from 'vue-i18n'
 	

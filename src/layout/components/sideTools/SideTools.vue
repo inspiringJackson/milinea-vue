@@ -11,9 +11,11 @@
 	import { ref, watch } from 'vue'
 	import ToolButton from './ToolButton.vue'
 	import { useI18n } from 'vue-i18n'
-	import { usePaperStore } from '../../../stores/usePaperStore'
+	// import { usePaperStore } from '../../../stores/usePaperStore'
+	import { useGlobalStore } from '../../../stores/useGlobalStore'
 	import { onMounted } from 'vue'
-	import { ToolModes } from '../../../paper-core/config/enums'
+	import { ToolModes } from '../../../fabric-core/config/enums'
+	import { useFabricStore } from '../../../stores/useFabricStore'
 
 	const { t } = useI18n()
 
@@ -62,7 +64,7 @@
 	const handleToolChange = (groupIndex : number, toolIndex : number) => {
 		currentSelectedTool.value[groupIndex] = toolIndex
 		activeTool.value = { groupIndex, toolIndex }
-		usePaperStore().setCurrentTool(tools[groupIndex][toolIndex].mode)
+		useFabricStore().setCurrentTool(tools[groupIndex][toolIndex].mode)
 	}
 
 	onMounted(() => {
@@ -94,7 +96,7 @@
 	})
 
 	watch(
-		() => usePaperStore().currentTool,
+		() => useFabricStore().currentTool,
 		(newTool) => {
 			let foundGroupIndex = -1
 			let foundToolIndex = -1
