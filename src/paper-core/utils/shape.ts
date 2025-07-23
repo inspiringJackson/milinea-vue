@@ -41,20 +41,17 @@ export function addHoverAndSelect(item : paper.Item) {
 			paperStore.currentTool === ToolModes.SELECT &&
 			paperStore.currentMode === "DEFAULT"
 		) {
-			console.log('enter')
 			hitArea.visible = true
 		}
 	})
 	
 	item.on('mouseleave', function () {
-		console.log('lea')
 		if (
 			!bounds.selected && 
 			hitArea.visible && 
 			paperStore.currentTool === ToolModes.SELECT &&
 			paperStore.currentMode === "DEFAULT"
 		) {
-			console.log('leave')
 			hitArea.visible = false
 		}
 	})
