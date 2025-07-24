@@ -1,16 +1,12 @@
 <!-- src/components/CanvasBoard.vue -->
 <template>
 	<div class="canvas-container" ref="container">
-		<!-- <canvas ref="bottomCanvas" class="main-canvas" style="z-index: -1;" resize></canvas> -->
 		<canvas ref="canvas" class="main-canvas" resize style="position: absolute; left: 0; top: 0;z-index: 1;" tabindex="0"></canvas>
-		<!-- <canvas ref="topCanvas" class="main-canvas" style="position: absolute; left: 0; top: 0;z-index: 1; pointer-events: none;" resize></canvas> -->
 	</div>
 </template>
 
 <script setup lang="ts">
 	import { ref, watch, onMounted, onUnmounted } from 'vue'
-	// import paper from 'paper'
-	// import { usePaperStore } from '../stores/usePaperStore'
 	import { useFabricStore } from '../stores/useFabricStore'
 	import { ToolModes } from '../fabric-core/config/enums'
 
@@ -24,9 +20,8 @@
 
 	const container = ref<HTMLDivElement | null>(null)
 	const canvas = ref<HTMLCanvasElement | null>(null)
-	const bottomCanvas = ref<HTMLCanvasElement | null>(null)
-	const topCanvas = ref<HTMLCanvasElement | null>(null)
-	// const paperStore = usePaperStore()
+	let bottomCanvas: HTMLCanvasElement | null = null
+	let topCanvas: HTMLCanvasElement | null = null
 	const fabricStore = useFabricStore()
 
 	// 光标配置映射表
@@ -67,16 +62,59 @@
 	)
 
 	onMounted(() => {
-		if (!canvas.value) return
+		if (!canvas.value || !container.value) return
 
-		// paperStore.init(canvas.value, bottomCanvas.value, topCanvas.value)
-		fabricStore.init(container.value, canvas.value, bottomCanvas.value, topCanvas.value)
+		fabricStore.init(container.value, canvas.value) //, bottomCanvas.value, topCanvas.value)
+		
+		const fabricWrapper = container.value.querySelector('[data-fabric="wrapper"]') as HTMLElement
+		const fabricLowerCanvas = container.value.querySelector('.lower-canvas') as HTMLCanvasElement
+		const fabricUpperCanvas = container.value.querySelector('.upper-canvas') as HTMLCanvasElement
+		
+		if (fabricWrapper && fabricLowerCanvas && fabricUpperCanvas) {
+			// 对fabric.js默认生成的上下层canvas包裹容器进行解构，并调整canvas顺序使得网格随缩放比动态渲染
+			// english: deconstruct the default generated upper and lower canvas containers of fabric.js 
+			// and adjust the canvas order to dynamically render the grid according to the zoom ratio
+			const customTopCanvas = document.createElement('canvas')
+			customTopCanvas.className = 'main-canvas top-canvas'
+			Object.assign(customTopCanvas.style, {
+				position: 'absolute',
+				left: '0',
+				top: '0',
+				zIndex: '1',
+				pointerEvents: 'none',
+				width: '100%',
+				height: '100%',
+			})
+			container.value.appendChild(customTopCanvas)
+			topCanvas = customTopCanvas
+			
+			const customBottomCanvas = document.createElement('canvas')
+			customBottomCanvas.className = 'main-canvas bottom-canvas'
+			Object.assign(customBottomCanvas.style, {
+				position: 'absolute',
+				left: '0',
+				top: '0',
+				zIndex: '0',
+				pointerEvents: 'none',
+				width: '100%',
+				height: '100%',
+			})
+			container.value.appendChild(customBottomCanvas)
+			bottomCanvas = customBottomCanvas
+			
+			fabricWrapper.remove()
+			container.value.appendChild(fabricLowerCanvas)
+			container.value.appendChild(fabricUpperCanvas)
+			fabricLowerCanvas.style.zIndex = '0'
+			fabricUpperCanvas.style.zIndex = '1'
+			
+			fabricStore.loadRulerAndGrid(bottomCanvas, topCanvas)
+		}
 
 		updateCursor()
 	})
 
 	onUnmounted(() => {
-		// paperStore.clearCanvas()
 		fabricStore.clearCanvas()
 	})
 </script>
@@ -86,10 +124,6 @@
 		position: relative;
 		width: 100%;
 		height: 100%;
-		// top: 0;
-		// left: 0;
-		// bottom: 0;
-		// right: 0;
 		overflow: hidden;
 		background-color: var(--canvas-color);
 	}

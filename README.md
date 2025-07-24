@@ -18,10 +18,11 @@ Migration from Paper.js to Fabric.js - Current Progress:<br>
 | SelectTool |  |
 | PenTool |  |
 | ShapeTool |  |
-| GridRenderer |  |
-| RulerRenderer |  |
+| GridRenderer | √ |
+| RulerRenderer | √ |
 | CommandSystem |  |
 | UndoRedo |  |
+| Theme | √ |
 
 ![Preview](https://github.com/inspiringJackson/mycdn/blob/main/milinea-vue/preview5-13.png)
 

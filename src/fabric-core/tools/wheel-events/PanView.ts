@@ -1,4 +1,5 @@
 // src/fabric-core/tools/wheel-events/PanView.ts
+import { useFabricStore } from "../../../stores/useFabricStore"
 import { PAN_STEP } from "../../config/constants"
 import { Canvas, Point, util } from "fabric"
 
@@ -8,7 +9,7 @@ export function PanView(
 	zoom: number,
 	fabricCanvas: Canvas
 ) {
-	const delta = e.deltaY * PAN_STEP / zoom
+	const delta = e.deltaY * PAN_STEP * Math.log2(zoom + 1) //* PAN_STEP / zoom
 	const vpt = fabricCanvas.viewportTransform.slice()
 	switch (type) {
 		case 'horizontal':
@@ -27,4 +28,5 @@ export function PanView(
 			break
 	}
 	fabricCanvas.setViewportTransform(vpt)
+	useFabricStore().renderEngine.update()
 }

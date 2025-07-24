@@ -13,6 +13,7 @@ import { PanView } from "./wheel-events/PanView"
 export class ToolManager {
 	private fabricStore: ReturnType<typeof useFabricStore>
 	private isViewMoving: boolean = false
+	// private renderUpdate: Function | null = null
 	
 	// 以下是临时变量
 	// the following are temporary variables
@@ -20,6 +21,7 @@ export class ToolManager {
 	
 	constructor() {
 		this.fabricStore = useFabricStore()
+		// this.renderUpdate = this.fabricStore.renderEngine.update
 		this.initialize()
 	}
 	

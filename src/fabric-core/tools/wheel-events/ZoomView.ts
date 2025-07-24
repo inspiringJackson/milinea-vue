@@ -14,5 +14,5 @@ export function ZoomView(
 	const clampedScale = clampedZoom / currentZoom
 	const mousePoint = new Point(e.offsetX, e.offsetY)
 	fabricCanvas.zoomToPoint(mousePoint, clampedZoom)
-	
+	useFabricStore().renderEngine.update()
 }

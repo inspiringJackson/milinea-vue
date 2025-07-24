@@ -5,7 +5,7 @@ import { Canvas, Point } from "fabric"
 export function MoveView(
 	e: any,
 	fabricCanvas: Canvas,
-	moveStart: Point,
+	moveStart: Point
 ) : Point {
 	const vpt = fabricCanvas.viewportTransform.slice()
 	const x = e.clientX - moveStart.x
@@ -13,5 +13,6 @@ export function MoveView(
 	vpt[4] += x
 	vpt[5] += y
 	fabricCanvas.setViewportTransform(vpt)
+	useFabricStore().renderEngine.update()
 	return new Point(e.clientX, e.clientY)
 }
