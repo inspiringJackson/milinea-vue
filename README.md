@@ -23,6 +23,7 @@ Migration from Paper.js to Fabric.js - Current Progress:<br>
 | CommandSystem |  |
 | UndoRedo |  |
 | Theme | √ |
+| CanvasNodeTree |  |
 
 ![Preview](https://github.com/inspiringJackson/mycdn/blob/main/milinea-vue/preview5-13.png)
 
