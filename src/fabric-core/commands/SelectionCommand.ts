@@ -1,32 +1,45 @@
 // src/fabric-core/commands/SelectionCommand.ts
 import { Command } from "../../stores/useHistoryStore"
 import { useFabricStore } from "../../stores/useFabricStore"
-import { FabricObject, ActiveSelection } from "fabric"
+import { FabricObject, ActiveSelection, Point } from "fabric"
 
 export class SelectionCommand implements Command {
 	constructor(
-		private readonly prevSelection: FabricObject[],
-		private readonly newSelection: FabricObject[]
+		private readonly prevSelection : FabricObject[],
+		private readonly newSelection : FabricObject[]
 	) { }
-	
-	redo(): void {
+
+	redo() : void {
 		this.execute()
 	}
-	
-	undo(): void {
+
+	undo() : void {
 		this.applySelection(this.prevSelection)
 	}
-	
-	execute(): void {
+
+	execute() : void {
 		this.applySelection(this.newSelection)
 	}
-	
-	private applySelection(selection: FabricObject[]) {
+
+	private applySelection(selection : FabricObject[]) {
 		const canvas = useFabricStore().fabricCanvas
 		if (selection.length === 0) canvas.discardActiveObject()
 		else if (selection.length === 1) canvas.setActiveObject(selection[0])
 		else {
-			const activeSelection = new ActiveSelection(selection)
+			const activeSelection = new ActiveSelection(selection, {
+				canvas: canvas
+			})
+			const activeSelectionLeft   = activeSelection.left
+			const activeSelectionTop    = activeSelection.top
+			const activeSelectionWidth  = activeSelection.width
+			const activeSelectionHeight = activeSelection.height
+			activeSelection._objects.forEach((obj, index) => {
+				obj.set({
+					left: obj.left - activeSelectionWidth / 2 - activeSelectionLeft,
+					top:  obj.top - activeSelectionHeight / 2 - activeSelectionTop
+				})
+			})
+			activeSelection.setCoords()
 			canvas.setActiveObject(activeSelection)
 		}
 		canvas.renderAll()

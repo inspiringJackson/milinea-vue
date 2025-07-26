@@ -1,7 +1,7 @@
 // src/stores/useFabricStore.ts
 // dependencies:
 import { defineStore } from 'pinia'
-import { Canvas, Rect, InteractiveFabricObject } from 'fabric'
+import { Canvas, Rect, InteractiveFabricObject, FabricObject } from 'fabric'
 // stores:
 import { useGlobalStore } from './useGlobalStore'
 // fabric-core:
@@ -34,7 +34,7 @@ export const useFabricStore = defineStore('fabric', {
 		renderEngine: null as RenderEngine | null,
 		
 		currentTool: 'select',
-		isViewMoving: false,
+		isViewMoving: false
 	}),
 	actions: {
 		init(
@@ -47,11 +47,11 @@ export const useFabricStore = defineStore('fabric', {
 				viewportTransform: [1, 0, 0, 1, DEFAULT_INITIAL_OFFSET_X, DEFAULT_INITIAL_OFFSET_Y],
 				enableRetinaScaling: true,
 				renderOnAddRemove: false,
-				selectionColor: FABRIC_SELECTION_COLOR,
-				selectionBorderColor: FABRIC_SELECTION_BORDER_COLOR,
 				// 设置这个属性后，需要手动调用 renderAll 方法渲染 canvas，否则有关矩阵变换的属性设置不会生效
 				// english: you need to call renderAll method manually after setting any matrix-related properties
 				skipOffscreen: true,
+				selectionColor: FABRIC_SELECTION_COLOR,
+				selectionBorderColor: FABRIC_SELECTION_BORDER_COLOR,
 			})
 			
 			InteractiveFabricObject.ownDefaults = {
@@ -63,7 +63,7 @@ export const useFabricStore = defineStore('fabric', {
 				padding: FABRIC_BORDER_PADDING,
 				borderColor: FABRIC_SELECTED_BORDER_COLOR,
 				borderOpacityWhenMoving: FABRIC_SELECTED_BORDER_OPACITY_WHEN_MOVING,
-				perPixelTargetFind: PER_PIXEL_TARGET_FIND
+				// perPixelTargetFind: PER_PIXEL_TARGET_FIND,
 			}
 		},
 		loadRulerAndGrid(
