@@ -27,6 +27,22 @@ Migration from Paper.js to Fabric.js - Current Progress:<br>
 
 ![Preview](https://github.com/inspiringJackson/mycdn/blob/main/milinea-vue/preview5-13.png)
 
+## 安装和使用 Installation and Usage
+
+```
+git clone https://github.com/inspiringJackson/milinea-vue.git
+```
+
+```
+cd milinea-vue
+npm install
+```
+
+开发运行 Development Run
+```
+npm run dev
+```
+
 ## 项目架构 Project Structure
 ```
 src/
