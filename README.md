@@ -15,7 +15,7 @@ Migration from Paper.js to Fabric.js - Current Progress:<br>
 | MoveView | √ |
 | PanView | √ |
 | ZoomView | √ |
-| SelectTool |  |
+| SelectTool | √ |
 | PenTool |  |
 | ShapeTool |  |
 | GridRenderer | √ |

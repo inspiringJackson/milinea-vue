@@ -1,6 +1,7 @@
 // src/fabric-core/tools/toolManager.ts
 // stores:
 import { useFabricStore } from "../../stores/useFabricStore"
+import { useHistoryStore } from "../../stores/useHistoryStore"
 // enums:
 import { ToolModes } from "../config/enums"
 // types:
@@ -12,6 +13,7 @@ import { PanView } from "./wheel-events/PanView"
 
 export class ToolManager {
 	private fabricStore: ReturnType<typeof useFabricStore>
+	private historyStore: ReturnType<typeof useHistoryStore>
 	private isViewMoving: boolean = false
 	// private renderUpdate: Function | null = null
 	
@@ -21,12 +23,14 @@ export class ToolManager {
 	
 	constructor() {
 		this.fabricStore = useFabricStore()
+		this.historyStore = useHistoryStore()
 		// this.renderUpdate = this.fabricStore.renderEngine.update
 		this.initialize()
 	}
 	
 	initialize() {
 		this.setupViewEvents()
+		this.setupObjectEvents()
 	}
 	
 	setupViewEvents() {
@@ -76,6 +80,43 @@ export class ToolManager {
 		if (event.ctrlKey && event.shiftKey && !event.altKey) return 'antiDiagonal'
 		if (!event.ctrlKey && event.shiftKey && event.altKey) return 'diagonal'
 		return 'vertical'
+	}
+	
+	setupObjectEvents() {
+		const fabricCanvas = this.fabricStore.fabricCanvas
+		fabricCanvas.on("before:selection:cleared", (e) => this.handleBeforeSelectionClear(e))
+		fabricCanvas.on("selection:cleared", (e) => this.handleSelectionClear(e))
+		fabricCanvas.on("selection:created", (e) => this.handleSelectionCreate(e))
+		fabricCanvas.on("selection:updated", (e) => this.handleSelectionUpdate(e))
+	}
+	
+	handleBeforeSelectionClear(e: any) {
+		const fabricCanvas = this.fabricStore.fabricCanvas
+		// console.log("beforeclear")
+		// console.log(e)
+		// this.historyStore.commitSelectionChange(e.deselected, [])
+	}
+	
+	handleSelectionClear(e: any) {
+		const fabricCanvas = this.fabricStore.fabricCanvas
+		// console.log("clear")
+		// console.log(e)
+		// this.historyStore.commitSelectionChange()
+		if (e.e instanceof MouseEvent) this.historyStore.commitSelectionChange(e.deselected, [])
+	}
+	
+	handleSelectionCreate(e: any) {
+		const fabricCanvas = this.fabricStore.fabricCanvas
+		// console.log("create")
+		// console.log(e)
+		if (e.e instanceof MouseEvent) this.historyStore.commitSelectionChange([], e.selected)
+	}
+	
+	handleSelectionUpdate(e: any) {
+		const fabricCanvas = this.fabricStore.fabricCanvas
+		// console.log("update")
+		// console.log(e)
+		if (e.e instanceof MouseEvent) this.historyStore.commitSelectionChange(e.deselected, e.selected)
 	}
 	
 	switchTool(toolMode: ToolModes) {
